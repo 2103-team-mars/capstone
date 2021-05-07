@@ -74,8 +74,13 @@ async function seed() {
   const [psychiatrist, psychologist] = await Profession.bulkCreate(professionData);
   const [depression, anxiety, eating] = await Specialty.bulkCreate(specialtyData);
   const [fatigue, food, sleep] = await Symptom.bulkCreate(symptomData);
-  const [doc1, doc2] = await User.bulkCreate(doctorData);
-  const [pat1, pat2] = await User.bulkCreate(patientData);
+  // const [doc1, doc2] = await User.bulkCreate(doctorData);
+  const [doc1, doc2] = await Promise.all([User.create(doctorData[0]), User.create(doctorData[1])]);
+  // const [pat1, pat2] = await User.bulkCreate(patientData);
+  const [pat1, pat2] = await Promise.all([
+    User.create(patientData[0]),
+    User.create(patientData[1]),
+  ]);
 
   await doc1.setProfession(psychiatrist);
   await doc2.setProfession(psychologist);
@@ -89,13 +94,9 @@ async function seed() {
   await doc1.addPatients([pat1, pat2]);
   await doc2.addPatient(pat2);
 
-  // Creating Users
-  // const users = await Promise.all([
-  //   User.create({ username: 'cody', password: '123' }),
-  //   User.create({ username: 'murphy', password: '123' }),
-  // ]);
+  await doc1.addAppointmentPatient(pat1, { through: { date: Date.now(), topic: '1st Meeting' } });
+  await doc2.addAppointmentPatient(pat2, { through: { date: Date.now(), topic: '1st Meeting' } });
 
-  // console.log(`seeded ${users.length} users`);
   console.log(`seeded successfully`);
   // return {
   //   users: {
