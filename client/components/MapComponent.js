@@ -9,11 +9,33 @@ export class MapComponent extends Component {
     this.props.fetchDoctors();
   }
   render() {
-    console.log(this.props);
-    const { google } = this.props;
+    const { google, auth, doctors } = this.props;
     return (
       <div>
-        <Map google={google} />
+        <Map
+          google={google}
+          initialCenter={{ lat: 37.4221, lng: -122.0841 }}
+          center={
+            auth.id
+              ? {
+                  lat: auth.coordinates[0],
+                  lng: auth.coordinates[1],
+                }
+              : { lat: 37.4221, lng: -122.0841 }
+          }
+        >
+          {doctors.map((doctor) => {
+            return (
+              <Marker
+                name={doctor.name}
+                position={{
+                  lat: doctor.coordinates[0],
+                  lng: doctor.coordinates[1],
+                }}
+              />
+            );
+          })}
+        </Map>
       </div>
     );
   }

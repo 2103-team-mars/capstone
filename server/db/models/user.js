@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const makeCoordinates = require('../../coordinates');
 
 const SALT_ROUNDS = 5;
 
@@ -29,7 +30,8 @@ const User = db.define('user', {
   },
   profilePicture: {
     type: Sequelize.TEXT,
-    defaultValue: 'https://rpgplanner.com/wp-content/uploads/2020/06/no-photo-available.png',
+    defaultValue:
+      'https://rpgplanner.com/wp-content/uploads/2020/06/no-photo-available.png',
   },
   age: {
     type: Sequelize.INTEGER,
@@ -51,6 +53,9 @@ const User = db.define('user', {
   location: {
     type: Sequelize.TEXT,
     allowNull: false,
+  },
+  coordinates: {
+    type: Sequelize.ARRAY(Sequelize.FLOAT),
   },
 });
 
@@ -108,8 +113,20 @@ const hashPassword = async (user) => {
   }
 };
 
+const convertAddress = async (user) => {
+  if (user.changed('location')) {
+    console.log('in convertAddress');
+    user.coordinates = await makeCoordinates(user.location);
+  }
+};
+
 User.beforeCreate(hashPassword);
+User.beforeCreate(convertAddress);
+User.beforeUpdate(convertAddress);
 User.beforeUpdate(hashPassword);
 User.beforeBulkCreate((users) => {
-  users.forEach(hashPassword);
+  return Promise.all(users.map(hashPassword));
+});
+User.beforeBulkCreate((users) => {
+  return Promise.all(users.map(convertAddress));
 });

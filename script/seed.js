@@ -35,7 +35,7 @@ const doctorData = [
     age: 40,
     sex: 'male',
     dob: Date.now(),
-    location: 'somewhere',
+    location: '5760 Irving Park Rd, Chicago, IL 60634',
   },
   {
     email: 'doc2@gmail.com',
@@ -45,7 +45,7 @@ const doctorData = [
     age: 40,
     sex: 'female',
     dob: Date.now(),
-    location: 'somewhere',
+    location: '567 Wabash Ave NW, New Philadelphia, OH 44663',
   },
 ];
 const patientData = [
@@ -57,7 +57,7 @@ const patientData = [
     age: 40,
     sex: 'male',
     dob: Date.now(),
-    location: '12-6 maybury circle, waterbury, ct',
+    location: '1601 E Basin Ave, Pahrump, NV 89060',
   },
   {
     email: 'pat2@gmail.com',
@@ -67,7 +67,7 @@ const patientData = [
     age: 40,
     sex: 'female',
     dob: Date.now(),
-    location: 'somewhere',
+    location: '5110 N 40th St #201, Phoenix, AZ 85018',
   },
 ];
 

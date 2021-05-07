@@ -2,15 +2,17 @@ const axios = require('axios');
 
 async function makeCoordinates(address) {
   const { data } = await axios.get(
-    'https://maps.googleapis.com/maps/api/geocode/json',
+    'http://www.mapquestapi.com/geocoding/v1/address',
     {
       params: {
-        key: 'AIzaSyA88BT_HAbFTCSu7jJOj8d5DvAw8m-as1Q',
-        address: address,
+        key: '84Mid2LGGMpXz9ck0VWs9AGAE44vAKpO',
+        location: address,
       },
     }
   );
-  console.log(data);
+  const lat = data.results[0].locations[0].latLng.lat;
+  const lng = data.results[0].locations[0].latLng.lng;
+  return [lat, lng];
 }
 
 module.exports = makeCoordinates;
