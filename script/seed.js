@@ -11,8 +11,16 @@ const {
   Profession,
 } = require('../server/db');
 
-const professionData = [{ name: 'Psychiatrist' }, { name: 'Psychologist' }, { name: 'Therapist' }];
-const specialtyData = [{ name: 'Despression' }, { name: 'Anxiety' }, { name: 'Eating disorder' }];
+const professionData = [
+  { name: 'Psychiatrist' },
+  { name: 'Psychologist' },
+  { name: 'Therapist' },
+];
+const specialtyData = [
+  { name: 'Despression' },
+  { name: 'Anxiety' },
+  { name: 'Eating disorder' },
+];
 const symptomData = [
   { name: 'Constant fatigue' },
   { name: 'Loss of appetite' },
@@ -49,7 +57,7 @@ const patientData = [
     age: 40,
     sex: 'male',
     dob: Date.now(),
-    location: 'somewhere',
+    location: '12-6 maybury circle, waterbury, ct',
   },
   {
     email: 'pat2@gmail.com',
@@ -71,11 +79,18 @@ async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
   console.log('db synced!');
 
-  const [psychiatrist, psychologist] = await Profession.bulkCreate(professionData);
-  const [depression, anxiety, eating] = await Specialty.bulkCreate(specialtyData);
+  const [psychiatrist, psychologist] = await Profession.bulkCreate(
+    professionData
+  );
+  const [depression, anxiety, eating] = await Specialty.bulkCreate(
+    specialtyData
+  );
   const [fatigue, food, sleep] = await Symptom.bulkCreate(symptomData);
   // const [doc1, doc2] = await User.bulkCreate(doctorData);
-  const [doc1, doc2] = await Promise.all([User.create(doctorData[0]), User.create(doctorData[1])]);
+  const [doc1, doc2] = await Promise.all([
+    User.create(doctorData[0]),
+    User.create(doctorData[1]),
+  ]);
   // const [pat1, pat2] = await User.bulkCreate(patientData);
   const [pat1, pat2] = await Promise.all([
     User.create(patientData[0]),
@@ -94,8 +109,12 @@ async function seed() {
   await doc1.addPatients([pat1, pat2]);
   await doc2.addPatient(pat2);
 
-  await doc1.addAppointmentPatient(pat1, { through: { date: Date.now(), topic: '1st Meeting' } });
-  await doc2.addAppointmentPatient(pat2, { through: { date: Date.now(), topic: '1st Meeting' } });
+  await doc1.addAppointmentPatient(pat1, {
+    through: { date: Date.now(), topic: '1st Meeting' },
+  });
+  await doc2.addAppointmentPatient(pat2, {
+    through: { date: Date.now(), topic: '1st Meeting' },
+  });
 
   console.log(`seeded successfully`);
   // return {
