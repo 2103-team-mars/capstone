@@ -5,6 +5,7 @@ import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import { me } from './store';
 import MapComponent from './components/MapComponent';
+import Meeting from './components/Meeting';
 
 /**
  * COMPONENT
@@ -24,6 +25,7 @@ class Routes extends Component {
             <Route path='/home' component={Home} />
 
             <Route path='/map' component={MapComponent} />
+            <Route path='/meeting' component={Meeting} />
             <Redirect to='/home' />
           </Switch>
         ) : (
@@ -31,6 +33,7 @@ class Routes extends Component {
             <Route path='/' exact component={Login} />
             <Route path='/login' component={Login} />
             <Route path='/signup' component={Signup} />
+            <Route path='/meeting' component={Meeting} />
             <Route path='/map' component={MapComponent} />
           </Switch>
         )}
