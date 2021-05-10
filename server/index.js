@@ -18,6 +18,20 @@ const init = async () => {
       socket.on('send message', (message, room) => {
         socket.to(room).emit('receive', message);
       });
+      socket.on('leave', (room) => {
+        socket.leave(room);
+      });
+      socket.on('call', (data) => {
+        socket
+          .to(data.room)
+          .emit('calling', { signal: data.signal, name: data.name });
+      });
+      socket.on('answer', (data) => {
+        socket.to(data.room).emit('answering', data.signal);
+      });
+      socket.on('end', (room) => {
+        socket.to(room).emit('ending');
+      });
     });
   } catch (ex) {
     console.log(ex);
