@@ -106,7 +106,7 @@ class Meeting extends Component {
     this.theirStream.current.srcObject = null;
     this.connection.current.destroy();
     if (initiator) {
-      socket.emit('end', room);
+      socket.emit('end', this.state.room);
     }
   }
   onChange(event) {
