@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { io } from 'socket.io-client';
-
-const socket = io('http://localhost:8080');
+import { socket } from './socket';
 
 export default class Meeting extends Component {
   constructor() {
@@ -11,10 +9,8 @@ export default class Meeting extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    const socket = io('http://localhost:8080');
-    socket.on('connect', () => {
-      socket.emit('join', 'room');
-    });
+    socket.emit('join', 'room');
+
     socket.on('receive', (message) => {
       this.setState({
         chat: [...this.state.chat, message],
@@ -27,9 +23,10 @@ export default class Meeting extends Component {
   onSubmit(event) {
     event.preventDefault();
     socket.emit('send message', this.state.msg, 'room');
-    this.setState({ msg: '' });
+    this.setState({ msg: '', chat: [...this.state.chat, this.state.msg] });
   }
   render() {
+    console.log(this.state.chat);
     return (
       <div>
         <form onClick={this.onSubmit}>
