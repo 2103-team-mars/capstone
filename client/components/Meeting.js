@@ -1,16 +1,39 @@
 import React, { Component } from 'react';
 import { socket } from './socket';
+import Peer from 'simple-peer';
+import { v4 } from 'uuid';
+import { connect } from 'react-redux';
 
-export default class Meeting extends Component {
+class Meeting extends Component {
   constructor() {
     super();
-    this.state = { msg: '', chat: [] };
+    this.state = {
+      msg: '',
+      chat: [],
+      room: '',
+      stream: null,
+      receivingCall: false,
+      callerSignal: null,
+      callAccepted: false,
+      roomToCall: '',
+      callerName: '',
+    };
+    this.myStream = React.createRef();
+    this.theirStream = React.createRef();
+    this.connection = React.createRef();
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
   componentDidMount() {
-    socket.emit('join', 'room');
-
+    const room = v4();
+    this.setState({ room });
+    socket.emit('join', room);
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        this.setState({ stream });
+        this.myStream.current.srcObject = stream;
+      });
     socket.on('receive', (message) => {
       this.setState({
         chat: [...this.state.chat, message],
@@ -42,7 +65,20 @@ export default class Meeting extends Component {
             <p>{msg}</p>
           </div>
         ))}
+        <video
+          style={{ width: '200px' }}
+          ref={this.myStream}
+          autoPlay
+          playsInline
+        />
       </div>
     );
   }
 }
+const mapState = (state) => {
+  return {
+    auth: state.auth,
+  };
+};
+
+export default connect(mapState)(Meeting);
