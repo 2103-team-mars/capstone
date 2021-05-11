@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
 import { connect } from 'react-redux';
 import MapComponent from './MapComponent';
+import PatientProfile from './PatientProfile';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -55,7 +56,7 @@ export function Dashboard({ auth }) {
             My doctors list
           </TabPanel>
           <TabPanel value={value} index={2}>
-            My Profile
+            <PatientProfile />
           </TabPanel>
           <TabPanel value={value} index={3}>
             My Medications
