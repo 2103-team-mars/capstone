@@ -9,29 +9,25 @@ const {
   Symptom,
   Specialty,
   Profession,
+  Doctor,
+  Patient,
 } = require('../server/db');
 
-const professionData = [
-  { name: 'Psychiatrist' },
-  { name: 'Psychologist' },
-  { name: 'Therapist' },
-];
-const specialtyData = [
-  { name: 'Despression' },
-  { name: 'Anxiety' },
-  { name: 'Eating disorder' },
-];
+const professionData = [{ name: 'Psychiatrist' }, { name: 'Psychologist' }, { name: 'Therapist' }];
+const specialtyData = [{ name: 'Despression' }, { name: 'Anxiety' }, { name: 'Eating disorder' }];
 const symptomData = [
   { name: 'Constant fatigue' },
   { name: 'Loss of appetite' },
   { name: 'Sleep deprevation' },
 ];
-const doctorData = [
+
+const userData = [
   {
     email: 'doc1@gmail.com',
-    name: 'Doc1',
-    password: 'doc1pw',
-    isDoctor: true,
+    firstName: 'Doctor',
+    lastName: '1',
+    password: '123',
+    metaType: 'doctor',
     age: 40,
     sex: 'male',
     dob: Date.now(),
@@ -39,21 +35,21 @@ const doctorData = [
   },
   {
     email: 'doc2@gmail.com',
-    name: 'Doc2',
-    password: 'doc2pw',
-    isDoctor: true,
+    firstName: 'Doctor',
+    lastName: '2',
+    password: '123',
+    metaType: 'doctor',
     age: 40,
     sex: 'female',
     dob: Date.now(),
     location: '567 Wabash Ave NW, New Philadelphia, OH 44663',
   },
-];
-const patientData = [
   {
     email: 'pat1@gmail.com',
-    name: 'Pat1',
-    password: 'pat1pw',
-    isDoctor: false,
+    firstName: 'Patient',
+    lastName: '1',
+    password: '123',
+    metaType: 'patient',
     age: 40,
     sex: 'male',
     dob: Date.now(),
@@ -61,9 +57,10 @@ const patientData = [
   },
   {
     email: 'pat2@gmail.com',
-    name: 'Pat2',
-    password: 'pat2pw',
-    isDoctor: false,
+    firstName: 'Patient',
+    lastName: '2',
+    password: '123',
+    metaType: 'patient',
     age: 40,
     sex: 'female',
     dob: Date.now(),
@@ -79,22 +76,35 @@ async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
   console.log('db synced!');
 
-  const [psychiatrist, psychologist] = await Profession.bulkCreate(
-    professionData
-  );
-  const [depression, anxiety, eating] = await Specialty.bulkCreate(
-    specialtyData
-  );
+  const [psychiatrist, psychologist] = await Profession.bulkCreate(professionData);
+  const [depression, anxiety, eating] = await Specialty.bulkCreate(specialtyData);
   const [fatigue, food, sleep] = await Symptom.bulkCreate(symptomData);
-  // const [doc1, doc2] = await User.bulkCreate(doctorData);
+
+  const [doc1user, doc2user, pat1user, pat2user] = await User.bulkCreate(userData);
   const [doc1, doc2] = await Promise.all([
-    User.create(doctorData[0]),
-    User.create(doctorData[1]),
+    Doctor.create({ rating: 5 }),
+    Doctor.create({ rating: 4 }),
   ]);
-  // const [pat1, pat2] = await User.bulkCreate(patientData);
-  const [pat1, pat2] = await Promise.all([
-    User.create(patientData[0]),
-    User.create(patientData[1]),
+  const [pat1, pat2] = await Promise.all([Patient.create(), Patient.create()]);
+
+  const apt1 = await Appointment.create({
+    date: Date.now(),
+    topic: '1st Meeting',
+    patientId: pat1.id,
+    doctorId: doc1.id,
+  });
+  const apt2 = await Appointment.create({
+    date: Date.now(),
+    topic: '1st Meeting',
+    patientId: pat2.id,
+    doctorId: doc2.id,
+  });
+
+  await Promise.all([
+    doc1user.setDoctor(doc1),
+    doc2user.setDoctor(doc2),
+    pat1user.setPatient(pat1),
+    pat2user.setPatient(pat2),
   ]);
 
   await doc1.setProfession(psychiatrist);
@@ -109,13 +119,6 @@ async function seed() {
   await doc1.addPatients([pat1, pat2]);
   await doc2.addPatient(pat2);
 
-  await doc1.addAppointmentPatient(pat1, {
-    through: { date: Date.now(), topic: '1st Meeting' },
-  });
-  await doc2.addAppointmentPatient(pat2, {
-    through: { date: Date.now(), topic: '1st Meeting' },
-  });
-
   console.log(`seeded successfully`);
   // return {
   //   users: {
@@ -123,6 +126,37 @@ async function seed() {
   //     murphy: users[1],
   //   },
   // };
+
+  // const allPatients1 = await User.findAll({
+  //   include: [Doctor, Patient],
+  //   where: { metaType: 'patient' },
+  // });
+  // const allPatients2 = await Patient.findAll({
+  //   include: [User],
+  // });
+
+  // console.log('query 1');
+  // allPatients1.map((pat) => console.log(pat.toJSON()));
+  // console.log('\n\nquery 2');
+  // allPatients2.map((pat) => console.log(pat.toJSON()));
+
+  // const allDoctors1 = await User.findAll({
+  //   include: [Doctor, Patient],
+  //   where: { metaType: 'doctor' },
+  // });
+  // const allDoctors2 = await Doctor.findAll({
+  //   include: [User],
+  // });
+
+  // console.log('query 1');
+  // allDoctors1.map((doc) => console.log(doc.toJSON()));
+  // allDoctors1.map((doc) => console.log(doc.meta));
+
+  // const doc1data = await allDoctors1[0].getDoctor();
+  // console.log(doc1data.toJSON());
+
+  // console.log('\n\nquery 2');
+  // allDoctors2.map((doc) => console.log(doc.toJSON()));
 }
 
 /*

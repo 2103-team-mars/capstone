@@ -1,14 +1,14 @@
 //this is the access point for all things database related!
 
-const db = require("./db");
+const db = require('./db');
 
-const User = require("./models/user");
-const { Symptom, Specialty, Profession } = require("./models/metaTables");
-const Medication = require("./models/medication");
-const Appointment = require("./models/appointment");
-const DoctorPatient = require("./models/doctorPatient");
-const Doctor = require("./models/doctor");
-const Patient = require("./models/patient");
+const User = require('./models/user');
+const { Symptom, Specialty, Profession } = require('./models/metaTables');
+const Medication = require('./models/medication');
+const Appointment = require('./models/appointment');
+const DoctorPatient = require('./models/doctorPatient');
+const Doctor = require('./models/doctor');
+const Patient = require('./models/patient');
 
 //associations could go here!
 //maintaining this table as part of a scalable patient doctor association
@@ -16,23 +16,23 @@ Doctor.belongsToMany(Patient, { through: DoctorPatient });
 Patient.belongsToMany(Doctor, { through: DoctorPatient });
 
 //polymorphic associations
-User.belongsTo(Doctor, { contraints: false, foreignKey: "metaId" });
+User.belongsTo(Doctor, { contraints: false, foreignKey: 'metaId' });
 
 Doctor.hasOne(User, {
   contraints: false,
-  foreignKey: "metaId",
+  foreignKey: 'metaId',
   scope: {
-    metaType: "doctor",
+    metaType: 'doctor',
   },
 });
 
-User.belongsTo(Patient, { contraints: false, foreignKey: "metaId" });
+User.belongsTo(Patient, { contraints: false, foreignKey: 'metaId' });
 
 Patient.hasOne(User, {
   contraints: false,
-  foreignKey: "metaId",
+  foreignKey: 'metaId',
   scope: {
-    metaType: "patient",
+    metaType: 'patient',
   },
 });
 
@@ -50,14 +50,14 @@ Patient.belongsToMany(Doctor, {
 });
 
 Patient.belongsToMany(Symptom, {
-  through: "PatientSymptoms",
+  through: 'PatientSymptoms',
 });
-Symptom.belongsToMany(Patient, { through: "PatientSymptoms" });
+Symptom.belongsToMany(Patient, { through: 'PatientSymptoms' });
 
 Doctor.belongsToMany(Specialty, {
-  through: "DoctorSpecialties",
+  through: 'DoctorSpecialties',
 });
-Specialty.belongsToMany(Doctor, { through: "DoctorSpecialties" });
+Specialty.belongsToMany(Doctor, { through: 'DoctorSpecialties' });
 
 Doctor.belongsTo(Profession);
 
