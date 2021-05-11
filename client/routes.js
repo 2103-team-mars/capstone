@@ -1,11 +1,12 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Login, Signup } from './components/AuthForm';
-import Home from './components/Home';
-import { me } from './store';
-import MapComponent from './components/MapComponent';
-import Meeting from './components/Meeting';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Login, Signup } from "./components/AuthForm";
+import Home from "./components/Home";
+import { me } from "./store";
+import MapComponent from "./components/MapComponent";
+import Meeting from "./components/Meeting";
+import PatientDocProfile from "./PatientDocProfile";
 
 /**
  * COMPONENT
@@ -22,16 +23,18 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route path='/home' component={Home} />
-            <Route path='/map' component={MapComponent} />
-            <Route path='/meeting' component={Meeting} />
-            <Redirect to='/home' />
+            <Route path="/home" component={Home} />
+            <Route path="/map" component={MapComponent} />
+            <Route path="/meeting" component={Meeting} />
+            <Route path="/meeting" component={Meeting} />
+            <Route path="/patient/docprofile" component={PatientDocProfile} />
+            <Redirect to="/home" />
           </Switch>
         ) : (
           <Switch>
-            <Route path='/' exact component={Login} />
-            <Route path='/login' component={Login} />
-            <Route path='/signup' component={Signup} />
+            <Route path="/" exact component={Login} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
           </Switch>
         )}
       </div>
