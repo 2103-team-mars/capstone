@@ -1,5 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+const Patient = require('./patient');
+const Doctor = require('./doctor');
+const { Profession } = require('./metaTables');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const makeCoordinates = require('../../coordinates');
@@ -15,7 +18,11 @@ const User = db.define('user', {
       isEmail: true,
     },
   },
-  name: {
+  firstName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  lastName: {
     type: Sequelize.STRING,
     allowNull: false,
   },
@@ -23,15 +30,9 @@ const User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  isDoctor: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-  },
   profilePicture: {
     type: Sequelize.TEXT,
-    defaultValue:
-      'https://rpgplanner.com/wp-content/uploads/2020/06/no-photo-available.png',
+    defaultValue: 'https://rpgplanner.com/wp-content/uploads/2020/06/no-photo-available.png',
   },
   age: {
     type: Sequelize.INTEGER,
@@ -57,6 +58,13 @@ const User = db.define('user', {
   coordinates: {
     type: Sequelize.ARRAY(Sequelize.FLOAT),
   },
+  metaType: {
+    type: Sequelize.ENUM('doctor', 'patient'),
+    allowNull: false,
+  },
+  metaId: {
+    type: Sequelize.INTEGER,
+  },
 });
 
 module.exports = User;
@@ -64,6 +72,25 @@ module.exports = User;
 /**
  * instanceMethods
  */
+
+User.addHook('afterFind', (findResult) => {
+  if (!Array.isArray(findResult)) findResult = [findResult];
+  for (const instance of findResult) {
+    if (instance.metaType === 'doctor' && instance.doctor !== undefined) {
+      instance.meta = instance.doctor;
+      instance.dataValues.meta = instance.doctor;
+    } else if (instance.metaType === 'patient' && instance.patient !== undefined) {
+      instance.meta = instance.patient;
+      instance.dataValues.meta = instance.patient;
+    }
+    // To prevent mistakes:
+    delete instance.doctor;
+    delete instance.dataValues.doctor;
+    delete instance.patient;
+    delete instance.dataValues.patient;
+  }
+});
+
 User.prototype.correctPassword = function (candidatePwd) {
   //we need to compare the plain version to an encrypted version of the password
   return bcrypt.compare(candidatePwd, this.password);
@@ -89,7 +116,7 @@ User.authenticate = async function ({ email, password }) {
 User.findByToken = async function (token) {
   try {
     const { id } = await jwt.verify(token, process.env.JWT);
-    const user = User.findByPk(id);
+    const user = User.findByPk(id, { include: [Patient, { model: Doctor, include: Profession }] });
     if (!user) {
       throw 'nooo';
     }

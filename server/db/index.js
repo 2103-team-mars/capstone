@@ -7,36 +7,65 @@ const { Symptom, Specialty, Profession } = require('./models/metaTables');
 const Medication = require('./models/medication');
 const Appointment = require('./models/appointment');
 const DoctorPatient = require('./models/doctorPatient');
+const Doctor = require('./models/doctor');
+const Patient = require('./models/patient');
 
 //associations could go here!
-User.belongsToMany(User, { through: DoctorPatient, as: 'doctors', foreignKey: 'patientId' });
-User.belongsToMany(User, { through: DoctorPatient, as: 'patients', foreignKey: 'doctorId' });
+//maintaining this table as part of a scalable patient doctor association
+Doctor.belongsToMany(Patient, { through: DoctorPatient });
+Patient.belongsToMany(Doctor, { through: DoctorPatient });
 
-User.hasOne(Medication, { as: 'patient', foreignKey: 'patientId' });
-User.hasOne(Medication, { as: 'doctor', foreignKey: 'doctorId' });
+//polymorphic associations
+User.belongsTo(Doctor, { contraints: false, foreignKey: 'metaId' });
 
-User.belongsToMany(User, {
-  through: Appointment,
-  as: 'appointmentDoctors',
-  foreignKey: 'patientId',
-});
-User.belongsToMany(User, {
-  through: Appointment,
-  as: 'appointmentPatients',
-  foreignKey: 'doctorId',
+Doctor.hasOne(User, {
+  contraints: false,
+  foreignKey: 'metaId',
+  scope: {
+    metaType: 'doctor',
+  },
 });
 
-User.belongsToMany(Symptom, { through: 'PatientSymptoms', foreignKey: 'patientId' });
-Symptom.belongsToMany(User, { through: 'PatientSymptoms' });
+User.belongsTo(Patient, { contraints: false, foreignKey: 'metaId' });
 
-User.belongsToMany(Specialty, { through: 'DoctorSpecialties', foreignKey: 'doctorId' });
-Specialty.belongsToMany(User, { through: 'DoctorSpecialties' });
+Patient.hasOne(User, {
+  contraints: false,
+  foreignKey: 'metaId',
+  scope: {
+    metaType: 'patient',
+  },
+});
 
-User.belongsTo(Profession);
+Patient.hasMany(Medication);
+Doctor.hasMany(Medication);
+Medication.belongsTo(Doctor);
+Medication.belongsTo(Patient);
+
+Doctor.belongsToMany(Patient, {
+  through: { model: Appointment, unique: false },
+});
+
+Patient.belongsToMany(Doctor, {
+  through: { model: Appointment, unique: false },
+});
+
+Patient.belongsToMany(Symptom, {
+  through: 'PatientSymptoms',
+});
+Symptom.belongsToMany(Patient, { through: 'PatientSymptoms' });
+
+Doctor.belongsToMany(Specialty, {
+  through: 'DoctorSpecialties',
+});
+Specialty.belongsToMany(Doctor, { through: 'DoctorSpecialties' });
+
+Doctor.belongsTo(Profession);
 
 module.exports = {
   db,
   User,
+  Patient,
+  Doctor,
   Medication,
   Appointment,
   DoctorPatient,

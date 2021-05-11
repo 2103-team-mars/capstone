@@ -48,26 +48,23 @@ export class MapComponent extends Component {
       <div>
         <Map
           google={google}
-          initialCenter={{ lat: 37.4221, lng: -122.0841 }}
-          center={
-            auth.id
-              ? {
-                  lat: auth.coordinates[0],
-                  lng: auth.coordinates[1],
-                }
-              : { lat: 37.4221, lng: -122.0841 }
-          }
+          initialCenter={{
+            lat: auth.coordinates[0],
+            lng: auth.coordinates[1],
+          }}
         >
           {doctors.map((doctor) => {
             return (
               <Marker
+                key={doctor.id}
+                id={doctor.id}
                 onClick={this.onMarkerClick}
-                name={doctor.name}
-                email={doctor.email}
-                location={doctor.location}
+                name={doctor.user.firstName + ' ' + doctor.user.lastName}
+                email={doctor.user.email}
+                location={doctor.user.location}
                 position={{
-                  lat: doctor.coordinates[0],
-                  lng: doctor.coordinates[1],
+                  lat: doctor.user.coordinates[0],
+                  lng: doctor.user.coordinates[1],
                 }}
               />
             );

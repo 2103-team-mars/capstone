@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const { User } = require('../db');
+const { User, Doctor, Profession, Specialty } = require('../db');
 
 //get /api/doctors
 router.get('/', async (req, res, next) => {
   try {
-    const doctors = await User.findAll({
-      where: { isDoctor: true },
+    const doctors = await Doctor.findAll({
+      include: [User, Profession, Specialty],
     });
     res.json(doctors);
   } catch (error) {

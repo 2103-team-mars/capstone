@@ -32,12 +32,10 @@ class Meeting extends Component {
     const room = v4();
     this.setState({ room });
     socket.emit('join', room);
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        this.setState({ stream });
-        this.myStream.current.srcObject = stream;
-      });
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+      this.setState({ stream });
+      this.myStream.current.srcObject = stream;
+    });
     socket.on('receive', (message) => {
       this.setState({
         chat: [...this.state.chat, message],
@@ -79,7 +77,11 @@ class Meeting extends Component {
     });
     peer.on('signal', (data) => {
       socket.emit('join', room);
-      socket.emit('call', { room, signal: data, name: this.props.auth.name });
+      socket.emit('call', {
+        room,
+        signal: data,
+        name: this.props.auth.firstName + ' ' + this.props.auth.lastName,
+      });
     });
     peer.on('stream', (stream) => {
       this.theirStream.current.srcObject = stream;
@@ -92,11 +94,11 @@ class Meeting extends Component {
   }
   end(initiator) {
     socket.removeAllListeners('answering');
-    if (!this.props.auth.isDoctor) {
+    if (this.props.auth.metaType !== 'doctor') {
       socket.emit('leave', this.state.room);
     }
     this.setState({
-      room: this.props.auth.isDoctor ? this.state.room : '',
+      room: this.props.auth.metaType === 'doctor' ? this.state.room : '',
       receivingCall: false,
       callerSignal: null,
       callAccepted: false,
@@ -124,11 +126,8 @@ class Meeting extends Component {
     return (
       <div>
         <form onClick={this.onSubmit}>
-          <input
-            onChange={(event) => this.onChange(event)}
-            value={this.state.msg}
-          />
-          <button type='submit'>Send</button>
+          <input onChange={(event) => this.onChange(event)} value={this.state.msg} />
+          <button type="submit">Send</button>
         </form>
 
         {this.state.chat.map((msg, idx) => (
@@ -136,41 +135,25 @@ class Meeting extends Component {
             <p>{msg}</p>
           </div>
         ))}
-        <video
-          style={{ width: '600px' }}
-          ref={this.myStream}
-          autoPlay
-          playsInline
-          muted
-        />
+        <video style={{ width: '600px' }} ref={this.myStream} autoPlay playsInline muted />
         {this.state.callAccepted ? (
-          <video
-            style={{ width: '600px' }}
-            ref={this.theirStream}
-            autoPlay
-            playsInline
-          />
+          <video style={{ width: '600px' }} ref={this.theirStream} autoPlay playsInline />
         ) : null}
-        {this.props.auth.isDoctor ? (
+        {this.props.auth.metaType === 'doctor' ? (
           <div>
             <p>{this.state.room}</p>
           </div>
         ) : null}
-        {this.state.callAccepted ? (
-          <button onClick={() => this.end(true)}>endCall</button>
-        ) : null}
+        {this.state.callAccepted ? <button onClick={() => this.end(true)}>endCall</button> : null}
         {!this.state.callAccepted && this.state.receivingCall ? (
           <div>
             <p>{this.state.callerName}</p>
             <button onClick={this.answer}>Answer</button>
           </div>
         ) : null}
-        {!this.props.auth.isDoctor ? (
+        {this.props.auth.metaType !== 'doctor' ? (
           <div>
-            <input
-              value={this.state.roomToCall}
-              onChange={this.onRoomChange}
-            ></input>
+            <input value={this.state.roomToCall} onChange={this.onRoomChange}></input>
             <button
               onClick={() => {
                 this.call(this.state.roomToCall);

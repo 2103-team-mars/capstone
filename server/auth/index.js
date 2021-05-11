@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { User } = require('../db');
-const makeCoordinates = require('../coordinates');
 
 router.post('/login', async (req, res, next) => {
   try {
@@ -26,9 +25,7 @@ router.post('/signup', async (req, res, next) => {
 router.get('/me', async (req, res, next) => {
   try {
     const user = await User.findByToken(req.headers.authorization);
-    user.coordinates = await makeCoordinates(user.location);
     res.send(user);
-    // res.send(await User.findByToken(req.headers.authorization));
   } catch (ex) {
     next(ex);
   }
