@@ -4,6 +4,31 @@ import Peer from 'simple-peer';
 import { v4 } from 'uuid';
 import { connect } from 'react-redux';
 
+const peerConfig = {
+  iceServers: [
+    {
+      urls: ['stun:23.21.150.121'],
+    },
+    {
+      urls: [
+        'stun:stun.l.google.com:19302',
+        'stun:stun1.l.google.com:19302',
+        'stun:stun2.l.google.com:19302',
+        'stun:stun3.l.google.com:19302',
+        'stun:stun4.l.google.com:19302',
+      ],
+    },
+    {
+      url: 'stun:numb.viagenie.ca:3478',
+    },
+    {
+      url: 'turn:numb.viagenie.ca',
+      credential: 'muazkh',
+      username: 'webrtc@live.com',
+    },
+  ],
+};
+
 class Meeting extends Component {
   constructor() {
     super();
@@ -32,12 +57,10 @@ class Meeting extends Component {
     const room = v4();
     this.setState({ room });
     socket.emit('join', room);
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        this.setState({ stream });
-        this.myStream.current.srcObject = stream;
-      });
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+      this.setState({ stream });
+      this.myStream.current.srcObject = stream;
+    });
     socket.on('receive', (message) => {
       this.setState({
         chat: [...this.state.chat, message],
@@ -61,6 +84,7 @@ class Meeting extends Component {
       initiator: false,
       trickle: false,
       stream: this.state.stream,
+      config: peerConfig,
     });
     peer.on('signal', (data) => {
       socket.emit('answer', { room: this.state.room, signal: data });
@@ -76,6 +100,7 @@ class Meeting extends Component {
       initiator: true,
       trickle: false,
       stream: this.state.stream,
+      config: peerConfig,
     });
     peer.on('signal', (data) => {
       socket.emit('join', room);
@@ -124,11 +149,8 @@ class Meeting extends Component {
     return (
       <div>
         <form onClick={this.onSubmit}>
-          <input
-            onChange={(event) => this.onChange(event)}
-            value={this.state.msg}
-          />
-          <button type='submit'>Send</button>
+          <input onChange={(event) => this.onChange(event)} value={this.state.msg} />
+          <button type="submit">Send</button>
         </form>
 
         {this.state.chat.map((msg, idx) => (
@@ -136,29 +158,16 @@ class Meeting extends Component {
             <p>{msg}</p>
           </div>
         ))}
-        <video
-          style={{ width: '600px' }}
-          ref={this.myStream}
-          autoPlay
-          playsInline
-          muted
-        />
+        <video style={{ width: '600px' }} ref={this.myStream} autoPlay playsInline muted />
         {this.state.callAccepted ? (
-          <video
-            style={{ width: '600px' }}
-            ref={this.theirStream}
-            autoPlay
-            playsInline
-          />
+          <video style={{ width: '600px' }} ref={this.theirStream} autoPlay playsInline />
         ) : null}
         {this.props.auth.isDoctor ? (
           <div>
             <p>{this.state.room}</p>
           </div>
         ) : null}
-        {this.state.callAccepted ? (
-          <button onClick={() => this.end(true)}>endCall</button>
-        ) : null}
+        {this.state.callAccepted ? <button onClick={() => this.end(true)}>endCall</button> : null}
         {!this.state.callAccepted && this.state.receivingCall ? (
           <div>
             <p>{this.state.callerName}</p>
@@ -167,10 +176,7 @@ class Meeting extends Component {
         ) : null}
         {!this.props.auth.isDoctor ? (
           <div>
-            <input
-              value={this.state.roomToCall}
-              onChange={this.onRoomChange}
-            ></input>
+            <input value={this.state.roomToCall} onChange={this.onRoomChange}></input>
             <button
               onClick={() => {
                 this.call(this.state.roomToCall);
