@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import auth from './auth';
 import mapReducer from './googleMap';
+import appointments from './appointments';
 
 const reducer = combineReducers({
   auth,
   mapDoctors: mapReducer,
+  appointments,
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
