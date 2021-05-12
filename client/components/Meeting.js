@@ -104,7 +104,11 @@ class Meeting extends Component {
     });
     peer.on('signal', (data) => {
       socket.emit('join', room);
-      socket.emit('call', { room, signal: data, name: this.props.auth.name });
+      socket.emit('call', {
+        room,
+        signal: data,
+        name: this.props.auth.firstName + ' ' + this.props.auth.lastName,
+      });
     });
     peer.on('stream', (stream) => {
       this.theirStream.current.srcObject = stream;
@@ -117,11 +121,11 @@ class Meeting extends Component {
   }
   end(initiator) {
     socket.removeAllListeners('answering');
-    if (!this.props.auth.isDoctor) {
+    if (this.props.auth.metaType !== 'doctor') {
       socket.emit('leave', this.state.room);
     }
     this.setState({
-      room: this.props.auth.isDoctor ? this.state.room : '',
+      room: this.props.auth.metaType === 'doctor' ? this.state.room : '',
       receivingCall: false,
       callerSignal: null,
       callAccepted: false,
@@ -162,7 +166,7 @@ class Meeting extends Component {
         {this.state.callAccepted ? (
           <video style={{ width: '600px' }} ref={this.theirStream} autoPlay playsInline />
         ) : null}
-        {this.props.auth.isDoctor ? (
+        {this.props.auth.metaType === 'doctor' ? (
           <div>
             <p>{this.state.room}</p>
           </div>
@@ -174,7 +178,7 @@ class Meeting extends Component {
             <button onClick={this.answer}>Answer</button>
           </div>
         ) : null}
-        {!this.props.auth.isDoctor ? (
+        {this.props.auth.metaType !== 'doctor' ? (
           <div>
             <input value={this.state.roomToCall} onChange={this.onRoomChange}></input>
             <button
