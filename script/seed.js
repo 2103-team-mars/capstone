@@ -120,43 +120,6 @@ async function seed() {
   await doc2.addPatient(pat2);
 
   console.log(`seeded successfully`);
-  // return {
-  //   users: {
-  //     cody: users[0],
-  //     murphy: users[1],
-  //   },
-  // };
-
-  // const allPatients1 = await User.findAll({
-  //   include: [Doctor, Patient],
-  //   where: { metaType: 'patient' },
-  // });
-  // const allPatients2 = await Patient.findAll({
-  //   include: [User],
-  // });
-
-  // console.log('query 1');
-  // allPatients1.map((pat) => console.log(pat.toJSON()));
-  // console.log('\n\nquery 2');
-  // allPatients2.map((pat) => console.log(pat.toJSON()));
-
-  // const allDoctors1 = await User.findAll({
-  //   include: [Doctor, Patient],
-  //   where: { metaType: 'doctor' },
-  // });
-  // const allDoctors2 = await Doctor.findAll({
-  //   include: [User],
-  // });
-
-  // console.log('query 1');
-  // allDoctors1.map((doc) => console.log(doc.toJSON()));
-  // allDoctors1.map((doc) => console.log(doc.meta));
-
-  // const doc1data = await allDoctors1[0].getDoctor();
-  // console.log(doc1data.toJSON());
-
-  // console.log('\n\nquery 2');
-  // allDoctors2.map((doc) => console.log(doc.toJSON()));
 }
 
 /*
