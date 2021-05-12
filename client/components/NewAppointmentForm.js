@@ -16,12 +16,11 @@ const NewAppointmentForm = () => {
   };
 
   return (
-    <div style={{ width: '50%', margin: '5rem auto 0' }}>
+    <div style={{ width: '50%', margin: '5rem auto 0 2rem' }}>
       <form onSubmit={handleSubmit}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDateTimePicker
             variant="inline"
-            ampm={false}
             value={dateTime}
             onChange={(date) => setDateTime(date)}
             disablePast

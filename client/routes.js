@@ -5,7 +5,6 @@ import { Login, Signup } from './components/AuthForm';
 import Home from './components/Home';
 import { me } from './store';
 import Meeting from './components/Meeting';
-import NewAppointmentForm from './components/NewAppointmentForm';
 import Dashboard from './components/Dashboard';
 
 /**
@@ -23,11 +22,10 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route path='/home' component={Home} />
-            <Route path='/meeting' component={Meeting} />
-            <Route path='/dashboard' component={Dashboard} />
-            <Route path="/newAppointment" component={NewAppointmentForm} />
-            <Redirect to='/home' />
+            <Route path="/home" component={Home} />
+            <Route path="/meeting" component={Meeting} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Redirect to="/home" />
           </Switch>
         ) : (
           <Switch>

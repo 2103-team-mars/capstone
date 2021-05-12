@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
 });
 
 //GET /api/appointments/doctors/:id
-router.get('/doctors/:id', isDoctor, async (req, res, next) => {
+router.get('/doctors/:id', async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { doctorId: req.params.id },
@@ -26,8 +26,8 @@ router.get('/doctors/:id', isDoctor, async (req, res, next) => {
   }
 });
 
-//GET /api/appointments/users/:id
-router.get('/users/:id', isPatient, async (req, res, next) => {
+//GET /api/appointments/patients/:id
+router.get('/patients/:id', isPatient, async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { patientId: req.params.id },
@@ -62,18 +62,18 @@ router.put('/:id', isPatient, async (req, res, next) => {
     const { topic, join } = req.body;
     const patient = req.user;
     const appointment = await Appointment.findByPk(req.params.id, {
-      include: [{ model: Doctor, include: User }],
+      include: [{ model: Patient, include: User }],
     });
     if (join) {
-      const updatedAppointment = await appointment.update({
+      await appointment.update({
         topic,
         patientId: patient.metaId,
       });
-      res.json(updatedAppointment);
     } else {
       await appointment.update({ patientId: null });
-      res.sendStatus(204);
     }
+    await appointment.reload();
+    res.json(appointment);
   } catch (error) {
     next(error);
   }

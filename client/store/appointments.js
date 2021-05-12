@@ -4,6 +4,8 @@ const initialState = [];
 
 const GET_APPOINTMENTS = 'GET_APPOINTMENTS';
 const NEW_APPOINTMENT = 'NEW_APPOINTMENT';
+const CLAIM_APPOINTMENT = 'CLAIM_APPOINTMENT';
+const CANCEL_APPOINTMENT = 'CANCEL_APPOINTMENT';
 const REMOVE_APPOINTMENT = 'REMOVE_APPOINTMENT';
 
 export const getAppointments = (appointments) => {
@@ -20,6 +22,21 @@ export const newAppointment = (appointment) => {
   };
 };
 
+export const claimAppointment = (appointment) => {
+  return {
+    type: CLAIM_APPOINTMENT,
+    appointment,
+  };
+};
+
+export const cancelAppointment = (appointment, onDoctorPage) => {
+  return {
+    type: CLAIM_APPOINTMENT,
+    appointment,
+    onDoctorPage,
+  };
+};
+
 export const removeAppointment = (id) => {
   return {
     type: REMOVE_APPOINTMENT,
@@ -31,7 +48,7 @@ export const fetchAppointments = (isDoctor, id) => {
   return async (dispatch) => {
     try {
       const { data: appointments } = await axios.get(
-        `/api/appointments/${isDoctor ? 'doctors' : 'users'}/${id}`,
+        `/api/appointments/${isDoctor ? 'doctors' : 'patients'}/${id}`,
         {
           headers: {
             authorization: window.localStorage.getItem('token'),
@@ -76,7 +93,7 @@ export const registerAppointment = (topic, id) => {
           },
         }
       );
-      dispatch(newAppointment(appointment));
+      dispatch(claimAppointment(appointment));
     } catch (error) {
       throw error;
     }
@@ -98,10 +115,10 @@ export const deleteAppointment = (id) => {
   };
 };
 
-export const leaveAppointment = (id) => {
+export const leaveAppointment = (id, onDoctorPage) => {
   return async (dispatch) => {
     try {
-      await axios.put(
+      const { data: appointment } = await axios.put(
         `/api/appointments/${id}`,
         { join: false },
         {
@@ -110,7 +127,7 @@ export const leaveAppointment = (id) => {
           },
         }
       );
-      dispatch(removeAppointment(id));
+      dispatch(cancelAppointment(appointment, onDoctorPage));
     } catch (error) {
       throw error;
     }
@@ -120,9 +137,23 @@ export const leaveAppointment = (id) => {
 export default function appointmentsReducer(state = initialState, action) {
   switch (action.type) {
     case GET_APPOINTMENTS:
-      return action.appointments;
+      return action.appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
     case NEW_APPOINTMENT:
-      return [...state, action.newAppointment];
+      return [...state, action.appointment].sort((a, b) => new Date(a.date) - new Date(b.date));
+    case CLAIM_APPOINTMENT:
+      return state.map((appointment) => {
+        if (appointment.id === action.appointment.id) return action.appointment;
+        else return appointment;
+      });
+    case CANCEL_APPOINTMENT:
+      if (action.onDoctorPage) {
+        return state.map((appointment) => {
+          if (appointment.id === action.appointment.id) return action.appointment;
+          else return appointment;
+        });
+      } else {
+        return state.filter((appointment) => appointment.id !== action.id);
+      }
     case REMOVE_APPOINTMENT:
       return state.filter((appointment) => appointment.id !== action.id);
     default:
