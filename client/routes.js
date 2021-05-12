@@ -6,6 +6,7 @@ import Home from './components/Home';
 import { me } from './store';
 import Meeting from './components/Meeting';
 import Dashboard from './components/Dashboard';
+import PatientProfile from './components/PatientProfile';
 
 /**
  * COMPONENT
@@ -22,16 +23,22 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route path="/home" component={Home} />
-            <Route path="/meeting" component={Meeting} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Redirect to="/home" />
+            <Route
+              exact
+              path='/patients/:patientId'
+              component={PatientProfile}
+            />
+            <Route path='/home' component={Home} />
+            <Route path='/meeting' component={Meeting} />
+            <Route path='/dashboard' component={Dashboard} />
+
+            <Redirect to='/home' />
           </Switch>
         ) : (
           <Switch>
-            <Route path="/" exact component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
+            <Route path='/' exact component={Login} />
+            <Route path='/login' component={Login} />
+            <Route path='/signup' component={Signup} />
           </Switch>
         )}
       </div>

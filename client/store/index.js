@@ -6,12 +6,14 @@ import auth from './auth';
 import mapReducer from './googleMap';
 import symptomsReducer from './symptoms';
 import appointments from './appointments';
+import patient from './patient';
 
 const reducer = combineReducers({
   auth,
   mapDoctors: mapReducer,
   symptoms: symptomsReducer,
   appointments,
+  patient,
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))

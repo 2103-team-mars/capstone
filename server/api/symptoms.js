@@ -9,10 +9,16 @@ const {
 } = require('../db');
 
 //get /api/symptoms
-router.get('/', async (req, res, next) => {
+router.get('/patients/:id', async (req, res, next) => {
   try {
-    const symptoms = await Patient.findOne({
-      include: Symptom,
+    const symptoms = await Symptom.findAll({
+      include: {
+        model: Patient,
+        where: {
+          id: req.params.id,
+        },
+        attributes: [],
+      },
     });
     res.send(symptoms);
   } catch (error) {

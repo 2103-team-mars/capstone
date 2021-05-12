@@ -11,10 +11,12 @@ export const getSymptoms = (symptoms) => {
   };
 };
 
-export const fetchSymptoms = () => {
+export const fetchSymptoms = (id) => {
   return async (dispatch) => {
     try {
-      const { data: symptoms } = await axios.get('/api/symptoms');
+      const { data: symptoms } = await axios.get(
+        `/api/symptoms/patients/${id}`
+      );
       dispatch(getSymptoms(symptoms));
     } catch (error) {
       throw error;
