@@ -3,10 +3,17 @@ import fetchDoctor from "../store/singleDoctor";
 import { connect } from "react-redux";
 
 export class PatientDocProfile extends Component {
+  componentDidMount() {
+    const { docId } = Number(this.props.match.params);
+    this.props.fetchDoctor(docId);
+  }
   render() {
+    console.log("this.props from RENDER ---->>>>", this.props);
+
     return (
       <div>
         <p>This the Patient Doc Profile Component</p>
+        <div></div>
       </div>
     );
   }
@@ -20,7 +27,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    fetchDoctor: (id) => dispatch(fetchDoctor(id)),
+    fetchDoctor: (docId) => dispatch(fetchDoctor(docId)),
   };
 };
 

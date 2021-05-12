@@ -15,7 +15,7 @@ export const getDoctor = (doctor) => {
 export const fetchDoctor = (id) => {
   return async (dispatch) => {
     try {
-      const { data: doctor } = await axios.get(`/api/doctors/${id}`);
+      const { data: doctor } = await axios.get(`/api/doctors/1`);
       dispatch(getDoctor(doctor));
     } catch (err) {
       next(err);
