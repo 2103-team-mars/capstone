@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { fetchDoctor } from "../store/singleDoctor";
 import { connect } from "react-redux";
-import MyAppointments from "./MyAppointments";
+import DocAppointments from "./DocAppointments";
 
 export class PatientDocProfile extends Component {
   constructor(props) {
@@ -40,7 +40,11 @@ export class PatientDocProfile extends Component {
           <hr />
           <div>
             <h2>View Appointment Availabilites</h2>
-            <MyAppointments />
+            <DocAppointments
+              doctorId={this.props.match.params.docId}
+              doctorFirstName={firstName}
+              doctorLastName={lastName}
+            />
           </div>
         </div>
       );
