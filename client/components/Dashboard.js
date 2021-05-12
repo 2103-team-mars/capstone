@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
-import { connect } from 'react-redux';
-import MapComponent from './MapComponent';
-import PatientProfile from './PatientProfile';
-import MyAppointments from './MyAppointments';
+import React, { Component } from "react";
+import { AppBar, Tabs, Tab, Typography, Box } from "@material-ui/core";
+import { connect } from "react-redux";
+import MapComponent from "./MapComponent";
+import PatientProfile from "./PatientProfile";
+import MyAppointments from "./MyAppointments";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -28,9 +28,9 @@ export function Dashboard({ auth }) {
   };
   return (
     <div>
-      {auth.metaType === 'patient' ? (
+      {auth.metaType === "patient" ? (
         <div>
-          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
+          <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -64,7 +64,7 @@ export function Dashboard({ auth }) {
         </div>
       ) : (
         <div>
-          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
+          <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
             <Tabs
               value={value}
               onChange={handleChange}
