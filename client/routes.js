@@ -26,10 +26,7 @@ class Routes extends Component {
             <Route path="/home" exact component={Home} />
             <Route path="/meeting" component={Meeting} />
             <Route path="/dashboard" component={Dashboard} />
-            <Route
-              path="/patient/docprofile/:docId"
-              component={PatientDocProfile}
-            />
+            <Route path="/doctor/:docId" component={PatientDocProfile} />
             <Redirect to="/home" />
           </Switch>
         ) : (

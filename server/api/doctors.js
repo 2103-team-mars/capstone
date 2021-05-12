@@ -17,15 +17,10 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const docId = req.params.id;
-    const doctor = await Doctor.findAll({
-      include: {
-        model: User,
-        where: {
-          id: docId,
-        },
-      },
+    const doctor = await Doctor.findByPk(docId, {
+      include: [User, Profession, Specialty],
     });
-    if (doctor.length === 0) {
+    if (!doctor.id) {
       res.status(404).send("This doctor does not exist in the DB");
     } else {
       res.send(doctor);

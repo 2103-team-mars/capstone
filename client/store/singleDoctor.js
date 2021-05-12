@@ -15,16 +15,16 @@ export const getDoctor = (doctor) => {
 export const fetchDoctor = (id) => {
   return async (dispatch) => {
     try {
-      const { data: doctor } = await axios.get(`/api/doctors/1`);
-      dispatch(getDoctor(doctor));
+      const { data } = await axios.get(`/api/doctors/${id}`);
+      dispatch(getDoctor(data));
     } catch (err) {
-      next(err);
+      console.log("There was a error in fetching your data");
     }
   };
 };
 
 //initial state
-const initialState = [];
+const initialState = {};
 
 export default function singleDoctor(state = initialState, action) {
   switch (action.type) {

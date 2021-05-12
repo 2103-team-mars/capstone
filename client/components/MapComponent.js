@@ -1,9 +1,10 @@
 import { GoogleApiWrapper, Map, InfoWindow, Marker } from "google-maps-react";
-import { Link } from "react-router-dom";
+import { Router, Link } from "react-router-dom";
 import React, { Component } from "react";
 import { fetchDoctors } from "../store/googleMap";
 import { connect } from "react-redux";
 import PatientDocProfile from "./PatientDocProfile";
+import history from "../history";
 
 export class MapComponent extends Component {
   constructor() {
@@ -77,10 +78,12 @@ export class MapComponent extends Component {
             visible={this.state.showingInfoWindow}
           >
             <div>
-              {/* <Link to={`/patient/docprofile/${this.state.selectedDoctor.id}`}>
-              </Link> */}
+              <Router history={history}>
+                <Link to={`/doctor/${this.state.selectedDoctor.id}`}>
+                  <h1>{this.state.selectedDoctor.name}</h1>
+                </Link>
+              </Router>
 
-              <h1>{this.state.selectedDoctor.name}</h1>
               <h1>{this.state.selectedDoctor.location}</h1>
               <h1>{this.state.selectedDoctor.email}</h1>
               <h1>{this.state.selectedDoctor.id}</h1>

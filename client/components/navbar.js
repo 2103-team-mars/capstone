@@ -16,7 +16,7 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
           </a>
 
           <Link to="/meeting">Meeting</Link>
-          <Link to="/patient/docprofile">Doc Profile</Link>
+          <Link to="/doctor/:docId">Doc Profile</Link>
 
           <Link to="/dashboard">Dashboard</Link>
         </div>
