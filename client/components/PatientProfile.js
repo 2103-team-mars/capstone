@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchSymptoms } from '../store/symptoms';
 
 export class PatientProfile extends Component {
+  componentDidMount() {
+    this.props.fetchSymptoms();
+  }
   render() {
+    const symptoms = this.props.symptoms || [];
+    const realSymptoms = symptoms.symptoms || [];
     return (
       <div>
         {this.props.auth.metaType === 'patient' ? (
@@ -15,6 +21,10 @@ export class PatientProfile extends Component {
             <p>Age: {this.props.auth.age}</p>
             <p>Email: {this.props.auth.email}</p>
             <p>Location: {this.props.auth.location}</p>
+            Symptoms:
+            {realSymptoms.map((symptom) => {
+              return <p> {symptom.name}</p>;
+            })}
           </div>
         ) : (
           <div>
@@ -36,6 +46,13 @@ export class PatientProfile extends Component {
 const mapState = (state) => {
   return {
     auth: state.auth,
+    symptoms: state.symptoms,
   };
 };
-export default connect(mapState)(PatientProfile);
+
+const mapDispatch = (dispatch) => {
+  return {
+    fetchSymptoms: () => dispatch(fetchSymptoms()),
+  };
+};
+export default connect(mapState, mapDispatch)(PatientProfile);
