@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React from "react";
+import { connect } from "react-redux";
 
 /**
  * COMPONENT
@@ -9,7 +9,7 @@ export const Home = (props) => {
   return (
     <div>
       <h3>
-        Welcome, {auth.firstName} {auth.lastName}
+        Welcome, {auth.firstName} {auth.lastName},
       </h3>
     </div>
   );
