@@ -3,6 +3,7 @@ import { AppBar, Tabs, Tab, Typography, Box } from "@material-ui/core";
 import { connect } from "react-redux";
 import MapComponent from "./MapComponent";
 import PatientProfile from "./PatientProfile";
+import MyAppointments from "./MyAppointments";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -29,7 +30,7 @@ export function Dashboard({ auth }) {
     <div>
       {auth.metaType === "patient" ? (
         <div>
-          <AppBar position="static">
+          <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -58,12 +59,12 @@ export function Dashboard({ auth }) {
             My Medications
           </TabPanel>
           <TabPanel value={value} index={4}>
-            My Appointments
+            <MyAppointments />
           </TabPanel>
         </div>
       ) : (
         <div>
-          <AppBar position="static">
+          <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -84,7 +85,7 @@ export function Dashboard({ auth }) {
             My Patients
           </TabPanel>
           <TabPanel value={value} index={2}>
-            My Appointments as a doctor
+            <MyAppointments />
           </TabPanel>
         </div>
       )}

@@ -9,11 +9,14 @@ export class PatientDocProfile extends Component {
   }
   render() {
     console.log("this.props from RENDER ---->>>>", this.props);
+    const {singleDoc} = this.props
 
     return (
       <div>
         <p>This the Patient Doc Profile Component</p>
-        <div></div>
+        <div>
+          <
+        </div>
       </div>
     );
   }
