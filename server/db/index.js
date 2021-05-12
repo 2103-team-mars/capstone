@@ -41,14 +41,19 @@ Doctor.hasMany(Medication);
 Medication.belongsTo(Doctor);
 Medication.belongsTo(Patient);
 
+//Appointments
 Doctor.belongsToMany(Patient, {
   through: { model: Appointment, unique: false },
 });
-
 Patient.belongsToMany(Doctor, {
   through: { model: Appointment, unique: false },
 });
+Doctor.hasMany(Appointment);
+Appointment.belongsTo(Doctor);
+Patient.hasMany(Appointment);
+Appointment.belongsTo(Patient);
 
+//Symptoms
 Patient.belongsToMany(Symptom, {
   through: 'PatientSymptoms',
 });

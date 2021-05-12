@@ -5,6 +5,7 @@ import { Router } from 'react-router-dom';
 import history from './history';
 import store from './store';
 import App from './app';
+import DateFnsUtils from '@date-io/date-fns';
 
 import { CssBaseline } from '@material-ui/core';
 
