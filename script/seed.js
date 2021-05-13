@@ -79,9 +79,9 @@ async function seed() {
     await doctorUsers[i].setDoctor(doctors[i]);
   }
 
-  const tomorrow = new Date();
+  const past = new Date();
   const future = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setDate(tomorrow.getDate() - 20);
   future.setDate(future.getDate() + 150);
 
   const appointments = [];
@@ -103,7 +103,7 @@ async function seed() {
 
     for (let i = 0; i < 5; i++) {
       const appointment = await Appointment.create({
-        date: randDate(tomorrow, future),
+        date: randDate(past, future),
         topic: '',
         doctorId: doc.id,
       });
