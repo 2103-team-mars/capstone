@@ -12,7 +12,8 @@ const {
   Doctor,
   Patient,
 } = require('../server/db');
-const axios = require('axios');
+
+const _ = require('lodash');
 
 const professionData = [{ name: 'Psychiatrist' }, { name: 'Psychologist' }, { name: 'Therapist' }];
 const specialtyData = [
@@ -29,105 +30,20 @@ const specialtyData = [
 const symptomData = require('./symptomData');
 const medicationData = require('./medicationData');
 const topicData = require('./topicData');
+const generateUserData = require('./userData');
 
 const randInt = (a, b) => {
-  return Math.floor(Math.random() * (b - a + 1) + a);
+  return Math.floor(Math.random() * (b - a) + a);
 };
 
-const generateUserData = async () => {
-  const testPatientData = [
-    {
-      email: 'pat1@gmail.com',
-      firstName: 'Patient',
-      lastName: '1',
-      password: '123',
-      metaType: 'patient',
-    },
-    {
-      email: 'pat2@gmail.com',
-      firstName: 'Patient',
-      lastName: '2',
-      password: '123',
-      metaType: 'patient',
-    },
-  ];
-  const testDoctorData = [
-    {
-      email: 'doc1@gmail.com',
-      firstName: 'Doctor',
-      lastName: '1',
-      password: '123',
-      metaType: 'doctor',
-    },
-    {
-      email: 'doc2@gmail.com',
-      firstName: 'Doctor',
-      lastName: '2',
-      password: '123',
-      metaType: 'doctor',
-    },
-  ];
-  const {
-    data: { results: randomUserPatientData },
-  } = await axios.get('https://randomuser.me/api', {
-    params: {
-      results: 200,
-      seed: 'randomPatients',
-    },
-  });
-  const {
-    data: { results: randomUserDoctorData },
-  } = await axios.get('https://randomuser.me/api', {
-    params: {
-      results: 500,
-      seed: 'randomDoctors',
-    },
-  });
-
-  const userPatientData = [];
-  const userDoctorData = [];
-
-  randomUserPatientData.forEach((user) => {
-    userPatientData.push({
-      email: user.email,
-      firstName: user.name.first,
-      lastName: user.name.last,
-      password: user.login.password,
-      profilePicture: user.picture.thumbnail,
-      age: user.dob.age,
-      sex: user.gender,
-      dob: new Date(user.dob.date),
-      location: `${user.location.street}, ${user.location.city}, ${user.location.state}, ${user.location.postcode}`,
-      metaType: 'patient',
-    });
-  });
-  randomUserDoctorData.forEach((user) => {
-    userDoctorData.push({
-      email: user.email,
-      firstName: user.name.first,
-      lastName: user.name.last,
-      password: user.login.password,
-      profilePicture: user.picture.thumbnail,
-      age: user.dob.age,
-      sex: user.gender,
-      dob: new Date(user.dob.date),
-      location: `${user.location.street}, ${user.location.city}, ${user.location.state}, ${user.location.postcode}`,
-      metaType: 'doctor',
-    });
-  });
-
-  userPatientData[0] = { ...userPatientData[0], ...testPatientData[0] };
-  userPatientData[1] = { ...userPatientData[1], ...testPatientData[1] };
-  userDoctorData[0] = { ...userDoctorData[0], ...testDoctorData[0] };
-  userDoctorData[1] = { ...userDoctorData[1], ...testDoctorData[1] };
-
-  return [userPatientData, userDoctorData];
+const randDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
 const generateDoctorData = () => {
   const doctorData = [];
   for (let i = 0; i < 500; i++) {
-    doctorData.push({ rating: randInt(1, 5) });
+    doctorData.push({ rating: randInt(1, 6) });
   }
   return doctorData;
 };
@@ -144,44 +60,79 @@ async function seed() {
   const specialties = await Specialty.bulkCreate(specialtyData);
   const symptoms = await Symptom.bulkCreate(symptomData);
 
-  // const [doc1user, doc2user, pat1user, pat2user] = await User.bulkCreate(userData);
-  // const [doc1, doc2] = await Promise.all([
-  //   Doctor.create({ rating: 5 }),
-  //   Doctor.create({ rating: 4 }),
-  // ]);
-  // const [pat1, pat2] = await Promise.all([Patient.create(), Patient.create()]);
+  const [userPatientData, userDoctorData] = await generateUserData();
+  const patientUsers = await User.bulkCreate(userPatientData);
+  const doctorUsers = await User.bulkCreate(userDoctorData);
 
-  // const apt1 = await Appointment.create({
-  //   date: Date.now(),
-  //   topic: '1st Meeting',
-  //   patientId: pat1.id,
-  //   doctorId: doc1.id,
-  // });
-  // const apt2 = await Appointment.create({
-  //   date: Date.now(),
-  //   topic: '1st Meeting',
-  //   patientId: pat2.id,
-  //   doctorId: doc2.id,
-  // });
+  const doctors = await Doctor.bulkCreate(generateDoctorData());
+  const patients = await Promise.all(
+    Array(200)
+      .fill(0)
+      .map(() => Patient.create())
+  );
 
-  // await Promise.all([
-  //   doc1user.setDoctor(doc1),
-  //   doc2user.setDoctor(doc2),
-  //   pat1user.setPatient(pat1),
-  //   pat2user.setPatient(pat2),
-  // ]);
+  for (let i = 0; i < patientUsers.length; i++) {
+    await patientUsers[i].setPatient(patients[i]);
+  }
 
-  // await doc1.setProfession(psychiatrist);
-  // await doc2.setProfession(psychologist);
+  for (let i = 0; i < doctorUsers.length; i++) {
+    await doctorUsers[i].setDoctor(doctors[i]);
+  }
 
-  // await doc1.addSpecialties([depression, anxiety]);
-  // await doc2.addSpecialty(eating);
+  const tomorrow = new Date();
+  const future = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  future.setDate(future.getDate() + 150);
 
-  // await pat1.addSymptoms([fatigue, food]);
-  // await pat2.addSymptom(sleep);
+  const appointments = [];
 
-  // await doc1.addPatients([pat1, pat2]);
-  // await doc2.addPatient(pat2);
+  for (let doc of doctors) {
+    const profIdx = randInt(0, professions.length);
+    await doc.setProfession(professions[profIdx]);
+
+    const specialtyIdxs = new Set();
+    const randomSpecialties = [];
+    for (let i = 0; i < 3; i++) {
+      const specialtyIdx = randInt(0, specialties.length);
+      if (!specialtyIdxs.has(specialtyIdx)) {
+        specialtyIdxs.add(specialtyIdx);
+        randomSpecialties.push(specialties[specialtyIdx]);
+      }
+    }
+    await doc.addSpecialties(randomSpecialties);
+
+    for (let i = 0; i < 5; i++) {
+      const appointment = await Appointment.create({
+        date: randDate(tomorrow, future),
+        topic: '',
+        doctorId: doc.id,
+      });
+      appointments.push(appointment);
+    }
+  }
+
+  const shuffledAppointments = _.shuffle(appointments);
+
+  for (let i = 0; i < patients.length; i++) {
+    await patients[i].addSymptom(symptoms[i]);
+
+    for (let j = 0; j < 2; j++) {
+      await shuffledAppointments[i * 2 + j].update({
+        topic: topicData[i * 2 + j].topic,
+        patientId: patients[i].id,
+      });
+    }
+  }
+
+  const medications = await Medication.bulkCreate(medicationData);
+  const shuffledDoctors = _.shuffle(doctors);
+
+  for (let i = 0; i < patients.length; i++) {
+    const doc = shuffledDoctors[i];
+    const pat = patients[i];
+    const med = medications[i];
+    await Promise.all([med.setDoctor(doc), med.setPatient(pat)]);
+  }
 
   console.log(`seeded successfully`);
 }
