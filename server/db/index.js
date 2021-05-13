@@ -54,10 +54,8 @@ Patient.hasMany(Appointment);
 Appointment.belongsTo(Patient);
 
 //Symptoms
-Patient.belongsToMany(Symptom, {
-  through: 'PatientSymptoms',
-});
-Symptom.belongsToMany(Patient, { through: 'PatientSymptoms' });
+Patient.hasMany(Symptom);
+Symptom.belongsTo(Patient);
 
 Doctor.belongsToMany(Specialty, {
   through: 'DoctorSpecialties',

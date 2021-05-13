@@ -7,7 +7,7 @@ import { me } from './store';
 import Meeting from './components/Meeting';
 import Dashboard from './components/Dashboard';
 import PatientProfile from './components/PatientProfile';
-
+import PatientDocProfile from './components/PatientDocProfile';
 /**
  * COMPONENT
  */
@@ -31,7 +31,7 @@ class Routes extends Component {
             <Route path='/home' component={Home} />
             <Route path='/meeting' component={Meeting} />
             <Route path='/dashboard' component={Dashboard} />
-
+            <Route path='/doctor/:docId' component={PatientDocProfile} />
             <Redirect to='/home' />
           </Switch>
         ) : (

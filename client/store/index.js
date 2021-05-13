@@ -7,11 +7,12 @@ import mapReducer from './googleMap';
 import symptomsReducer from './symptoms';
 import appointments from './appointments';
 import patient from './patient';
-
+import singleDoctor from './singleDoctor';
 const reducer = combineReducers({
   auth,
   mapDoctors: mapReducer,
   symptoms: symptomsReducer,
+  singleDoctor,
   appointments,
   patient,
 });
