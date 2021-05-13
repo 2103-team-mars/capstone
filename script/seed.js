@@ -12,61 +12,125 @@ const {
   Doctor,
   Patient,
 } = require('../server/db');
+const axios = require('axios');
 
 const professionData = [{ name: 'Psychiatrist' }, { name: 'Psychologist' }, { name: 'Therapist' }];
-const specialtyData = [{ name: 'Despression' }, { name: 'Anxiety' }, { name: 'Eating disorder' }];
-const symptomData = [
-  { name: 'Constant fatigue' },
-  { name: 'Loss of appetite' },
-  { name: 'Sleep deprevation' },
+const specialtyData = [
+  { name: 'Anxiety' },
+  { name: 'ADHD' },
+  { name: 'Bipolar disorder' },
+  { name: 'OCD' },
+  { name: 'PTSD' },
+  { name: 'Psychosis' },
+  { name: 'Schizophrenia' },
+  { name: 'Despression' },
+  { name: 'Eating disorder' },
 ];
+const symptomData = require('./symptomData');
+const medicationData = require('./medicationData');
+const topicData = require('./topicData');
 
-const userData = [
-  {
-    email: 'doc1@gmail.com',
-    firstName: 'Doctor',
-    lastName: '1',
-    password: '123',
-    metaType: 'doctor',
-    age: 40,
-    sex: 'male',
-    dob: Date.now(),
-    location: '5760 Irving Park Rd, Chicago, IL 60634',
-  },
-  {
-    email: 'doc2@gmail.com',
-    firstName: 'Doctor',
-    lastName: '2',
-    password: '123',
-    metaType: 'doctor',
-    age: 40,
-    sex: 'female',
-    dob: Date.now(),
-    location: '567 Wabash Ave NW, New Philadelphia, OH 44663',
-  },
-  {
-    email: 'pat1@gmail.com',
-    firstName: 'Patient',
-    lastName: '1',
-    password: '123',
-    metaType: 'patient',
-    age: 40,
-    sex: 'male',
-    dob: Date.now(),
-    location: '1601 E Basin Ave, Pahrump, NV 89060',
-  },
-  {
-    email: 'pat2@gmail.com',
-    firstName: 'Patient',
-    lastName: '2',
-    password: '123',
-    metaType: 'patient',
-    age: 40,
-    sex: 'female',
-    dob: Date.now(),
-    location: '5110 N 40th St #201, Phoenix, AZ 85018',
-  },
-];
+const randInt = (a, b) => {
+  return Math.floor(Math.random() * (b - a + 1) + a);
+};
+
+const generateUserData = async () => {
+  const testPatientData = [
+    {
+      email: 'pat1@gmail.com',
+      firstName: 'Patient',
+      lastName: '1',
+      password: '123',
+      metaType: 'patient',
+    },
+    {
+      email: 'pat2@gmail.com',
+      firstName: 'Patient',
+      lastName: '2',
+      password: '123',
+      metaType: 'patient',
+    },
+  ];
+  const testDoctorData = [
+    {
+      email: 'doc1@gmail.com',
+      firstName: 'Doctor',
+      lastName: '1',
+      password: '123',
+      metaType: 'doctor',
+    },
+    {
+      email: 'doc2@gmail.com',
+      firstName: 'Doctor',
+      lastName: '2',
+      password: '123',
+      metaType: 'doctor',
+    },
+  ];
+  const {
+    data: { results: randomUserPatientData },
+  } = await axios.get('https://randomuser.me/api', {
+    params: {
+      results: 200,
+      seed: 'randomPatients',
+    },
+  });
+  const {
+    data: { results: randomUserDoctorData },
+  } = await axios.get('https://randomuser.me/api', {
+    params: {
+      results: 500,
+      seed: 'randomDoctors',
+    },
+  });
+
+  const userPatientData = [];
+  const userDoctorData = [];
+
+  randomUserPatientData.forEach((user) => {
+    userPatientData.push({
+      email: user.email,
+      firstName: user.name.first,
+      lastName: user.name.last,
+      password: user.login.password,
+      profilePicture: user.picture.thumbnail,
+      age: user.dob.age,
+      sex: user.gender,
+      dob: new Date(user.dob.date),
+      location: `${user.location.street}, ${user.location.city}, ${user.location.state}, ${user.location.postcode}`,
+      metaType: 'patient',
+    });
+  });
+  randomUserDoctorData.forEach((user) => {
+    userDoctorData.push({
+      email: user.email,
+      firstName: user.name.first,
+      lastName: user.name.last,
+      password: user.login.password,
+      profilePicture: user.picture.thumbnail,
+      age: user.dob.age,
+      sex: user.gender,
+      dob: new Date(user.dob.date),
+      location: `${user.location.street}, ${user.location.city}, ${user.location.state}, ${user.location.postcode}`,
+      metaType: 'doctor',
+    });
+  });
+
+  userPatientData[0] = { ...userPatientData[0], ...testPatientData[0] };
+  userPatientData[1] = { ...userPatientData[1], ...testPatientData[1] };
+  userDoctorData[0] = { ...userDoctorData[0], ...testDoctorData[0] };
+  userDoctorData[1] = { ...userDoctorData[1], ...testDoctorData[1] };
+
+  return [userPatientData, userDoctorData];
+};
+
+const generateDoctorData = () => {
+  const doctorData = [];
+  for (let i = 0; i < 500; i++) {
+    doctorData.push({ rating: randInt(1, 5) });
+  }
+  return doctorData;
+};
 
 /**
  * seed - this function clears the database, updates tables to
@@ -76,48 +140,48 @@ async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
   console.log('db synced!');
 
-  const [psychiatrist, psychologist] = await Profession.bulkCreate(professionData);
-  const [depression, anxiety, eating] = await Specialty.bulkCreate(specialtyData);
-  const [fatigue, food, sleep] = await Symptom.bulkCreate(symptomData);
+  const professions = await Profession.bulkCreate(professionData);
+  const specialties = await Specialty.bulkCreate(specialtyData);
+  const symptoms = await Symptom.bulkCreate(symptomData);
 
-  const [doc1user, doc2user, pat1user, pat2user] = await User.bulkCreate(userData);
-  const [doc1, doc2] = await Promise.all([
-    Doctor.create({ rating: 5 }),
-    Doctor.create({ rating: 4 }),
-  ]);
-  const [pat1, pat2] = await Promise.all([Patient.create(), Patient.create()]);
+  // const [doc1user, doc2user, pat1user, pat2user] = await User.bulkCreate(userData);
+  // const [doc1, doc2] = await Promise.all([
+  //   Doctor.create({ rating: 5 }),
+  //   Doctor.create({ rating: 4 }),
+  // ]);
+  // const [pat1, pat2] = await Promise.all([Patient.create(), Patient.create()]);
 
-  const apt1 = await Appointment.create({
-    date: Date.now(),
-    topic: '1st Meeting',
-    patientId: pat1.id,
-    doctorId: doc1.id,
-  });
-  const apt2 = await Appointment.create({
-    date: Date.now(),
-    topic: '1st Meeting',
-    patientId: pat2.id,
-    doctorId: doc2.id,
-  });
+  // const apt1 = await Appointment.create({
+  //   date: Date.now(),
+  //   topic: '1st Meeting',
+  //   patientId: pat1.id,
+  //   doctorId: doc1.id,
+  // });
+  // const apt2 = await Appointment.create({
+  //   date: Date.now(),
+  //   topic: '1st Meeting',
+  //   patientId: pat2.id,
+  //   doctorId: doc2.id,
+  // });
 
-  await Promise.all([
-    doc1user.setDoctor(doc1),
-    doc2user.setDoctor(doc2),
-    pat1user.setPatient(pat1),
-    pat2user.setPatient(pat2),
-  ]);
+  // await Promise.all([
+  //   doc1user.setDoctor(doc1),
+  //   doc2user.setDoctor(doc2),
+  //   pat1user.setPatient(pat1),
+  //   pat2user.setPatient(pat2),
+  // ]);
 
-  await doc1.setProfession(psychiatrist);
-  await doc2.setProfession(psychologist);
+  // await doc1.setProfession(psychiatrist);
+  // await doc2.setProfession(psychologist);
 
-  await doc1.addSpecialties([depression, anxiety]);
-  await doc2.addSpecialty(eating);
+  // await doc1.addSpecialties([depression, anxiety]);
+  // await doc2.addSpecialty(eating);
 
-  await pat1.addSymptoms([fatigue, food]);
-  await pat2.addSymptom(sleep);
+  // await pat1.addSymptoms([fatigue, food]);
+  // await pat2.addSymptom(sleep);
 
-  await doc1.addPatients([pat1, pat2]);
-  await doc2.addPatient(pat2);
+  // await doc1.addPatients([pat1, pat2]);
+  // await doc2.addPatient(pat2);
 
   console.log(`seeded successfully`);
 }
