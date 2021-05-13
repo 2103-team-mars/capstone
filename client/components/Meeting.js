@@ -52,8 +52,25 @@ class Meeting extends Component {
       this.end(false);
     });
   }
+
+  componentWillUnmount() {
+    if (this.state.callAccepted) {
+      this.end(true);
+    }
+
+    socket.removeAllListeners('receive');
+    socket.removeAllListeners('calling');
+    socket.removeAllListeners('answering');
+    socket.removeAllListeners('ending');
+
+    if (this.state.stream) {
+      this.state.stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
+  }
+
   answer() {
-    console.log('running');
     this.setState({ callAccepted: true });
     const peer = new Peer({
       initiator: false,
@@ -69,6 +86,7 @@ class Meeting extends Component {
     peer.signal(this.state.callerSignal);
     this.connection.current = peer;
   }
+
   call(room) {
     const peer = new Peer({
       initiator: true,
@@ -92,6 +110,7 @@ class Meeting extends Component {
     });
     this.connection.current = peer;
   }
+
   end(initiator) {
     socket.removeAllListeners('answering');
     if (this.props.auth.metaType !== 'doctor') {
@@ -111,17 +130,21 @@ class Meeting extends Component {
       socket.emit('end', this.state.room);
     }
   }
+
   onChange(event) {
     this.setState({ msg: event.target.value });
   }
+
   onRoomChange(event) {
     this.setState({ roomToCall: event.target.value });
   }
+
   onSubmit(event) {
     event.preventDefault();
     socket.emit('send message', this.state.msg, this.state.room);
     this.setState({ msg: '', chat: [...this.state.chat, this.state.msg] });
   }
+
   render() {
     return (
       <div>

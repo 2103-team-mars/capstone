@@ -1,14 +1,16 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { createLogger } from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import auth from './auth';
-import mapReducer from './googleMap';
-import appointments from './appointments';
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createLogger } from "redux-logger";
+import thunkMiddleware from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
+import auth from "./auth";
+import mapReducer from "./googleMap";
+import singleDoctor from "./singleDoctor";
+import appointments from "./appointments";
 
 const reducer = combineReducers({
   auth,
   mapDoctors: mapReducer,
+  singleDoctor,
   appointments,
 });
 const middleware = composeWithDevTools(
@@ -17,4 +19,4 @@ const middleware = composeWithDevTools(
 const store = createStore(reducer, middleware);
 
 export default store;
-export * from './auth';
+export * from "./auth";
