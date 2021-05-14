@@ -1,6 +1,5 @@
-const isDev = process.env.NODE_ENV === 'development';
 module.exports = {
-  mode: isDev ? 'development' : 'production',
+  mode: 'development',
 
   entry: ['./client/index.js'],
   output: {

@@ -8,6 +8,7 @@ const {
   Symptom,
 } = require('../db');
 
+const { isDoctor, isPatient, isLoggedIn } = require('../middleware');
 //get /api/symptoms
 router.get('/patients/:id', async (req, res, next) => {
   try {
@@ -21,6 +22,21 @@ router.get('/patients/:id', async (req, res, next) => {
       },
     });
     res.send(symptoms);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//post /api/symptoms
+router.post('/', isLoggedIn, isPatient, async (req, res, next) => {
+  try {
+    const patient = await req.user.getPatient();
+    const { name } = req.body;
+    let symptom = await Symptom.create({
+      name,
+    });
+    await patient.addSymptom(symptom);
+    res.send(symptom);
   } catch (error) {
     next(error);
   }

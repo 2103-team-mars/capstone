@@ -17,7 +17,7 @@
     "test:dev:models": "npm run test:dev -- --grep=model",
     "test:dev:routes": "npm run test:dev -- --grep=route",
     "windows:server": "set JWT=shh&&nodemon server -e html,js,scss --ignore public --ignore client",
-    "windows:build": "webpack -w"
+    "windows:build": "webpack -w --mode=development"
   },
   "author": "Fullstack Academy of Code",
   "license": "MIT",

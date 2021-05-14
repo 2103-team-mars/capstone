@@ -2,19 +2,73 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchSymptoms } from '../store/symptoms';
 import { fetchPatient } from '../store/patient';
+import { updatePatientThunk } from '../store/auth';
+import { postSymptomThunk } from '../store/symptoms';
+
+const defaultState = {
+  firstName: '',
+  lastName: '',
+  dob: '',
+  age: 0,
+  location: '',
+  symptom: '',
+};
 
 export class PatientProfile extends Component {
+  constructor() {
+    super();
+    this.state = {
+      // id: this.props.auth.id,
+      firstName: '',
+      lastName: '',
+      dob: '',
+      age: 0,
+      location: '',
+      symptom: '',
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePost = this.handlePost.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  }
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.updatePatientThunk({ ...this.state });
+  }
+  handlePost(event) {
+    event.preventDefault();
+    this.props.postSymptomThunk({ name: this.state.symptom });
+    this.setState(defaultState);
+  }
+
   componentDidMount() {
+    if (this.props.auth.id) {
+      this.setState({
+        id: this.props.auth.id,
+        firstName: this.props.auth.firstName,
+        lastName: this.props.auth.lastName,
+        dob: this.props.auth.dob,
+        age: this.props.auth.age,
+        location: this.props.auth.location,
+      });
+    }
     this.props.auth.metaType === 'patient'
       ? this.props.fetchSymptoms(this.props.auth.metaId)
       : this.props.fetchPatient(this.props.match.params.patientId);
   }
   render() {
+    const { firstName, lastName, dob, age, location, symptom } = this.state;
+    const { handleSubmit, handleChange, handlePost } = this;
     const symptoms = this.props.symptoms || [];
     return (
       <div>
         {this.props.auth.metaType === 'patient' ? (
-          <div>
+          <div key={this.props.auth.id}>
             <img src={this.props.auth.profilePicture} />
             <p>
               Name: {this.props.auth.firstName} {this.props.auth.lastName}
@@ -27,11 +81,33 @@ export class PatientProfile extends Component {
             {symptoms.map((symptom) => {
               return <p> {symptom.name}</p>;
             })}
+            <form onSubmit={handleSubmit}>
+              <label htmlFor='firstName'>First Name:</label>
+              <input
+                name='firstName'
+                onChange={handleChange}
+                value={firstName}
+              />
+              <label htmlFor='lastName'>Last Name:</label>
+              <input name='lastName' onChange={handleChange} value={lastName} />
+              <label htmlFor='dob'>Date of Birth:</label>
+              <input name='dob' onChange={handleChange} value={dob} />
+              <label htmlFor='age'>Age:</label>
+              <input name='age' onChange={handleChange} value={age} />
+              <label htmlFor='location'>Location:</label>
+              <input name='location' onChange={handleChange} value={location} />
+              <button type='submit'>Submit</button>
+            </form>
+            <form onSubmit={handlePost}>
+              <label htmlFor='symptom'>Symptoms:</label>
+              <input name='symptom' onChange={handleChange} value={symptom} />
+              <button type='submit'>Submit Change</button>
+            </form>
           </div>
         ) : (
           <div>
             {this.props.patient.id && (
-              <div>
+              <div key={this.props.patient.id}>
                 <img src={this.props.patient.user.profilePicture} />
                 <p>
                   Name: {this.props.patient.user.firstName}
@@ -70,6 +146,8 @@ const mapDispatch = (dispatch) => {
   return {
     fetchSymptoms: (id) => dispatch(fetchSymptoms(id)),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
+    updatePatientThunk: (id) => dispatch(updatePatientThunk(id)),
+    postSymptomThunk: (symptom) => dispatch(postSymptomThunk(symptom)),
   };
 };
 export default connect(mapState, mapDispatch)(PatientProfile);
