@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const {
   db,
@@ -11,70 +11,48 @@ const {
   Profession,
   Doctor,
   Patient,
-} = require('../server/db');
+} = require("../server/db");
+
+const _ = require("lodash");
 
 const professionData = [
-  { name: 'Psychiatrist' },
-  { name: 'Psychologist' },
-  { name: 'Therapist' },
+  { name: "Psychiatrist" },
+  { name: "Psychologist" },
+  { name: "Therapist" },
 ];
 const specialtyData = [
-  { name: 'Despression' },
-  { name: 'Anxiety' },
-  { name: 'Eating disorder' },
+  { name: "Anxiety" },
+  { name: "ADHD" },
+  { name: "Bipolar disorder" },
+  { name: "OCD" },
+  { name: "PTSD" },
+  { name: "Psychosis" },
+  { name: "Schizophrenia" },
+  { name: "Despression" },
+  { name: "Eating disorder" },
 ];
-const symptomData = [
-  { name: 'Constant fatigue' },
-  { name: 'Loss of appetite' },
-  { name: 'Sleep deprevation' },
-];
+const symptomData = require("./symptomData");
+const medicationData = require("./medicationData");
+const topicData = require("./topicData");
+const generateUserData = require("./userData");
 
-const userData = [
-  {
-    email: 'doc1@gmail.com',
-    firstName: 'Doctor',
-    lastName: '1',
-    password: '123',
-    metaType: 'doctor',
-    age: 40,
-    sex: 'male',
-    dob: Date.now(),
-    location: '5760 Irving Park Rd, Chicago, IL 60634',
-  },
-  {
-    email: 'doc2@gmail.com',
-    firstName: 'Doctor',
-    lastName: '2',
-    password: '123',
-    metaType: 'doctor',
-    age: 40,
-    sex: 'female',
-    dob: Date.now(),
-    location: '567 Wabash Ave NW, New Philadelphia, OH 44663',
-  },
-  {
-    email: 'pat1@gmail.com',
-    firstName: 'Patient',
-    lastName: '1',
-    password: '123',
-    metaType: 'patient',
-    age: 40,
-    sex: 'male',
-    dob: Date.now(),
-    location: '1601 E Basin Ave, Pahrump, NV 89060',
-  },
-  {
-    email: 'pat2@gmail.com',
-    firstName: 'Patient',
-    lastName: '2',
-    password: '123',
-    metaType: 'patient',
-    age: 40,
-    sex: 'female',
-    dob: Date.now(),
-    location: '5110 N 40th St #201, Phoenix, AZ 85018',
-  },
-];
+const randInt = (a, b) => {
+  return Math.floor(Math.random() * (b - a) + a);
+};
+
+const randDate = (start, end) => {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+};
+
+const generateDoctorData = () => {
+  const doctorData = [];
+  for (let i = 0; i < 500; i++) {
+    doctorData.push({ rating: randInt(1, 6) });
+  }
+  return doctorData;
+};
 
 /**
  * seed - this function clears the database, updates tables to
@@ -82,95 +60,87 @@ const userData = [
  */
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  console.log('db synced!');
+  console.log("db synced!");
 
-  const [psychiatrist, psychologist] = await Profession.bulkCreate(
-    professionData
+  const professions = await Profession.bulkCreate(professionData);
+  const specialties = await Specialty.bulkCreate(specialtyData);
+  const symptoms = await Symptom.bulkCreate(symptomData);
+
+  const [userPatientData, userDoctorData] = await generateUserData();
+  const patientUsers = await User.bulkCreate(userPatientData);
+  const doctorUsers = await User.bulkCreate(userDoctorData);
+
+  const doctors = await Doctor.bulkCreate(generateDoctorData());
+  const patients = await Promise.all(
+    Array(200)
+      .fill(0)
+      .map(() => Patient.create())
   );
-  const [depression, anxiety, eating] = await Specialty.bulkCreate(
-    specialtyData
-  );
-  const [fatigue, food, sleep] = await Symptom.bulkCreate(symptomData);
 
-  const [doc1user, doc2user, pat1user, pat2user] = await User.bulkCreate(
-    userData
-  );
-  const [doc1, doc2] = await Promise.all([
-    Doctor.create({ rating: 5 }),
-    Doctor.create({ rating: 4 }),
-  ]);
-  const [pat1, pat2] = await Promise.all([Patient.create(), Patient.create()]);
+  for (let i = 0; i < patientUsers.length; i++) {
+    await patientUsers[i].setPatient(patients[i]);
+  }
 
-  const apt1 = await Appointment.create({
-    date: Date.now(),
-    topic: '1st Meeting',
-    patientId: pat1.id,
-    doctorId: doc1.id,
-  });
-  const apt2 = await Appointment.create({
-    date: Date.now(),
-    topic: '1st Meeting',
-    patientId: pat2.id,
-    doctorId: doc2.id,
-  });
+  for (let i = 0; i < doctorUsers.length; i++) {
+    await doctorUsers[i].setDoctor(doctors[i]);
+  }
 
-  await Promise.all([
-    doc1user.setDoctor(doc1),
-    doc2user.setDoctor(doc2),
-    pat1user.setPatient(pat1),
-    pat2user.setPatient(pat2),
-  ]);
+  const past = new Date();
+  const future = new Date();
+  past.setDate(past.getDate() - 20);
+  future.setDate(future.getDate() + 150);
 
-  await doc1.setProfession(psychiatrist);
-  await doc2.setProfession(psychologist);
+  const appointments = [];
 
-  await doc1.addSpecialties([depression, anxiety]);
-  await doc2.addSpecialty(eating);
+  for (let doc of doctors) {
+    const profIdx = randInt(0, professions.length);
+    await doc.setProfession(professions[profIdx]);
 
-  await pat1.addSymptoms([fatigue, food]);
-  await pat2.addSymptom(sleep);
+    const specialtyIdxs = new Set();
+    const randomSpecialties = [];
+    for (let i = 0; i < 3; i++) {
+      const specialtyIdx = randInt(0, specialties.length);
+      if (!specialtyIdxs.has(specialtyIdx)) {
+        specialtyIdxs.add(specialtyIdx);
+        randomSpecialties.push(specialties[specialtyIdx]);
+      }
+    }
+    await doc.addSpecialties(randomSpecialties);
 
-  await doc1.addPatients([pat1, pat2]);
-  await doc2.addPatient(pat2);
+    for (let i = 0; i < 5; i++) {
+      const appointment = await Appointment.create({
+        date: randDate(past, future),
+        topic: "",
+        doctorId: doc.id,
+      });
+      appointments.push(appointment);
+    }
+  }
+
+  const shuffledAppointments = _.shuffle(appointments);
+
+  for (let i = 0; i < patients.length; i++) {
+    await patients[i].addSymptom(symptoms[i]);
+
+    for (let j = 0; j < 2; j++) {
+      await shuffledAppointments[i * 2 + j].update({
+        topic: topicData[i * 2 + j].topic,
+        patientId: patients[i].id,
+      });
+    }
+  }
+
+  const medications = await Medication.bulkCreate(medicationData);
+  const shuffledDoctors = _.shuffle(doctors);
+
+  for (let i = 0; i < patients.length; i++) {
+    const doc = shuffledDoctors[i];
+    const pat = patients[i];
+    const med = medications[i];
+    await Promise.all([med.setDoctor(doc), med.setPatient(pat)]);
+  }
 
   console.log(`seeded successfully`);
-  // return {
-  //   users: {
-  //     cody: users[0],
-  //     murphy: users[1],
-  //   },
-  // };
-
-  // const allPatients1 = await User.findAll({
-  //   include: [Doctor, Patient],
-  //   where: { metaType: 'patient' },
-  // });
-  // const allPatients2 = await Patient.findAll({
-  //   include: [User],
-  // });
-
-  // console.log('query 1');
-  // allPatients1.map((pat) => console.log(pat.toJSON()));
-  // console.log('\n\nquery 2');
-  // allPatients2.map((pat) => console.log(pat.toJSON()));
-
-  // const allDoctors1 = await User.findAll({
-  //   include: [Doctor, Patient],
-  //   where: { metaType: 'doctor' },
-  // });
-  // const allDoctors2 = await Doctor.findAll({
-  //   include: [User],
-  // });
-
-  // console.log('query 1');
-  // allDoctors1.map((doc) => console.log(doc.toJSON()));
-  // allDoctors1.map((doc) => console.log(doc.meta));
-
-  // const doc1data = await allDoctors1[0].getDoctor();
-  // console.log(doc1data.toJSON());
-
-  // console.log('\n\nquery 2');
-  // allDoctors2.map((doc) => console.log(doc.toJSON()));
 }
 
 /*
@@ -179,16 +149,16 @@ async function seed() {
  The `seed` function is concerned only with modifying the database.
 */
 async function runSeed() {
-  console.log('seeding...');
+  console.log("seeding...");
   try {
     await seed();
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
   } finally {
-    console.log('closing db connection');
+    console.log("closing db connection");
     await db.close();
-    console.log('db connection closed');
+    console.log("db connection closed");
   }
 }
 

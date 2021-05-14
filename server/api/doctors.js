@@ -30,28 +30,4 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-//PUT /api/doctors/:id
-router.put("/:id", async (req, res, next) => {
-  try {
-    const docId = req.params.id;
-    // const {} = req.body;
-    const doctor = await Doctor.findByPk(docId, {
-      include: [User, Profession, Specialty],
-    });
-
-    console.log("doctor =========>>>>>>>>>", doctor);
-
-    if (!doctor.id) {
-      res.status(404).send("This doctor does not exist in the DB");
-      return;
-    }
-
-    const updatedDoc = await doctor.update(req.body);
-
-    res.send(updatedDoc);
-  } catch (err) {
-    next(err);
-  }
-});
-
 module.exports = router;
