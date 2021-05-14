@@ -41,5 +41,13 @@ router.post('/', isLoggedIn, isPatient, async (req, res, next) => {
     next(error);
   }
 });
+//delete /api/symptoms/id
+router.delete('/:id', isLoggedIn, isPatient, async (req, res, next) => {
+  try {
+    const symptom = await Symptom.findOne({ where: { id: req.params.id } });
+    await symptom.destroy();
+    res.sendStatus(204);
+  } catch (error) {}
+});
 
 module.exports = router;

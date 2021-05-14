@@ -3,11 +3,11 @@ const db = require('../db');
 
 const Medication = db.define('medication', {
   name: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false,
   },
   company: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false,
   },
   strength: {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fetchSymptoms } from '../store/symptoms';
 import { fetchPatient } from '../store/patient';
 import { updatePatientThunk } from '../store/auth';
-import { postSymptomThunk } from '../store/symptoms';
+import { postSymptomThunk, deleteSymptomThunk } from '../store/symptoms';
 
 const defaultState = {
   firstName: '',
@@ -79,7 +79,16 @@ export class PatientProfile extends Component {
             <p>Location: {this.props.auth.location}</p>
             Symptoms:
             {symptoms.map((symptom) => {
-              return <p> {symptom.name}</p>;
+              return (
+                <div>
+                  <p> {symptom.name}</p>
+                  <button
+                    onClick={() => this.props.deleteSymptomThunk(symptom)}
+                  >
+                    X
+                  </button>
+                </div>
+              );
             })}
             <form onSubmit={handleSubmit}>
               <label htmlFor='firstName'>First Name:</label>
@@ -121,10 +130,10 @@ export class PatientProfile extends Component {
                 {this.props.patient.symptoms.map((symptom) => {
                   return <p> {symptom.name}</p>;
                 })}
-                {/* Patient Medications:
+                Patient Medications:
                 {this.props.patient.medications.map((medicine) => {
                   return <p> {medicine.name}</p>;
-                })} */}
+                })}
               </div>
             )}
           </div>
@@ -148,6 +157,7 @@ const mapDispatch = (dispatch) => {
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     updatePatientThunk: (id) => dispatch(updatePatientThunk(id)),
     postSymptomThunk: (symptom) => dispatch(postSymptomThunk(symptom)),
+    deleteSymptomThunk: (symptom) => dispatch(deleteSymptomThunk(symptom)),
   };
 };
 export default connect(mapState, mapDispatch)(PatientProfile);

@@ -1,16 +1,17 @@
-import React, { Component } from "react";
-import { AppBar, Tabs, Tab, Typography, Box } from "@material-ui/core";
-import { connect } from "react-redux";
-import MapComponent from "./MapComponent";
-import PatientProfile from "./PatientProfile";
-import MyAppointments from "./MyAppointments";
+import React, { Component } from 'react';
+import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
+import { connect } from 'react-redux';
+import MapComponent from './MapComponent';
+import PatientProfile from './PatientProfile';
+import MyAppointments from './MyAppointments';
+import Medications from './Medications';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -28,22 +29,22 @@ export function Dashboard({ auth }) {
   };
   return (
     <div>
-      {auth.metaType === "patient" ? (
+      {auth.metaType === 'patient' ? (
         <div>
-          <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
+          <AppBar position='static' style={{ backgroundColor: '#bbb' }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
+              indicatorColor='primary'
+              textColor='primary'
               centered
-              variant="fullWidth"
+              variant='fullWidth'
             >
-              <Tab label="Find Doctor" />
-              <Tab label="My Doctors" />
-              <Tab label="Profile" />
-              <Tab label="Medications" />
-              <Tab label="Appointments" />
+              <Tab label='Find Doctor' />
+              <Tab label='My Doctors' />
+              <Tab label='Profile' />
+              <Tab label='Medications' />
+              <Tab label='Appointments' />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -56,7 +57,7 @@ export function Dashboard({ auth }) {
             <PatientProfile />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            My Medications
+            <Medications />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <MyAppointments />
@@ -64,18 +65,18 @@ export function Dashboard({ auth }) {
         </div>
       ) : (
         <div>
-          <AppBar position="static" style={{ backgroundColor: "#bbb" }}>
+          <AppBar position='static' style={{ backgroundColor: '#bbb' }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
+              indicatorColor='primary'
+              textColor='primary'
               centered
-              variant="fullWidth"
+              variant='fullWidth'
             >
-              <Tab label="Profile" />
-              <Tab label="My Patients" />
-              <Tab label="My Appointments" />
+              <Tab label='Profile' />
+              <Tab label='My Patients' />
+              <Tab label='My Appointments' />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>

@@ -17,7 +17,7 @@
     "test:dev:models": "npm run test:dev -- --grep=model",
     "test:dev:routes": "npm run test:dev -- --grep=route",
     "windows:server": "set JWT=shh&&nodemon server -e html,js,scss --ignore public --ignore client",
-    "windows:build": "webpack -w --mode=development"
+    "windows:build": "webpack -w"
   },
   "author": "Fullstack Academy of Code",
   "license": "MIT",
@@ -34,6 +34,7 @@
     "google-maps-react": "^2.0.6",
     "history": "^4.9.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "morgan": "^1.9.1",
     "pg": "^8.5.1",
     "react-google-maps": "^9.4.5",
