@@ -1,7 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { me } from "../store/auth";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { connect } from 'react-redux';
+import { me } from '../store/auth';
+import { Link } from 'react-router-dom';
+import { fetchAppointments } from '../store/appointments';
 
 /**
  * COMPONENT
@@ -9,31 +10,91 @@ import { Link } from "react-router-dom";
 export class Home extends React.Component {
   componentDidMount() {
     this.props.loadInitialData();
+    if (this.props.isLoggedIn) {
+      this.props.fetchAppointments(
+        this.props.auth.metaType === 'doctor',
+        this.props.auth.metaId
+      );
+    }
   }
   render() {
     console.log(this.props);
     const { auth, isLoggedIn } = this.props;
 
-    return (
-      <div>
-        {isLoggedIn && auth.metaType === "patient" ? (
-          <div>
-            <h3>
-              Hi, {auth.firstName} {auth.lastName}, how can we help you today?
-              <Link to={"/dashboard?index=2"}>
+    if (!isLoggedIn) {
+      return (
+        <div>
+          <h3>Welcome</h3>
+          <Link to='/auth'>Get Started!</Link>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          {auth.metaType === 'patient' ? (
+            <div>
+              <h3>
+                Hi, {auth.firstName} {auth.lastName}, how can we help you today?
+              </h3>
+              {this.props.appointments.length ? (
+                <h3>
+                  your upcoming appointment{' '}
+                  {new Date(this.props.appointments[0].date).toLocaleString(
+                    undefined,
+                    {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour12: true,
+                      hour: 'numeric',
+                      minute: 'numeric',
+                    }
+                  )}
+                </h3>
+              ) : (
+                <h3>You have no upcomming appointments</h3>
+              )}
+
+              <Link to={'/dashboard?index=2'}>
                 Not feeling well? Update you symptoms
               </Link>
-              <Link to={"/dashboard?index=0"}> Looking for a doctor?</Link>
-              <Link to={"/dashboard?index=3"}> Check your medication</Link>
-            </h3>
-          </div>
-        ) : (
-          <div>
-            <h3>Welcome</h3>
-          </div>
-        )}
-      </div>
-    );
+              <Link to={'/dashboard?index=0'}> Looking for a doctor?</Link>
+              <Link to={'/dashboard?index=3'}> Check your medication</Link>
+            </div>
+          ) : (
+            <div>
+              <h3>
+                Hi, {auth.firstName} {auth.lastName}, how can we help you today?
+              </h3>
+              {this.props.appointments.length ? (
+                <h3>
+                  your upcoming appointment{' '}
+                  {new Date(this.props.appointments[0].date).toLocaleString(
+                    undefined,
+                    {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour12: true,
+                      hour: 'numeric',
+                      minute: 'numeric',
+                    }
+                  )}
+                </h3>
+              ) : (
+                <h3>You have no upcomming appointments</h3>
+              )}
+
+              <Link to={'/dashboard?index=2'}>
+                Checkout your upcoming appointments
+              </Link>
+            </div>
+          )}
+        </div>
+      );
+    }
   }
 }
 
@@ -43,15 +104,16 @@ export class Home extends React.Component {
 const mapState = (state) => {
   return {
     auth: state.auth,
+    appointments: state.appointments,
     isLoggedIn: !!state.auth.id,
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
-    loadInitialData() {
-      dispatch(me());
-    },
+    loadInitialData: () => dispatch(me()),
+    fetchAppointments: (isDoctor, id) =>
+      dispatch(fetchAppointments(isDoctor, id)),
   };
 };
 
