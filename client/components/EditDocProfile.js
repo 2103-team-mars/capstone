@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  updateDoctor,
-  updateSpecialties,
-  fetchDoctor,
-} from "../store/singleDoctor";
+import { fetchDoctor } from "../store/singleDoctor";
+import { updateSpecialties } from "../store/specialties";
+import { updateDoctor } from "../store/auth";
 import Select from "react-select";
 
 const options = [
@@ -38,49 +36,32 @@ export class EditDocProfile extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
-    console.log(this.state);
   }
 
   selectHandler(specialties) {
     this.setState({ specialties });
-    console.log(`specialties:`, specialties);
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     event.preventDefault();
 
     const { id } = this.props.auth;
-    const { docId } = this.props.auth.meta.id;
+    const docId = this.props.singleDoc.id;
+
     const { firstName, lastName, location } = this.state;
     const { specialties } = this.state;
 
-    ///////////////////////////////
-    console.log("this was submitted", { firstName, lastName, location });
-    console.log("this was submitted----specialties", specialties);
-    //////////////////////////////////////////
-
-    this.props.updateDoctor(id, { firstName, lastName, location });
-    //this.props.updateSpecialties(id, { specialties });
+    await this.props.updateDoctor(id, { firstName, lastName, location });
+    await this.props.updateSpecialties(id, specialties);
 
     this.setState(this.initialState);
-    console.log("this was this.state----this.state", this.state);
-    this.props.fetchDoctor(docId), this.forceUpdate();
+
+    this.props.fetchDoctor(docId);
+    this.forceUpdate();
+    this.props.closeForm();
   }
 
   render() {
-    ////////////////////////////////////////////////
-    console.log(
-      "this.props from edit componenet =============>>>>>>>>",
-      this.props
-    );
-
-    console.log(
-      "this.state from edit componenet =============>>>>>>>>",
-      this.state
-    );
-
-    ////////////////////////////////////////////////
-
     return (
       <div>
         <div>

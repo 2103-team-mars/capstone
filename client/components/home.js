@@ -1,8 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { me } from '../store/auth';
-import { Link } from 'react-router-dom';
-import DocDocProfile from "./DocDocProfile";
+import React from "react";
+import { connect } from "react-redux";
+import { me } from "../store/auth";
+import { Link } from "react-router-dom";
 
 /**
  * COMPONENT
@@ -17,15 +16,15 @@ export class Home extends React.Component {
 
     return (
       <div>
-        {isLoggedIn && auth.metaType === 'patient' ? (
+        {isLoggedIn && auth.metaType === "patient" ? (
           <div>
             <h3>
               Hi, {auth.firstName} {auth.lastName}, how can we help you today?
-              <Link to={'/dashboard?index=2'}>
+              <Link to={"/dashboard?index=2"}>
                 Not feeling well? Update you symptoms
               </Link>
-              <Link to={'/dashboard?index=0'}> Looking for a doctor?</Link>
-              <Link to={'/dashboard?index=3'}> Check your medication</Link>
+              <Link to={"/dashboard?index=0"}> Looking for a doctor?</Link>
+              <Link to={"/dashboard?index=3"}> Check your medication</Link>
             </h3>
           </div>
         ) : (
@@ -33,11 +32,6 @@ export class Home extends React.Component {
             <h3>Welcome</h3>
           </div>
         )}
-
-        <div>
-        <h1> TEST for DocDocProfile Component</h1>
-        <DocDocProfile />
-      </div>
       </div>
     );
   }

@@ -16,6 +16,9 @@ export class DocDocProfile extends Component {
     const userId = this.props.auth.id;
     const docId = this.props.auth.metaId;
     this.props.fetchDoctor(docId);
+    this.setState({
+      showComponent: false,
+    });
   }
 
   onButtonClick() {
@@ -25,67 +28,59 @@ export class DocDocProfile extends Component {
   }
 
   render() {
-    ////////////////////////////////
-    console.log("this.props.auth", this.props.auth);
-    console.log("!this.props.singleDoc", !this.props.singleDoc);
+    const {
+      profilePicture,
+      firstName,
+      lastName,
+      location,
+      email,
+      meta: { profession },
+    } = this.props.auth;
 
-    ////////////////////////////////
+    const specialties = this.props.singleDoc.specialties || [];
 
-    if (!this.props.singleDoc.user) {
-      return (
+    return (
+      <div>
         <div>
-          <p>Loading...</p>
-        </div>
-      );
-    } else {
-      const { profilePicture, firstName, lastName, location, email } =
-        this.props.singleDoc.user;
-
-      const { profession, specialties } = this.props.singleDoc;
-
-      return (
-        <div>
+          <img src={profilePicture} />
+          <h2>{`${firstName} ${lastName}`}</h2>
+          <h3>{profession.name}</h3>
           <div>
-            <img src={profilePicture} />
-            <h2>
-              Dr. {firstName} {lastName}
-            </h2>
-            <h3>{profession.name}</h3>
             <div>
-              <div>
-                <strong>Contact Information:</strong>
-                <div>Location: {location}</div>
-                <div>Email: {email}</div>
-              </div>
-            </div>
-            <div>
-              <p>
-                <strong>Specialization:</strong>
-              </p>
-              <div>
-                {specialties.map((ele) => (
-                  <p key={ele.id}>{ele.name}</p>
-                ))}
-              </div>
+              <strong>Contact Information:</strong>
+              <div>Location: {location}</div>
+              <div>Email: {email}</div>
             </div>
           </div>
           <div>
-            <button onClick={this.onButtonClick}>Edit Profile</button>
-            {this.state.showComponent ? <EditDocProfile /> : null}
-          </div>
-
-          <hr />
-          <div>
-            <h2>My Appointment Schedule</h2>
-            <DocAppointments
-              doctorId={this.props.auth.metaId}
-              doctorFirstName={firstName}
-              doctorLastName={lastName}
-            />
+            <p>
+              <strong>Specialization:</strong>
+            </p>
+            <div>
+              {specialties.map((ele) => (
+                <p key={ele.id}>{ele.name}</p>
+              ))}
+            </div>
           </div>
         </div>
-      );
-    }
+        <div>
+          <button onClick={this.onButtonClick}>Edit Profile</button>
+          {this.state.showComponent ? (
+            <EditDocProfile closeForm={this.onButtonClick} />
+          ) : null}
+        </div>
+
+        <hr />
+        <div>
+          <h2>My Appointment Schedule</h2>
+          <DocAppointments
+            doctorId={this.props.auth.metaId}
+            doctorFirstName={firstName}
+            doctorLastName={lastName}
+          />
+        </div>
+      </div>
+    );
   }
 }
 
