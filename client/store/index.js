@@ -8,13 +8,16 @@ import symptomsReducer from './symptoms';
 import appointments from './appointments';
 import patient from './patient';
 import singleDoctor from './singleDoctor';
+import medications from './medications';
+
 const reducer = combineReducers({
   auth,
   mapDoctors: mapReducer,
-  symptoms: symptomsReducer,
   singleDoctor,
+  symptoms: symptomsReducer,
   appointments,
   patient,
+  medications,
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
