@@ -6,8 +6,9 @@ import Home from './components/Home';
 import { me } from './store';
 import Meeting from './components/Meeting';
 import Dashboard from './components/Dashboard';
-import PatientProfile from './components/PatientProfile';
 import PatientDocProfile from './components/PatientDocProfile';
+import PatientProfile from './components/PatientProfile';
+
 /**
  * COMPONENT
  */
