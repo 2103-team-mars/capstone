@@ -16,7 +16,7 @@ export class Home extends React.Component {
 
     return (
       <div>
-        {isLoggedIn ? (
+        {isLoggedIn && auth.metaType === 'patient' ? (
           <div>
             <h3>
               Hi, {auth.firstName} {auth.lastName}, how can we help you today?
