@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import MapComponent from './MapComponent';
 import PatientProfile from './PatientProfile';
 import MyAppointments from './MyAppointments';
 import Medications from './Medications';
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -21,12 +23,23 @@ function TabPanel(props) {
     </div>
   );
 }
-
-export function Dashboard({ auth }) {
-  const [value, setValue] = React.useState(0);
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+export default function Dashboard() {
+  const auth = useSelector((state) => state.auth);
+  let query = useQuery();
+  let index = query.get('index');
+  if (index === null) {
+    index = 0;
+  } else {
+    index = Number(index);
+  }
+  const [value, setValue] = React.useState(index);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <div>
       {auth.metaType === 'patient' ? (
@@ -93,9 +106,9 @@ export function Dashboard({ auth }) {
     </div>
   );
 }
-const mapState = (state) => {
-  return {
-    auth: state.auth,
-  };
-};
-export default connect(mapState)(Dashboard);
+// const mapState = (state) => {
+//   return {
+//     auth: state.auth,
+//   };
+// };
+// export default connect(mapState)(Dashboard);
