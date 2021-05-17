@@ -60,6 +60,9 @@ export class DocDocProfile extends Component {
               </div>
             </div>
           </div>
+          <div>
+            <button>Edit Profile</button>
+          </div>
 
           <hr />
           <div>
