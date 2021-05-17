@@ -6,8 +6,9 @@ import Home from './components/Home';
 import { me } from './store';
 import Meeting from './components/Meeting';
 import Dashboard from './components/Dashboard';
-import PatientProfile from './components/PatientProfile';
 import PatientDocProfile from './components/PatientDocProfile';
+import PatientProfile from './components/PatientProfile';
+
 /**
  * COMPONENT
  */
@@ -28,7 +29,7 @@ class Routes extends Component {
               path='/patients/:patientId'
               component={PatientProfile}
             />
-            <Route path='/home' component={Home} />
+            <Route path='/home' exact component={Home} />
             <Route path='/meeting' component={Meeting} />
             <Route path='/dashboard' component={Dashboard} />
             <Route path='/doctor/:docId' component={PatientDocProfile} />

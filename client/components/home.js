@@ -1,24 +1,47 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
+import { me } from '../store/auth';
+import { Link } from 'react-router-dom';
 import DocDocProfile from "./DocDocProfile";
 
 /**
  * COMPONENT
  */
-export const Home = (props) => {
-  const { auth } = props;
-  return (
-    <div>
-      <h3>
-        Welcome, {auth.firstName} {auth.lastName},
-      </h3>
+export class Home extends React.Component {
+  componentDidMount() {
+    this.props.loadInitialData();
+  }
+  render() {
+    console.log(this.props);
+    const { auth, isLoggedIn } = this.props;
+
+    return (
       <div>
+        {isLoggedIn && auth.metaType === 'patient' ? (
+          <div>
+            <h3>
+              Hi, {auth.firstName} {auth.lastName}, how can we help you today?
+              <Link to={'/dashboard?index=2'}>
+                Not feeling well? Update you symptoms
+              </Link>
+              <Link to={'/dashboard?index=0'}> Looking for a doctor?</Link>
+              <Link to={'/dashboard?index=3'}> Check your medication</Link>
+            </h3>
+          </div>
+        ) : (
+          <div>
+            <h3>Welcome</h3>
+          </div>
+        )}
+
+        <div>
         <h1> TEST for DocDocProfile Component</h1>
         <DocDocProfile />
       </div>
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
 
 /**
  * CONTAINER
@@ -26,7 +49,16 @@ export const Home = (props) => {
 const mapState = (state) => {
   return {
     auth: state.auth,
+    isLoggedIn: !!state.auth.id,
   };
 };
 
-export default connect(mapState)(Home);
+const mapDispatch = (dispatch) => {
+  return {
+    loadInitialData() {
+      dispatch(me());
+    },
+  };
+};
+
+export default connect(mapState, mapDispatch)(Home);

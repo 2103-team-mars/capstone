@@ -3,6 +3,7 @@ import axios from "axios";
 //action type
 const TOKEN = "token";
 const GET_DOCTOR = "GET_DOCTOR";
+
 const SET_SPECIALTIES = "SET_SPECIALTIES";
 
 //action creator

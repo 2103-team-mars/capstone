@@ -5,7 +5,7 @@ async function makeCoordinates(address) {
     "http://www.mapquestapi.com/geocoding/v1/address",
     {
       params: {
-        key: "FsX3BJQe8AW9OEFys2jSVC8TCN2NUIED",
+        key: 'FsX3BJQe8AW9OEFys2jSVC8TCN2NUIED',
         location: address,
       },
     }
