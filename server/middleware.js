@@ -1,4 +1,4 @@
-const { User } = require('./db');
+const { User, Specialty } = require("./db");
 
 const isLoggedIn = async (req, res, next) => {
   try {
@@ -11,23 +11,39 @@ const isLoggedIn = async (req, res, next) => {
 };
 
 const isPatient = (req, res, next) => {
-  if (req.user.metaType === 'patient') {
+  if (req.user.metaType === "patient") {
     next();
   } else {
-    const error = new Error('not authorized');
+    const error = new Error("not authorized");
     error.status = 403;
     next(error);
   }
 };
 
 const isDoctor = (req, res, next) => {
-  if (req.user.metaType === 'doctor') {
+  if (req.user.metaType === "doctor") {
     next();
   } else {
-    const error = new Error('not authorized');
+    const error = new Error("not authorized");
     error.status = 403;
     next(error);
   }
 };
 
-module.exports = { isLoggedIn, isPatient, isDoctor };
+//converts specialty string to array of ids as req.data
+const getSpecialtyIds = async (req, res, next) => {
+  try {
+    const SpecialtyIdArr = await Specialty.findAll({
+      where: {
+        name: req.body,
+      },
+    });
+
+    req.data = SpecialtyIdArr;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { isLoggedIn, isPatient, isDoctor, getSpecialtyIds };

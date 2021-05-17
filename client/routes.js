@@ -33,7 +33,9 @@ class Routes extends Component {
           </Switch>
         ) : (
           <Switch>
-            <Route path="/" component={AuthForm} />
+            <Route path="/home" exact component={Home} />
+            <Route path="/auth" component={AuthForm} />
+            <Redirect to="/home" />
           </Switch>
         )}
       </div>
