@@ -22,12 +22,11 @@ router.put("/:id", isLoggedIn, isDoctor, async (req, res, next) => {
   try {
     const doctor = req.user;
 
-    const { firstName, lastName, profilePicture, location } = req.body;
+    const { firstName, lastName, location } = req.body;
 
     const updatedDoc = await doctor.update({
       firstName,
       lastName,
-      profilePicture,
       location,
     });
 

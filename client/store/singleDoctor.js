@@ -1,8 +1,8 @@
 import axios from "axios";
 
 //action type
+const TOKEN = "token";
 const GET_DOCTOR = "GET_DOCTOR";
-const SET_DOCTOR = "SET_DOCTOR";
 const SET_SPECIALTIES = "SET_SPECIALTIES";
 
 //action creator
@@ -39,15 +39,25 @@ export const fetchDoctor = (id) => {
     }
   };
 };
+
 export const updateDoctor = (id, docDetails) => {
   return async (dispatch) => {
     try {
-      const { data: docDetails } = await axios.put(
-        `/api/doctors/${id}`,
-        id,
-        docDetails
-      );
-      dispatch(setDoctor(id, docDetails));
+      const token = window.localStorage.getItem(TOKEN);
+
+      ////////////////////////////////////////////
+      console.log("UpdateDoctor: hit the thunk here!");
+      ////////////////////////////////////////////
+
+      const { data } = await axios.put(`/api/users/${id}`, docDetails, {
+        headers: { authorization: token },
+      });
+
+      ////////////////////////////////////////////
+      console.log("dispated the data", data);
+      ////////////////////////////////////////////
+
+      dispatch(setDoctor(id, data));
     } catch (err) {
       console.log("There was a error in updating your records");
     }
@@ -57,10 +67,16 @@ export const updateDoctor = (id, docDetails) => {
 export const updateSpecialties = (id, specialties) => {
   return async (dispatch) => {
     try {
+      const token = window.localStorage.getItem(TOKEN);
+
+      ////////////////////////////////////////////
+      console.log("updateSpecialtiess: hit the thunk here!");
+      ////////////////////////////////////////////
+
       const { data: specialties } = await axios.put(
         " /api/specialty",
-        id,
-        specialties
+        specialties,
+        { headers: { authorization: token } }
       );
       dispatch(setSpecialties(id, specialties));
     } catch (err) {

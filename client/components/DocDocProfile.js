@@ -2,16 +2,35 @@ import React, { Component } from "react";
 import { fetchDoctor } from "../store/singleDoctor";
 import { connect } from "react-redux";
 import DocAppointments from "./DocAppointments";
+import EditDocProfile from "./EditDocProfile";
 
 export class DocDocProfile extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showComponent: false,
+    };
+    this.onButtonClick = this.onButtonClick.bind(this);
   }
   componentDidMount() {
+    const userId = this.props.auth.id;
     const docId = this.props.auth.metaId;
     this.props.fetchDoctor(docId);
   }
+
+  onButtonClick() {
+    this.setState({
+      showComponent: !this.state.showComponent,
+    });
+  }
+
   render() {
+    ////////////////////////////////
+    console.log("this.props.auth", this.props.auth);
+    console.log("!this.props.singleDoc", !this.props.singleDoc);
+
+    ////////////////////////////////
+
     if (!this.props.singleDoc.user) {
       return (
         <div>
@@ -23,16 +42,6 @@ export class DocDocProfile extends Component {
         this.props.singleDoc.user;
 
       const { profession, specialties } = this.props.singleDoc;
-
-      ////////////////////////////////////////////////////////////////////////////////////////////
-      console.log("FROM RENDER this.props.auth ------>>>>>>", this.props.auth);
-      console.log(
-        "FROM RENDER this.props.singleDoc ------>>>>>>",
-        this.props.singleDoc
-      );
-      console.log("specialties ------->>>>>", specialties);
-      //////////////////////////////////////////////
-      /////////////////////////////////////////
 
       return (
         <div>
@@ -61,7 +70,8 @@ export class DocDocProfile extends Component {
             </div>
           </div>
           <div>
-            <button>Edit Profile</button>
+            <button onClick={this.onButtonClick}>Edit Profile</button>
+            {this.state.showComponent ? <EditDocProfile /> : null}
           </div>
 
           <hr />
