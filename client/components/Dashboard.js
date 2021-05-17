@@ -106,9 +106,3 @@ export default function Dashboard() {
     </div>
   );
 }
-// const mapState = (state) => {
-//   return {
-//     auth: state.auth,
-//   };
-// };
-// export default connect(mapState)(Dashboard);

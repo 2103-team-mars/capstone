@@ -29,17 +29,18 @@ class Routes extends Component {
               path='/patients/:patientId'
               component={PatientProfile}
             />
+            <Route path='/doctor/:docId' component={PatientDocProfile} />
             <Route path='/home' exact component={Home} />
             <Route path='/meeting' component={Meeting} />
             <Route path='/dashboard' component={Dashboard} />
-            <Route path='/doctor/:docId' component={PatientDocProfile} />
+
             <Redirect to='/home' />
           </Switch>
         ) : (
           <Switch>
-            <Route path='/' exact component={Login} />
-            <Route path='/login' component={Login} />
-            <Route path='/signup' component={Signup} />
+            <Route path='/home' exact component={Home} />
+            <Route path='/auth' component={Login} />
+            <Redirect to='/home' />
           </Switch>
         )}
       </div>
