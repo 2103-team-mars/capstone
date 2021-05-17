@@ -7,15 +7,41 @@ const TOKEN = 'token';
  * ACTION TYPES
  */
 const SET_AUTH = 'SET_AUTH';
+const UPDATE_PATIENT = 'UPDATE_PATIENT';
 
 /**
  * ACTION CREATORS
  */
 const setAuth = (auth) => ({ type: SET_AUTH, auth });
+export const updatePatient = (patient) => {
+  return {
+    type: UPDATE_PATIENT,
+    patient,
+  };
+};
 
 /**
  * THUNK CREATORS
  */
+
+export const updatePatientThunk = (patient) => {
+  return async (dispatch) => {
+    try {
+      const { data: updated } = await axios.put(
+        `/api/patients/${patient.id}`,
+        patient,
+        {
+          headers: {
+            authorization: window.localStorage.getItem('token'),
+          },
+        }
+      );
+      dispatch(updatePatient(updated));
+    } catch (error) {
+      throw error;
+    }
+  };
+};
 export const me = () => async (dispatch) => {
   const token = window.localStorage.getItem(TOKEN);
   if (token) {
@@ -54,6 +80,8 @@ export default function (state = {}, action) {
   switch (action.type) {
     case SET_AUTH:
       return action.auth;
+    case UPDATE_PATIENT:
+      return action.patient;
     default:
       return state;
   }

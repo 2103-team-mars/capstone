@@ -15,7 +15,11 @@ const {
 
 const _ = require('lodash');
 
-const professionData = [{ name: 'Psychiatrist' }, { name: 'Psychologist' }, { name: 'Therapist' }];
+const professionData = [
+  { name: 'Psychiatrist' },
+  { name: 'Psychologist' },
+  { name: 'Therapist' },
+];
 const specialtyData = [
   { name: 'Anxiety' },
   { name: 'ADHD' },
@@ -37,7 +41,9 @@ const randInt = (a, b) => {
 };
 
 const randDate = (start, end) => {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
 };
 
 const generateDoctorData = () => {
@@ -81,7 +87,7 @@ async function seed() {
 
   const past = new Date();
   const future = new Date();
-  tomorrow.setDate(tomorrow.getDate() - 20);
+  past.setDate(past.getDate() - 20);
   future.setDate(future.getDate() + 150);
 
   const appointments = [];
