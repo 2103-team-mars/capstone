@@ -1,6 +1,7 @@
 import axios from "axios";
 
 //action type
+const TOKEN = "token";
 const GET_DOCTOR = "GET_DOCTOR";
 
 //action creator
@@ -30,6 +31,7 @@ export default function singleDoctor(state = initialState, action) {
   switch (action.type) {
     case GET_DOCTOR:
       return action.doctor;
+
     default:
       return state;
   }

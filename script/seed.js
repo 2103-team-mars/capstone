@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const {
   db,
@@ -11,30 +11,30 @@ const {
   Profession,
   Doctor,
   Patient,
-} = require('../server/db');
+} = require("../server/db");
 
-const _ = require('lodash');
+const _ = require("lodash");
 
 const professionData = [
-  { name: 'Psychiatrist' },
-  { name: 'Psychologist' },
-  { name: 'Therapist' },
+  { name: "Psychiatrist" },
+  { name: "Psychologist" },
+  { name: "Therapist" },
 ];
 const specialtyData = [
-  { name: 'Anxiety' },
-  { name: 'ADHD' },
-  { name: 'Bipolar disorder' },
-  { name: 'OCD' },
-  { name: 'PTSD' },
-  { name: 'Psychosis' },
-  { name: 'Schizophrenia' },
-  { name: 'Despression' },
-  { name: 'Eating disorder' },
+  { name: "Anxiety" },
+  { name: "ADHD" },
+  { name: "Bipolar disorder" },
+  { name: "OCD" },
+  { name: "PTSD" },
+  { name: "Psychosis" },
+  { name: "Schizophrenia" },
+  { name: "Despression" },
+  { name: "Eating disorder" },
 ];
-const symptomData = require('./symptomData');
-const medicationData = require('./medicationData');
-const topicData = require('./topicData');
-const generateUserData = require('./userData');
+const symptomData = require("./symptomData");
+const medicationData = require("./medicationData");
+const topicData = require("./topicData");
+const generateUserData = require("./userData");
 
 const randInt = (a, b) => {
   return Math.floor(Math.random() * (b - a) + a);
@@ -60,7 +60,7 @@ const generateDoctorData = () => {
  */
 async function seed() {
   await db.sync({ force: true }); // clears db and matches models to tables
-  console.log('db synced!');
+  console.log("db synced!");
 
   const professions = await Profession.bulkCreate(professionData);
   const specialties = await Specialty.bulkCreate(specialtyData);
@@ -110,7 +110,7 @@ async function seed() {
     for (let i = 0; i < 5; i++) {
       const appointment = await Appointment.create({
         date: randDate(past, future),
-        topic: '',
+        topic: "",
         doctorId: doc.id,
       });
       appointments.push(appointment);
@@ -149,16 +149,16 @@ async function seed() {
  The `seed` function is concerned only with modifying the database.
 */
 async function runSeed() {
-  console.log('seeding...');
+  console.log("seeding...");
   try {
     await seed();
   } catch (err) {
     console.error(err);
     process.exitCode = 1;
   } finally {
-    console.log('closing db connection');
+    console.log("closing db connection");
     await db.close();
-    console.log('db connection closed');
+    console.log("db connection closed");
   }
 }
 
