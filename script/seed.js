@@ -81,7 +81,7 @@ async function seed() {
 
   const past = new Date();
   const future = new Date();
-  tomorrow.setDate(tomorrow.getDate() - 20);
+  past.setDate(past.getDate() - 20);
   future.setDate(future.getDate() + 150);
 
   const appointments = [];

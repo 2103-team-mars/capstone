@@ -52,7 +52,7 @@ const MyAppointments = () => {
           ) : (
             <div>
               <p>
-                <Link to={`/patient/docProfile/${appt.doctor.id}`}>
+                <Link to={`/doctor/${appt.doctor.id}`}>
                   {appt.doctor.user.firstName + ' ' + appt.doctor.user.lastName}
                 </Link>
               </p>
