@@ -39,17 +39,17 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
           <Grid item xs container direction="row-reverse">
             {isLoggedIn && (
               <>
-                <Button component={RouterLink} to="/home" color="inherit">
-                  Home
-                </Button>
-                <Button component={RouterLink} to="/dashboard" color="inherit">
-                  Dashboard
+                <Button onClick={handleClick} color="inherit">
+                  Logout
                 </Button>
                 <Button component={RouterLink} to="meeting" color="inherit">
                   Meeting
                 </Button>
-                <Button onClick={handleClick} color="inherit">
-                  Logout
+                <Button component={RouterLink} to="/dashboard" color="inherit">
+                  Dashboard
+                </Button>
+                <Button component={RouterLink} to="/home" color="inherit">
+                  Home
                 </Button>
               </>
             )}

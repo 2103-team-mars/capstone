@@ -66,6 +66,7 @@ const AuthForm = () => {
               onChange={handleChange}
               className={classes.tabs}
               centered
+              indicatorColor="primary"
             >
               <Tab label="Login" {...a11yProps(0)} />
               <Tab label="Patient Signup" {...a11yProps(1)} />

@@ -4,6 +4,8 @@ import Peer from 'simple-peer';
 import { v4 } from 'uuid';
 import { connect } from 'react-redux';
 
+import { Grid, Box, Typography } from '@material-ui/core';
+
 class Meeting extends Component {
   constructor() {
     super();
@@ -146,8 +148,32 @@ class Meeting extends Component {
   }
 
   render() {
+    const { callAccepted } = this.state;
+    const isDoctor = this.props.auth.metaType === 'doctor';
     return (
-      <div>
+      <Box pt={3}>
+        <Typography variant="h4">Meeting</Typography>
+        {isDoctor && (
+          <Typography variant="h6">
+            <strong>Room Code:</strong> {this.state.room}
+          </Typography>
+        )}
+        <Grid container>
+          <Grid item md={8}>
+            {callAccepted && (
+              <video style={{ width: '100%' }} ref={this.theirStream} autoPlay playsInline />
+            )}
+          </Grid>
+          <Grid item md={4} container direction="column">
+            <Grid item md={4} style={{ backgroundColor: 'red' }}>
+              {/* <video style={{ width: '100%' }} ref={this.myStream} autoPlay playsInline muted /> */}
+              Some text
+            </Grid>
+            <Grid item md={8}>
+              Some text
+            </Grid>
+          </Grid>
+        </Grid>
         <form onClick={this.onSubmit}>
           <input onChange={(event) => this.onChange(event)} value={this.state.msg} />
           <button type="submit">Send</button>
@@ -158,15 +184,7 @@ class Meeting extends Component {
             <p>{msg}</p>
           </div>
         ))}
-        <video style={{ width: '600px' }} ref={this.myStream} autoPlay playsInline muted />
-        {this.state.callAccepted ? (
-          <video style={{ width: '600px' }} ref={this.theirStream} autoPlay playsInline />
-        ) : null}
-        {this.props.auth.metaType === 'doctor' ? (
-          <div>
-            <p>{this.state.room}</p>
-          </div>
-        ) : null}
+
         {this.state.callAccepted ? <button onClick={() => this.end(true)}>endCall</button> : null}
         {!this.state.callAccepted && this.state.receivingCall ? (
           <div>
@@ -186,7 +204,7 @@ class Meeting extends Component {
             </button>
           </div>
         ) : null}
-      </div>
+      </Box>
     );
   }
 }
