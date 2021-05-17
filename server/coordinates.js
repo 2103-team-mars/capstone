@@ -1,8 +1,8 @@
-const axios = require('axios');
+const axios = require("axios");
 
 async function makeCoordinates(address) {
   const { data } = await axios.get(
-    'http://www.mapquestapi.com/geocoding/v1/address',
+    "http://www.mapquestapi.com/geocoding/v1/address",
     {
       params: {
         key: 'FsX3BJQe8AW9OEFys2jSVC8TCN2NUIED',
