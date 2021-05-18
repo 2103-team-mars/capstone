@@ -24,6 +24,10 @@ const MyAppointments = () => {
     return (auth.metaType === 'doctor' && appt.patient) || appt.doctor;
   });
 
+  if (!filledAppointments.length) {
+    return <div>You have no registered appointments</div>;
+  }
+
   return (
     <div>
       {filledAppointments.map((appt) => (

@@ -1,18 +1,19 @@
-import axios from 'axios';
-import history from '../history';
+import axios from "axios";
+import history from "../history";
 
-const TOKEN = 'token';
-
+const TOKEN = "token";
 /**
  * ACTION TYPES
  */
-const SET_AUTH = 'SET_AUTH';
-const UPDATE_PATIENT = 'UPDATE_PATIENT';
+const SET_AUTH = "SET_AUTH";
+const UPDATE_PATIENT = "UPDATE_PATIENT";
+const SET_DOCTOR = "SET_DOCTOR";
 
 /**
  * ACTION CREATORS
  */
 const setAuth = (auth) => ({ type: SET_AUTH, auth });
+
 export const updatePatient = (patient) => {
   return {
     type: UPDATE_PATIENT,
@@ -20,6 +21,13 @@ export const updatePatient = (patient) => {
   };
 };
 
+export const setDoctor = (id, docDetails) => {
+  return {
+    type: SET_DOCTOR,
+    id,
+    docDetails,
+  };
+};
 /**
  * THUNK CREATORS
  */
@@ -32,7 +40,7 @@ export const updatePatientThunk = (patient) => {
         patient,
         {
           headers: {
-            authorization: window.localStorage.getItem('token'),
+            authorization: window.localStorage.getItem("token"),
           },
         }
       );
@@ -42,10 +50,35 @@ export const updatePatientThunk = (patient) => {
     }
   };
 };
+
+export const updateDoctor = (id, docDetails) => {
+  return async (dispatch) => {
+    try {
+      const token = window.localStorage.getItem(TOKEN);
+
+      ////////////////////////////////////////////
+      console.log("UpdateDoctor: hit the thunk here!");
+      ////////////////////////////////////////////
+
+      const { data } = await axios.put(`/api/users/${id}`, docDetails, {
+        headers: { authorization: token },
+      });
+
+      ////////////////////////////////////////////
+      console.log("dispatched the data", data);
+      ////////////////////////////////////////////
+
+      dispatch(setDoctor(id, data));
+    } catch (err) {
+      console.log("There was a error in updating your records");
+    }
+  };
+};
+
 export const me = () => async (dispatch) => {
   const token = window.localStorage.getItem(TOKEN);
   if (token) {
-    const res = await axios.get('/auth/me', {
+    const res = await axios.get("/auth/me", {
       headers: {
         authorization: token,
       },
@@ -76,7 +109,7 @@ export const signup = (userInfo, metaInfo, metaType) => async (dispatch) => {
 
 export const logout = () => {
   window.localStorage.removeItem(TOKEN);
-  history.push('/login');
+  history.push("/login");
   return {
     type: SET_AUTH,
     auth: {},
@@ -92,6 +125,10 @@ export default function (state = {}, action) {
       return action.auth;
     case UPDATE_PATIENT:
       return action.patient;
+
+    case SET_DOCTOR:
+      return action.docDetails;
+
     default:
       return state;
   }

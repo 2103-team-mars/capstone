@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { fetchDoctor } from "../store/singleDoctor";
-import { connect } from "react-redux";
-import DocAppointments from "./DocAppointments";
+import React, { Component } from 'react';
+import { fetchDoctor } from '../store/singleDoctor';
+import { connect } from 'react-redux';
+import DocAppointments from './DocAppointments';
 
 export class PatientDocProfile extends Component {
   constructor(props) {
@@ -19,10 +19,7 @@ export class PatientDocProfile extends Component {
         </div>
       );
     } else {
-      console.log("this.props from RENDER ---->>>>", this.props);
-
-      const { profilePicture, firstName, lastName, location } =
-        this.props.singleDoc.user;
+      const { profilePicture, firstName, lastName, location } = this.props.singleDoc.user;
 
       const { profession, specialties } = this.props.singleDoc;
 
