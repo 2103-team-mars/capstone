@@ -1,110 +1,73 @@
-import { GoogleApiWrapper, Map, InfoWindow, Marker } from "google-maps-react";
-import { Router, Link } from "react-router-dom";
-import React, { Component } from "react";
-import { fetchDoctors } from "../store/googleMap";
-import { connect } from "react-redux";
-import PatientDocProfile from "./PatientDocProfile";
-import history from "../history";
+import React, { useState, useEffect } from 'react';
+import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
+import { Link } from 'react-router-dom';
+import { fetchDoctors } from '../store/googleMap';
+import { useSelector, useDispatch } from 'react-redux';
 
-export class MapComponent extends Component {
-  constructor() {
-    super();
-    this.state = {
-      activeMarker: {},
-      selectedDoctor: {},
-      showingInfoWindow: false,
-    };
-    this.onMarkerClick = this.onMarkerClick.bind(this);
-    this.onInfoWindowClose = this.onInfoWindowClose.bind(this);
-    this.onMapClicked = this.onMapClicked.bind(this);
-  }
+const mapStyles = {
+  height: '100vh',
+  width: '100%',
+};
 
-  onMarkerClick(props, marker) {
-    this.setState({
-      activeMarker: marker,
-      selectedDoctor: props,
-      showingInfoWindow: true,
-    });
-  }
+const MapComponent = () => {
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const doctors = useSelector((state) => state.mapDoctors);
+  const [selected, setSelected] = useState({});
 
-  onInfoWindowClose() {
-    this.setState({
-      activeMarker: null,
-      showingInfoWindow: false,
-    });
-  }
+  useEffect(() => {
+    dispatch(fetchDoctors());
+  }, []);
 
-  onMapClicked() {
-    if (this.state.showingInfoWindow)
-      this.setState({
-        activeMarker: null,
-        showingInfoWindow: false,
-      });
-  }
-  componentDidMount() {
-    this.props.fetchDoctors();
-  }
-  render() {
-    const { google, auth, doctors } = this.props;
-    return (
-      <div>
-        <Map
-          google={google}
-          initialCenter={{
-            lat: auth.coordinates[0],
-            lng: auth.coordinates[1],
-          }}
-        >
-          {doctors.map((doctor) => {
-            return (
-              <Marker
-                key={doctor.id}
-                id={doctor.id}
-                onClick={this.onMarkerClick}
-                name={doctor.user.firstName + " " + doctor.user.lastName}
-                email={doctor.user.email}
-                location={doctor.user.location}
-                position={{
-                  lat: doctor.user.coordinates[0],
-                  lng: doctor.user.coordinates[1],
-                }}
-              />
-            );
-          })}
+  const onSelect = (item) => {
+    setSelected(item);
+  };
 
+  const center = {
+    lat: auth.coordinates[0],
+    lng: auth.coordinates[1],
+  };
+
+  return (
+    <LoadScript googleMapsApiKey="AIzaSyA88BT_HAbFTCSu7jJOj8d5DvAw8m-as1Q">
+      <GoogleMap mapContainerStyle={mapStyles} zoom={13} center={center}>
+        {doctors.map((doctor) => {
+          return (
+            <Marker
+              key={doctor.id}
+              id={doctor.id}
+              onClick={() => onSelect(doctor)}
+              name={doctor.user.firstName + ' ' + doctor.user.lastName}
+              email={doctor.user.email}
+              location={doctor.user.location}
+              position={{
+                lat: doctor.user.coordinates[0],
+                lng: doctor.user.coordinates[1],
+              }}
+            />
+          );
+        })}
+        {selected.id && (
           <InfoWindow
-            marker={this.state.activeMarker}
-            onClose={this.onInfoWindowClose}
-            visible={this.state.showingInfoWindow}
+            position={{
+              lat: selected.user.coordinates[0],
+              lng: selected.user.coordinates[1],
+            }}
+            clickable={true}
+            onCloseClick={() => setSelected({})}
           >
             <div>
-              <Router history={history}>
-                <Link to={`/doctor/${this.state.selectedDoctor.id}`}>
-                  <h1>{this.state.selectedDoctor.name}</h1>
-                </Link>
-              </Router>
-
-              <h1>{this.state.selectedDoctor.location}</h1>
-              <h1>{this.state.selectedDoctor.email}</h1>
-              <h1>{this.state.selectedDoctor.id}</h1>
+              <Link to={`/doctor/${selected.id}`}>
+                <h1>{selected.user.firstName + ' ' + selected.user.lastName}</h1>
+              </Link>
+              <h1>{selected.user.location}</h1>
+              <h1>{selected.user.email}</h1>
             </div>
           </InfoWindow>
-        </Map>
-      </div>
-    );
-  }
-}
-
-const mapState = (state) => {
-  return {
-    auth: state.auth,
-    doctors: state.mapDoctors,
-  };
+        )}
+      </GoogleMap>
+    </LoadScript>
+  );
 };
-const mapDispatch = (dispatch) => ({
-  fetchDoctors: () => dispatch(fetchDoctors()),
-});
 
-export default GoogleApiWrapper({
-  apiKey: "AIzaSyA88BT_HAbFTCSu7jJOj8d5DvAw8m-as1Q",
-})(connect(mapState, mapDispatch)(MapComponent));
+export default MapComponent;
