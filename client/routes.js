@@ -1,11 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import { Login, Signup } from './components/AuthForm';
+import AuthForm from './components/auth/AuthForm';
 import Home from './components/home';
 import { me } from './store';
 import Meeting from './components/Meeting';
 import Dashboard from './components/Dashboard';
+import PatientDocProfile from './components/PatientDocProfile';
+import PatientProfile from './components/PatientProfile';
 
 /**
  * COMPONENT
@@ -22,16 +24,18 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route path='/home' component={Home} />
-            <Route path='/meeting' component={Meeting} />
-            <Route path='/dashboard' component={Dashboard} />
-            <Redirect to='/home' />
+            <Route exact path="/patients/:patientId" component={PatientProfile} />
+            <Route path="/home" component={Home} />
+            <Route path="/meeting" component={Meeting} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/doctor/:docId" component={PatientDocProfile} />
+            <Redirect to="/home" />
           </Switch>
         ) : (
           <Switch>
-            <Route path='/' exact component={Login} />
-            <Route path='/login' component={Login} />
-            <Route path='/signup' component={Signup} />
+            <Route path="/home" exact component={Home} />
+            <Route path="/auth" component={AuthForm} />
+            <Redirect to="/home" />
           </Switch>
         )}
       </div>

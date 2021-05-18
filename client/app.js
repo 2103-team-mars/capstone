@@ -1,15 +1,17 @@
-import React from 'react'
-
+import React from 'react';
 import Navbar from './components/navbar'
 import Routes from './routes'
+import { Container } from '@material-ui/core';
 
 const App = () => {
   return (
     <div>
       <Navbar />
-      <Routes />
+      <Container maxWidth="xl">
+        <Routes />
+      </Container>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

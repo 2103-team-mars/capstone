@@ -142,7 +142,6 @@ const hashPassword = async (user) => {
 
 const convertAddress = async (user) => {
   if (user.changed('location')) {
-    console.log('in convertAddress');
     user.coordinates = await makeCoordinates(user.location);
   }
 };

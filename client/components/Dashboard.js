@@ -1,56 +1,75 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
-import { connect } from 'react-redux';
 import MapComponent from './MapComponent';
+import OldMap from './OldMap';
 import PatientProfile from './PatientProfile';
+import MyAppointments from './MyAppointments';
+import Medications from './Medications';
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import DocDocProfile from './DocDocProfile';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role='tabpanel'
+      role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }
-
-export function Dashboard({ auth }) {
-  const [value, setValue] = React.useState(0);
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+export default function Dashboard() {
+  const auth = useSelector((state) => state.auth);
+  let query = useQuery();
+  let index = query.get('index');
+  if (index === null) {
+    index = 0;
+  } else {
+    index = Number(index);
+  }
+  const [value, setValue] = useState(index);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const [oldMap, setOldMap] = useState(true);
+
+  const toggleOldMap = () => {
+    setOldMap((prevState) => !prevState);
+  };
+
   return (
     <div>
       {auth.metaType === 'patient' ? (
         <div>
-          <AppBar position='static'>
+          <button onClick={toggleOldMap}>Toggle Map</button>
+          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor='primary'
-              textColor='primary'
+              indicatorColor="primary"
+              textColor="primary"
               centered
-              variant='fullWidth'
+              variant="fullWidth"
             >
-              <Tab label='Find Doctor' />
-              <Tab label='My Doctors' />
-              <Tab label='Profile' />
-              <Tab label='Medications' />
-              <Tab label='Appointments' />
+              <Tab label="Find Doctor" />
+              <Tab label="My Doctors" />
+              <Tab label="Profile" />
+              <Tab label="Medications" />
+              <Tab label="Appointments" />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
-            <MapComponent />
+            {oldMap ? <OldMap /> : <MapComponent />}
           </TabPanel>
           <TabPanel value={value} index={1}>
             My doctors list
@@ -59,45 +78,39 @@ export function Dashboard({ auth }) {
             <PatientProfile />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            My Medications
+            <Medications />
           </TabPanel>
           <TabPanel value={value} index={4}>
-            My Appointments
+            <MyAppointments />
           </TabPanel>
         </div>
       ) : (
         <div>
-          <AppBar position='static'>
+          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor='primary'
-              textColor='primary'
+              indicatorColor="primary"
+              textColor="primary"
               centered
-              variant='fullWidth'
+              variant="fullWidth"
             >
-              <Tab label='Profile' />
-              <Tab label='My Patients' />
-              <Tab label='My Appointments' />
+              <Tab label="Profile" />
+              <Tab label="My Patients" />
+              <Tab label="My Appointments" />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
-            My Doctor Profile
+            <DocDocProfile />
           </TabPanel>
           <TabPanel value={value} index={1}>
             My Patients
           </TabPanel>
           <TabPanel value={value} index={2}>
-            My Appointments as a doctor
+            <MyAppointments />
           </TabPanel>
         </div>
       )}
     </div>
   );
 }
-const mapState = (state) => {
-  return {
-    auth: state.auth,
-  };
-};
-export default connect(mapState)(Dashboard);
