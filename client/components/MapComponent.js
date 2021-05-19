@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const mapStyles = {
   height: '100vh',
-  width: '100%',
+  width: '90%',
+  margin: '0 auto',
 };
 
 const MapComponent = () => {

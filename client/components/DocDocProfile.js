@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { fetchDoctor } from "../store/singleDoctor";
-import { connect } from "react-redux";
-import DocAppointments from "./DocAppointments";
-import EditDocProfile from "./EditDocProfile";
+import React, { Component } from 'react';
+import { fetchDoctor } from '../store/singleDoctor';
+import { connect } from 'react-redux';
+import DocAppointments from './appointments/DocAppointments';
+import EditDocProfile from './EditDocProfile';
 
 export class DocDocProfile extends Component {
   constructor(props) {
@@ -65,19 +65,13 @@ export class DocDocProfile extends Component {
         </div>
         <div>
           <button onClick={this.onButtonClick}>Edit Profile</button>
-          {this.state.showComponent ? (
-            <EditDocProfile closeForm={this.onButtonClick} />
-          ) : null}
+          {this.state.showComponent ? <EditDocProfile closeForm={this.onButtonClick} /> : null}
         </div>
 
         <hr />
         <div>
           <h2>My Appointment Schedule</h2>
-          <DocAppointments
-            doctorId={this.props.auth.metaId}
-            doctorFirstName={firstName}
-            doctorLastName={lastName}
-          />
+          <DocAppointments />
         </div>
       </div>
     );

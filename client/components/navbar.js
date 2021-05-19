@@ -17,7 +17,8 @@ import {
 
 const useStyles = makeStyles(() => ({
   navbar: {
-    backgroundColor: '#457B9D',
+    backgroundColor: '#7AF5CC',
+    color: 'black',
   },
   title: {
     textTransform: 'none',
@@ -55,7 +56,7 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
             )}
             {!isLoggedIn && (
               <>
-                <Button component={RouterLink} to="/users" color="inherit">
+                <Button component={RouterLink} to="/auth" color="inherit">
                   Login
                 </Button>
               </>

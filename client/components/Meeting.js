@@ -1,10 +1,42 @@
 import React, { Component } from 'react';
-import { socket } from './socket';
+import { socket } from '../utils/socket';
 import Peer from 'simple-peer';
 import { v4 } from 'uuid';
 import { connect } from 'react-redux';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { Grid, Box, Typography } from '@material-ui/core';
+import { Grid, Box, Typography, withStyles, Button, TextField } from '@material-ui/core';
+import CallIcon from '@material-ui/icons/Call';
+import CallEndIcon from '@material-ui/icons/CallEnd';
+
+const styles = {
+  gridContainer: {
+    display: 'grid',
+    'grid-template-columns': '2fr 2fr',
+    'grid-template-rows': '1fr',
+    'grid-gap': '0.2rem',
+    'grid-template-areas': "'myVid theirVid'",
+    height: 500,
+    width: '100%',
+  },
+  myVid: {
+    backgroundColor: 'red',
+    'grid-area': 'myVid',
+  },
+  theirVid: {
+    backgroundColor: 'blue',
+    'grid-area': 'theirVid',
+  },
+  chatBox: {
+    backgroundColor: 'green',
+    'grid-area': 'chatBox',
+  },
+  video: {
+    width: '90%',
+    margin: '0 auto',
+    display: 'block',
+  },
+};
 
 class Meeting extends Component {
   constructor() {
@@ -148,62 +180,68 @@ class Meeting extends Component {
   }
 
   render() {
-    const { callAccepted } = this.state;
+    const { callAccepted, receivingCall, callerName, room, roomToCall, chat, msg } = this.state;
+    const { classes } = this.props;
     const isDoctor = this.props.auth.metaType === 'doctor';
     return (
       <Box pt={3}>
         <Typography variant="h4">Meeting</Typography>
         {isDoctor && (
-          <Typography variant="h6">
-            <strong>Room Code:</strong> {this.state.room}
-          </Typography>
+          <>
+            <Typography variant="h6">
+              <strong>Room Code:</strong> {room}
+            </Typography>
+            <CopyToClipboard text={room}>
+              <Button variant="outlined">Copy Room Code</Button>
+            </CopyToClipboard>
+          </>
         )}
-        <Grid container>
-          <Grid item md={8}>
+        <Box pt={1}>
+          {callAccepted && <button onClick={() => this.end(true)}>endCall</button>}
+          {!callAccepted && receivingCall && (
+            <div>
+              <p>{callerName} is calling you</p>
+              <button onClick={this.answer}>Answer</button>
+            </div>
+          )}
+          {!isDoctor && (
+            <div>
+              <input value={roomToCall} onChange={this.onRoomChange}></input>
+              <button
+                onClick={() => {
+                  this.call(roomToCall);
+                }}
+              >
+                Call
+              </button>
+            </div>
+          )}
+        </Box>
+        <Box pt={2}>
+          <Grid container spacing={2} justify="center">
             {callAccepted && (
-              <video style={{ width: '100%' }} ref={this.theirStream} autoPlay playsInline />
+              <Grid item md={6}>
+                <video className={classes.video} ref={this.theirStream} autoPlay playsInline />{' '}
+              </Grid>
             )}
-          </Grid>
-          <Grid item md={4} container direction="column">
-            <Grid item md={4} style={{ backgroundColor: 'red' }}>
-              {/* <video style={{ width: '100%' }} ref={this.myStream} autoPlay playsInline muted /> */}
-              Some text
-            </Grid>
-            <Grid item md={8}>
-              Some text
+            <Grid item md={6}>
+              <video className={classes.video} ref={this.myStream} autoPlay playsInline muted />
             </Grid>
           </Grid>
-        </Grid>
+        </Box>
+
+        <Box>
+          {chat.map((msg, idx) => (
+            <div key={idx}>
+              <p>{msg}</p>
+            </div>
+          ))}
+        </Box>
+
         <form onClick={this.onSubmit}>
-          <input onChange={(event) => this.onChange(event)} value={this.state.msg} />
+          <input onChange={(event) => this.onChange(event)} value={msg} />
           <button type="submit">Send</button>
         </form>
-
-        {this.state.chat.map((msg, idx) => (
-          <div key={idx}>
-            <p>{msg}</p>
-          </div>
-        ))}
-
-        {this.state.callAccepted ? <button onClick={() => this.end(true)}>endCall</button> : null}
-        {!this.state.callAccepted && this.state.receivingCall ? (
-          <div>
-            <p>{this.state.callerName}</p>
-            <button onClick={this.answer}>Answer</button>
-          </div>
-        ) : null}
-        {this.props.auth.metaType !== 'doctor' ? (
-          <div>
-            <input value={this.state.roomToCall} onChange={this.onRoomChange}></input>
-            <button
-              onClick={() => {
-                this.call(this.state.roomToCall);
-              }}
-            >
-              Call
-            </button>
-          </div>
-        ) : null}
       </Box>
     );
   }
@@ -214,4 +252,4 @@ const mapState = (state) => {
   };
 };
 
-export default connect(mapState)(Meeting);
+export default connect(mapState)(withStyles(styles)(Meeting));

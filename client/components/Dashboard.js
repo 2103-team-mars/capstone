@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
-import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
 import MapComponent from './MapComponent';
 import OldMap from './OldMap';
 import PatientProfile from './PatientProfile';
-import MyAppointments from './MyAppointments';
+import MyAppointments from './appointments/MyAppointments';
 import Medications from './Medications';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DocDocProfile from './DocDocProfile';
+
+import { AppBar, Tabs, Tab, Typography, Box, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(() => ({
+  indicator: {
+    backgroundColor: 'transparent',
+  },
+  tab: {
+    backgroundColor: '#F5F5F5',
+    color: 'black',
+  },
+  activeTab: {
+    backgroundColor: '#004643',
+    color: 'white',
+  },
+}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -18,6 +33,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
+      style={{ backgroundColor: '#004643' }}
       {...other}
     >
       {value === index && <Box p={3}>{children}</Box>}
@@ -41,51 +57,43 @@ export default function Dashboard() {
     setValue(newValue);
   };
 
-  const [oldMap, setOldMap] = useState(true);
-
-  const toggleOldMap = () => {
-    setOldMap((prevState) => !prevState);
-  };
+  const classes = useStyles();
 
   return (
-    <div>
+    <Box mt={3}>
       {auth.metaType === 'patient' ? (
-        <div>
-          <button onClick={toggleOldMap}>Toggle Map</button>
-          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
+        <Box>
+          <AppBar position="static" style={{ backgroundColor: '#F5F5F5' }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
+              classes={{ indicator: classes.indicator }}
               centered
               variant="fullWidth"
             >
-              <Tab label="Find Doctor" />
-              <Tab label="My Doctors" />
-              <Tab label="Profile" />
-              <Tab label="Medications" />
-              <Tab label="Appointments" />
+              <Tab label="Find Doctor" className={value === 0 ? classes.activeTab : classes.tab} />
+              <Tab label="Profile" className={value === 1 ? classes.activeTab : classes.tab} />
+              <Tab label="Medications" className={value === 2 ? classes.activeTab : classes.tab} />
+              <Tab label="Appointments" className={value === 3 ? classes.activeTab : classes.tab} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
-            {oldMap ? <OldMap /> : <MapComponent />}
+            {/* If new map is having trouble switch to old map */}
+            {/* <OldMap /> */}
+            <MapComponent />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            My doctors list
-          </TabPanel>
-          <TabPanel value={value} index={2}>
             <PatientProfile />
           </TabPanel>
-          <TabPanel value={value} index={3}>
+          <TabPanel value={value} index={2}>
             <Medications />
           </TabPanel>
-          <TabPanel value={value} index={4}>
+          <TabPanel value={value} index={3}>
             <MyAppointments />
           </TabPanel>
-        </div>
+        </Box>
       ) : (
-        <div>
+        <Box>
           <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
             <Tabs
               value={value}
@@ -96,7 +104,6 @@ export default function Dashboard() {
               variant="fullWidth"
             >
               <Tab label="Profile" />
-              <Tab label="My Patients" />
               <Tab label="My Appointments" />
             </Tabs>
           </AppBar>
@@ -104,13 +111,10 @@ export default function Dashboard() {
             <DocDocProfile />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            My Patients
-          </TabPanel>
-          <TabPanel value={value} index={2}>
             <MyAppointments />
           </TabPanel>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
