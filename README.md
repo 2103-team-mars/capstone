@@ -8,12 +8,13 @@ Our application is a one-stop-shop for finding and connecting with a mental heal
 
 ## View Sanpshots
 
-TBD...
+TBD... (potentially use https://github.com/icholy/ttygif)
 
 ## Roadmap
 
 Our initial focus for our application is providing mental health access and services. Pending the usage and success of the application, we would consider expanding into providing access to a wider array of health services. This would include but is not limited to:
 
+- group counseling virtual sessions
 - general and annual check ups
 - last minute urgent care
 - symptoms diagnosis
