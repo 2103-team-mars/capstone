@@ -31,6 +31,4 @@ Developers of this application include:
 
 ## Support
 
-For more support on the application or to reach out to the developers,
-
-Now, you should be deployed!
+For more support on the application you can reach out to the developers via GitHub.
