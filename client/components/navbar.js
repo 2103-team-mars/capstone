@@ -1,7 +1,8 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
-import { logout } from '../store';
+import React from "react";
+import { connect } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
+import { logout } from "../store";
+import AboutUs from "./AboutUs";
 
 import {
   makeStyles,
@@ -13,16 +14,16 @@ import {
   Grid,
   Menu,
   MenuItem,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   navbar: {
-    backgroundColor: '#9CCA91',
-    color: 'black',
+    backgroundColor: "#9CCA91",
+    color: "black",
   },
   title: {
-    textTransform: 'none',
-    justifyContent: 'flex-start',
+    textTransform: "none",
+    justifyContent: "flex-start",
   },
 }));
 
@@ -32,7 +33,12 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
     <AppBar position="static" className={classes.navbar}>
       <Toolbar>
         <Grid container spacing={2} alignItems="center">
-          <Button color="inherit" className={classes.title} component={RouterLink} to="/home">
+          <Button
+            color="inherit"
+            className={classes.title}
+            component={RouterLink}
+            to="/home"
+          >
             <Grid container alignItems="center">
               <Typography variant="h6">HelloHealth</Typography>
             </Grid>
@@ -46,6 +52,9 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
                 <Button component={RouterLink} to="/meeting" color="inherit">
                   Meeting
                 </Button>
+                <Button component={RouterLink} to="/aboutus" color="inherit">
+                  About Us
+                </Button>
                 <Button component={RouterLink} to="/dashboard" color="inherit">
                   Dashboard
                 </Button>
@@ -56,8 +65,15 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
             )}
             {!isLoggedIn && (
               <>
-                <Button component={RouterLink} to="/BMICalculator" color="inherit">
+                <Button
+                  component={RouterLink}
+                  to="/BMICalculator"
+                  color="inherit"
+                >
                   BMI Calculator
+                </Button>
+                <Button component={RouterLink} to="/aboutus" color="inherit">
+                  About Us
                 </Button>
                 <Button component={RouterLink} to="/auth" color="inherit">
                   Login

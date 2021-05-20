@@ -7,8 +7,10 @@ import { me } from "./store";
 import Meeting from "./components/Meeting";
 import Dashboard from "./components/Dashboard";
 import PatientDocProfile from "./components/PatientDocProfile";
+import ImmediateHelp from "./components/ImmediateHelp";
+import AboutUs from "./components/AboutUs";
 import BMI from "./components/BMI";
-import PatientProfileDoctor from './components/PatientProfileDoctor';
+import PatientProfileDoctor from "./components/PatientProfileDoctor";
 
 /**
  * COMPONENT
@@ -19,7 +21,7 @@ class Routes extends Component {
   }
 
   setLoading() {
-    console.log('hello');
+    console.log("hello");
     this.setState({ loading: false });
   }
 
@@ -29,12 +31,18 @@ class Routes extends Component {
     return (
       <div>
         {!performedAuth ? (
-          'Loading'
+          "Loading"
         ) : isLoggedIn ? (
           <Switch>
-            <Route exact path="/patients/:patientId" component={PatientProfileDoctor} />
+            <Route
+              exact
+              path="/patients/:patientId"
+              component={PatientProfileDoctor}
+            />
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
+            <Route path="/help" component={ImmediateHelp} />
+            <Route path="/aboutus" component={AboutUs} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/doctor/:docId" component={PatientDocProfile} />
             <Redirect to="/home" />
@@ -43,6 +51,9 @@ class Routes extends Component {
           <Switch>
             <Route path="/home" exact component={Home} />
             <Route path="/auth" component={AuthForm} />
+            <Route path="/help" component={ImmediateHelp} />
+            <Route path="/aboutus" component={AboutUs} />
+            <Route path="/immediateHelp" component={ImmediateHelp} />
             <Route path="/BMICalculator" component={BMI} />
             <Redirect to="/home" />
           </Switch>

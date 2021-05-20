@@ -17,6 +17,15 @@ nav a {
   margin: 1em;
 }
 
+.footer {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgb(193, 192, 189);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
 .photo {
   justify-content: space-around;
   margin-right: -30%;
