@@ -5,36 +5,32 @@ import { v4 } from 'uuid';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import { Grid, Box, Typography, withStyles, Button, TextField } from '@material-ui/core';
+import {
+  Grid,
+  Box,
+  Typography,
+  withStyles,
+  Button,
+  TextField,
+  IconButton,
+} from '@material-ui/core';
 import CallIcon from '@material-ui/icons/Call';
 import CallEndIcon from '@material-ui/icons/CallEnd';
+import SendIcon from '@material-ui/icons/Send';
 
 const styles = {
-  gridContainer: {
-    display: 'grid',
-    'grid-template-columns': '2fr 2fr',
-    'grid-template-rows': '1fr',
-    'grid-gap': '0.2rem',
-    'grid-template-areas': "'myVid theirVid'",
-    height: 500,
-    width: '100%',
-  },
-  myVid: {
-    backgroundColor: 'red',
-    'grid-area': 'myVid',
-  },
-  theirVid: {
-    backgroundColor: 'blue',
-    'grid-area': 'theirVid',
-  },
-  chatBox: {
-    backgroundColor: 'green',
-    'grid-area': 'chatBox',
-  },
   video: {
-    width: '90%',
+    maxHeight: '90%',
+    maxWidth: '90%',
+    minWidth: '80%',
     margin: '0 auto',
     display: 'block',
+  },
+  boundingBox: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 20,
+    padding: '1rem',
+    display: 'inline-block',
   },
 };
 
@@ -72,7 +68,7 @@ class Meeting extends Component {
     });
     socket.on('receive', (message) => {
       this.setState({
-        chat: [...this.state.chat, message],
+        chat: [message, ...this.state.chat],
       });
     });
     socket.on('calling', (data) => {
@@ -175,8 +171,11 @@ class Meeting extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    socket.emit('send message', this.state.msg, this.state.room);
-    this.setState({ msg: '', chat: [...this.state.chat, this.state.msg] });
+    console.log('submit');
+    const { firstName, lastName } = this.props.auth;
+    const message = { msg: this.state.msg, author: `${firstName} ${lastName}` };
+    socket.emit('send message', message, this.state.room);
+    this.setState({ msg: '', chat: [message, ...this.state.chat] });
   }
 
   render() {
@@ -184,7 +183,7 @@ class Meeting extends Component {
     const { classes } = this.props;
     const isDoctor = this.props.auth.metaType === 'doctor';
     return (
-      <Box pt={3}>
+      <Box mt={3}>
         <Typography variant="h4">Meeting</Typography>
         {isDoctor && (
           <>
@@ -196,52 +195,115 @@ class Meeting extends Component {
             </CopyToClipboard>
           </>
         )}
-        <Box pt={1}>
-          {callAccepted && <button onClick={() => this.end(true)}>endCall</button>}
-          {!callAccepted && receivingCall && (
-            <div>
-              <p>{callerName} is calling you</p>
-              <button onClick={this.answer}>Answer</button>
-            </div>
+        <Box mt={1} className={!isDoctor || callAccepted ? classes.boundingBox : ''}>
+          {callAccepted && (
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<CallEndIcon />}
+              onClick={() => this.end(true)}
+            >
+              End Call
+            </Button>
           )}
-          {!isDoctor && (
-            <div>
-              <input value={roomToCall} onChange={this.onRoomChange}></input>
-              <button
-                onClick={() => {
-                  this.call(roomToCall);
-                }}
+          {!callAccepted && receivingCall && (
+            <Box>
+              <Typography variant="h6">{callerName} is calling you</Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<CallIcon />}
+                onClick={this.answer}
               >
-                Call
-              </button>
-            </div>
+                Answer
+              </Button>
+            </Box>
+          )}
+          {!isDoctor && !callAccepted && (
+            <Box>
+              <TextField
+                value={roomToCall}
+                onChange={this.onRoomChange}
+                id="roomToCall"
+                name="roomToCall"
+                label="Room to Call"
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <IconButton
+                      onClick={() => {
+                        this.call(roomToCall);
+                      }}
+                    >
+                      <CallIcon />
+                    </IconButton>
+                  ),
+                }}
+              ></TextField>
+            </Box>
           )}
         </Box>
         <Box pt={2}>
           <Grid container spacing={2} justify="center">
-            {callAccepted && (
-              <Grid item md={6}>
-                <video className={classes.video} ref={this.theirStream} autoPlay playsInline />{' '}
+            <Grid item md={6} container direction="column" alignItems="center">
+              {callAccepted && (
+                <Grid item>
+                  <video className={classes.video} ref={this.theirStream} autoPlay playsInline />
+                </Grid>
+              )}
+              <Grid item>
+                <video className={classes.video} ref={this.myStream} autoPlay playsInline muted />
               </Grid>
-            )}
+            </Grid>
             <Grid item md={6}>
-              <video className={classes.video} ref={this.myStream} autoPlay playsInline muted />
+              <Grid
+                item
+                style={{ height: '100%', width: '100%' }}
+                container
+                direction="column-reverse"
+              >
+                <form onSubmit={this.onSubmit} style={{ height: 75 }}>
+                  <TextField
+                    value={msg}
+                    onChange={this.onChange}
+                    id="msg"
+                    name="msg"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton type="submit">
+                          <SendIcon />
+                        </IconButton>
+                      ),
+                    }}
+                  ></TextField>
+                </form>
+                <Grid
+                  item
+                  container
+                  direction="column-reverse"
+                  wrap="nowrap"
+                  style={{
+                    border: '1px solid black',
+                    height: 500,
+                    padding: 10,
+                    overflowY: 'auto',
+                  }}
+                >
+                  {chat.map(({ msg, author }, index) => (
+                    <Box key={index}>
+                      <Typography>
+                        <strong>{author}:</strong> {msg}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Box>
-
-        <Box>
-          {chat.map((msg, idx) => (
-            <div key={idx}>
-              <p>{msg}</p>
-            </div>
-          ))}
-        </Box>
-
-        <form onClick={this.onSubmit}>
-          <input onChange={(event) => this.onChange(event)} value={msg} />
-          <button type="submit">Send</button>
-        </form>
       </Box>
     );
   }

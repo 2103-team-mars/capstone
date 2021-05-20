@@ -17,7 +17,7 @@ import {
 
 const useStyles = makeStyles(() => ({
   navbar: {
-    backgroundColor: '#7AF5CC',
+    backgroundColor: '#9CCA91',
     color: 'black',
   },
   title: {
@@ -43,7 +43,7 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
                 <Button onClick={handleClick} color="inherit">
                   Logout
                 </Button>
-                <Button component={RouterLink} to="meeting" color="inherit">
+                <Button component={RouterLink} to="/meeting" color="inherit">
                   Meeting
                 </Button>
                 <Button component={RouterLink} to="/dashboard" color="inherit">

@@ -19,11 +19,11 @@ const titleAccessor = (event) => {
   return event.topic;
 };
 
-const AgendaEvent = ({ event, isDoctor }) => {
+const AgendaEvent = ({ event, isDoctor, handleClose }) => {
   if (isDoctor) {
-    return <DoctorAppointment event={event} />;
+    return <DoctorAppointment event={event} handleClose={handleClose} />;
   }
-  return <PatientAppointment event={event} />;
+  return <PatientAppointment event={event} handleClose={handleClose}/>;
 };
 
 const MyAppointments = () => {

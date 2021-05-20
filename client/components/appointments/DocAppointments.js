@@ -17,11 +17,21 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import { Box } from '@material-ui/core';
 
-const AgendaEvent = ({ event, isDoctor }) => {
+const AgendaEvent = ({ event, isDoctor, handleClose, doctorFirstName, doctorLastName, metaId }) => {
   if (isDoctor) {
-    return <DoctorAppointment event={event} />;
+    return <DoctorAppointment event={event} handleClose={handleClose} />;
+  } else if (!event.patient || event.patient.id === metaId) {
+    return (
+      <PatientAppointment
+        event={event}
+        doctorFirstName={doctorFirstName}
+        doctorLastName={doctorLastName}
+        handleClose={handleClose}
+      />
+    );
+  } else {
+    return <h4>Taken</h4>;
   }
-  return <PatientAppointment event={event} />;
 };
 
 const DocAppointments = ({ doctorFirstName, doctorLastName }) => {
@@ -91,11 +101,20 @@ const DocAppointments = ({ doctorFirstName, doctorLastName }) => {
           endAccessor={endAccessor}
           eventPropGetter={eventPropGetter}
           onSelectEvent={handleClickEvent}
-          // components={{
-          //   agenda: {
-          //     event: (props) => <AgendaEvent {...props} isDoctor={auth.metaType === 'doctor'} />,
-          //   },
-          // }}
+          components={{
+            agenda: {
+              event: (props) => (
+                <AgendaEvent
+                  {...props}
+                  isDoctor={isDoctor}
+                  doctorFirstName={doctorFirstName}
+                  doctorLastName={doctorLastName}
+                  handleClose={handleClose}
+                  metaId={auth.metaId}
+                />
+              ),
+            },
+          }}
         />
       </Box>
       {!!event && (

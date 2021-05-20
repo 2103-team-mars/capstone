@@ -8,19 +8,23 @@ import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DocDocProfile from './DocDocProfile';
 
-import { AppBar, Tabs, Tab, Typography, Box, makeStyles } from '@material-ui/core';
+import { AppBar, Tabs, Tab, Box, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   indicator: {
     backgroundColor: 'transparent',
   },
   tab: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#d8d8d8',
+    opacity: 1,
     color: 'black',
   },
   activeTab: {
-    backgroundColor: '#004643',
-    color: 'white',
+    backgroundColor: 'white',
+    opacity: 1,
+    color: 'black',
+    borderRight: '1px solid #999',
+    borderLeft: '1px solid #999',
   },
 }));
 
@@ -33,7 +37,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      style={{ backgroundColor: '#004643' }}
+      style={{ backgroundColor: 'white' }}
       {...other}
     >
       {value === index && <Box p={3}>{children}</Box>}
@@ -62,8 +66,8 @@ export default function Dashboard() {
   return (
     <Box mt={3}>
       {auth.metaType === 'patient' ? (
-        <Box>
-          <AppBar position="static" style={{ backgroundColor: '#F5F5F5' }}>
+        <Box style={{ boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 40%)' }}>
+          <AppBar position="static">
             <Tabs
               value={value}
               onChange={handleChange}
@@ -93,18 +97,20 @@ export default function Dashboard() {
           </TabPanel>
         </Box>
       ) : (
-        <Box>
-          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
+        <Box style={{ boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 40%)' }}>
+          <AppBar position="static">
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
+              classes={{ indicator: classes.indicator }}
               centered
               variant="fullWidth"
             >
-              <Tab label="Profile" />
-              <Tab label="My Appointments" />
+              <Tab label="Profile" className={value === 0 ? classes.activeTab : classes.tab} />
+              <Tab
+                label="My Appointments"
+                className={value === 1 ? classes.activeTab : classes.tab}
+              />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
