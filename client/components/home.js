@@ -1,8 +1,8 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { me } from '../store/auth';
-import { Link } from 'react-router-dom';
-import { fetchAppointments } from '../store/appointments';
+import React from "react";
+import { connect } from "react-redux";
+import { me } from "../store/auth";
+import { Link } from "react-router-dom";
+import { fetchAppointments } from "../store/appointments";
 
 /**
  * COMPONENT
@@ -24,13 +24,14 @@ export class Home extends React.Component {
       return (
         <div>
           <h3>Welcome</h3>
+
           <Link to="/auth">Get Started!</Link>
         </div>
       );
     } else {
       return (
         <div>
-          {auth.metaType === 'patient' ? (
+          {auth.metaType === "patient" ? (
             <div>
               <h3>
                 Hi, {auth.firstName} {auth.lastName}, how can we help you today?
@@ -55,9 +56,11 @@ export class Home extends React.Component {
                 <h3>You have no upcomming appointments</h3>
               )} */}
 
-              <Link to={'/dashboard?index=2'}>Not feeling well? Update you symptoms</Link>
-              <Link to={'/dashboard?index=0'}> Looking for a doctor?</Link>
-              <Link to={'/dashboard?index=3'}> Check your medication</Link>
+              <Link to={"/dashboard?index=2"}>
+                Not feeling well? Update you symptoms
+              </Link>
+              <Link to={"/dashboard?index=0"}> Looking for a doctor?</Link>
+              <Link to={"/dashboard?index=3"}> Check your medication</Link>
             </div>
           ) : (
             <div>
@@ -84,7 +87,9 @@ export class Home extends React.Component {
                 <h3>You have no upcomming appointments</h3>
               )} */}
 
-              <Link to={'/dashboard?index=2'}>Checkout your upcoming appointments</Link>
+              <Link to={"/dashboard?index=2"}>
+                Checkout your upcoming appointments
+              </Link>
             </div>
           )}
         </div>

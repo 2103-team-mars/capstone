@@ -9,6 +9,7 @@ import Dashboard from "./components/Dashboard";
 import PatientDocProfile from "./components/PatientDocProfile";
 import PatientProfile from "./components/PatientProfile";
 import ImmediateHelp from "./components/ImmediateHelp";
+import AboutUs from "./components/AboutUs";
 
 /**
  * COMPONENT
@@ -33,6 +34,7 @@ class Routes extends Component {
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
             <Route path="/help" component={ImmediateHelp} />
+            <Route path="/aboutus" component={AboutUs} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/doctor/:docId" component={PatientDocProfile} />
             <Redirect to="/home" />
@@ -42,6 +44,7 @@ class Routes extends Component {
             <Route path="/home" exact component={Home} />
             <Route path="/auth" component={AuthForm} />
             <Route path="/help" component={ImmediateHelp} />
+            <Route path="/aboutus" component={AboutUs} />
             <Route path="/immediateHelp" component={ImmediateHelp} />
             <Redirect to="/home" />
           </Switch>
