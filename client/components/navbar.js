@@ -1,35 +1,91 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { logout } from "../store";
 import AboutUs from "./AboutUs";
 
-const Navbar = ({ handleClick, isLoggedIn }) => (
-  <div>
-    <h1>Hello Health</h1>
-    {/* <img src={image} height={100} width={100} /> */}
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-          <Link to="/meeting">Meeting</Link>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/aboutus">About Us</Link>
-        </div>
-      ) : (
-        <div>
-          <Link to="/auth">Login</Link>
-          <Link to="/home">Home</Link>
-          <Link to="/aboutus">About Us</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
-);
+import {
+  makeStyles,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Grid,
+  Menu,
+  MenuItem,
+} from "@material-ui/core";
+
+const useStyles = makeStyles(() => ({
+  navbar: {
+    backgroundColor: "#9CCA91",
+    color: "black",
+  },
+  title: {
+    textTransform: "none",
+    justifyContent: "flex-start",
+  },
+}));
+
+const Navbar = ({ handleClick, isLoggedIn }) => {
+  const classes = useStyles();
+  return (
+    <AppBar position="static" className={classes.navbar}>
+      <Toolbar>
+        <Grid container spacing={2} alignItems="center">
+          <Button
+            color="inherit"
+            className={classes.title}
+            component={RouterLink}
+            to="/home"
+          >
+            <Grid container alignItems="center">
+              <Typography variant="h6">HelloHealth</Typography>
+            </Grid>
+          </Button>
+          <Grid item xs container direction="row-reverse">
+            {isLoggedIn && (
+              <>
+                <Button onClick={handleClick} color="inherit">
+                  Logout
+                </Button>
+                <Button component={RouterLink} to="/meeting" color="inherit">
+                  Meeting
+                </Button>
+                <Button component={RouterLink} to="/aboutus" color="inherit">
+                  About Us
+                </Button>
+                <Button component={RouterLink} to="/dashboard" color="inherit">
+                  Dashboard
+                </Button>
+                <Button component={RouterLink} to="/home" color="inherit">
+                  Home
+                </Button>
+              </>
+            )}
+            {!isLoggedIn && (
+              <>
+                <Button
+                  component={RouterLink}
+                  to="/BMICalculator"
+                  color="inherit"
+                >
+                  BMI Calculator
+                </Button>
+                <Button component={RouterLink} to="/aboutus" color="inherit">
+                  About Us
+                </Button>
+                <Button component={RouterLink} to="/auth" color="inherit">
+                  Login
+                </Button>
+              </>
+            )}
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 /**
  * CONTAINER

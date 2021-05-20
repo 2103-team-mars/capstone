@@ -1,8 +1,39 @@
-import React, { Component } from "react";
-import { fetchDoctor } from "../store/singleDoctor";
-import { connect } from "react-redux";
-import DocAppointments from "./DocAppointments";
-import EditDocProfile from "./EditDocProfile";
+import React, { Component } from 'react';
+import { fetchDoctor } from '../store/singleDoctor';
+import { connect } from 'react-redux';
+import DocAppointments from './appointments/DocAppointments';
+import EditDocProfile from './EditDocProfile';
+
+import { Box, Grid, Typography, Fab } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+
+const styles = {
+  gridContainer: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateRows: '1fr 1fr',
+    minHeight: 600,
+    gridTemplateAreas: '"profile calendar" "profile calendar"',
+    gridGap: '1rem',
+  },
+  gridProfile: {
+    padding: '1rem',
+    borderRadius: '1rem',
+    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
+    gridArea: 'profile',
+  },
+  gridCalendar: {
+    padding: '1rem',
+    borderRadius: '1rem',
+    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
+    gridArea: 'calendar',
+  },
+  image: {
+    width: '40%',
+    height: 'auto',
+    borderRadius: 9999,
+  },
+};
 
 export class DocDocProfile extends Component {
   constructor(props) {
@@ -13,7 +44,6 @@ export class DocDocProfile extends Component {
     this.onButtonClick = this.onButtonClick.bind(this);
   }
   componentDidMount() {
-    const userId = this.props.auth.id;
     const docId = this.props.auth.metaId;
     this.props.fetchDoctor(docId);
     this.setState({
@@ -34,52 +64,75 @@ export class DocDocProfile extends Component {
       lastName,
       location,
       email,
+      dob,
+      age,
       meta: { profession },
     } = this.props.auth;
 
     const specialties = this.props.singleDoc.specialties || [];
 
     return (
-      <div>
-        <div>
-          <img src={profilePicture} />
-          <h2>{`${firstName} ${lastName}`}</h2>
-          <h3>{profession.name}</h3>
-          <div>
-            <div>
-              <strong>Contact Information:</strong>
-              <div>Location: {location}</div>
-              <div>Email: {email}</div>
-            </div>
-          </div>
-          <div>
-            <p>
-              <strong>Specialization:</strong>
-            </p>
-            <div>
-              {specialties.map((ele) => (
-                <p key={ele.id}>{ele.name}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div>
-          <button onClick={this.onButtonClick}>Edit Profile</button>
+      <Box style={styles.gridContainer}>
+        <Box style={styles.gridProfile}>
           {this.state.showComponent ? (
             <EditDocProfile closeForm={this.onButtonClick} />
-          ) : null}
-        </div>
-
-        <hr />
-        <div>
-          <h2>My Appointment Schedule</h2>
-          <DocAppointments
-            doctorId={this.props.auth.metaId}
-            doctorFirstName={firstName}
-            doctorLastName={lastName}
-          />
-        </div>
-      </div>
+          ) : (
+            <Grid
+              container
+              direction="column"
+              justify="space-around"
+              alignItems="center"
+              style={{ height: '100%' }}
+            >
+              <img style={styles.image} src={profilePicture} />
+              <Typography variant="h6" align="center">
+                {firstName} {lastName}
+              </Typography>
+              <Typography align="center">
+                <strong>Profession</strong>: {profession.name}
+              </Typography>
+              <Grid item container justify="center" spacing={2}>
+                <Grid item>
+                  <Typography align="center">
+                    <strong>Date of Birth:</strong> {dob}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography align="center">
+                    <strong>Age:</strong> {age}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Typography align="center">
+                <strong>Email:</strong> {email}
+              </Typography>
+              <Typography align="center">
+                <strong>Address:</strong> {location}
+              </Typography>
+              <Typography align="center">
+                <strong>Specializations:</strong>
+              </Typography>
+              {specialties.map((specialty) => (
+                <Typography key={specialty.id}>{specialty.name}</Typography>
+              ))}
+              <Fab
+                color="secondary"
+                aria-label="edit"
+                style={{ alignSelf: 'flex-end' }}
+                onClick={this.onButtonClick}
+              >
+                <EditIcon />
+              </Fab>
+            </Grid>
+          )}
+        </Box>
+        <Box style={styles.gridCalendar}>
+          <Typography align="center" variant="h6">
+            My Appointment Schedule
+          </Typography>
+          <DocAppointments />
+        </Box>
+      </Box>
     );
   }
 }

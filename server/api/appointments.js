@@ -70,7 +70,7 @@ router.put('/:id', isPatient, async (req, res, next) => {
         patientId: patient.metaId,
       });
     } else {
-      await appointment.update({ patientId: null });
+      await appointment.update({ patientId: null, topic: '' });
     }
     await appointment.reload();
     res.json(appointment);

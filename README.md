@@ -25,10 +25,10 @@ Our initial focus for our application is providing mental health access and serv
 
 Developers of this application include:
 
-- Chiara Wahsono (GH: chiarawahsono)
-- Christopher Gil Martins (GH: chris-gil-martins)
-- Mohammad Mussab (GH: Mmussab)
-- Sarahjean Marhone. (GH: sjmarhone)
+- [Mohammad Mussab](https://github.com/Mmussab)
+- [Chiara Wahsono](https://github.com/chiarawahsono)
+- [Sarahjean Marhône](https://github.com/sjmarhone)
+- [Christopher Gil-Martins](https://github.com/chris-gil-martins)
 
 ## Support
 
