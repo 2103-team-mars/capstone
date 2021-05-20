@@ -14,7 +14,7 @@ const ImperialBMI = () => {
     setWeight(weight);
   };
   useEffect(() => {
-    let bmiImperial = (weight / (height ^ 2)) * 703;
+    let bmiImperial = (weight / Math.pow(height, 2)) * 703;
     setBMI(bmiImperial.toFixed(2));
   }, [height, weight]);
 
