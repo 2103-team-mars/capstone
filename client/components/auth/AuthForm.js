@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginForm from './LoginForm';
 import UserSignup from './UserSignup';
-
+import Login from '../../SVG/LogIn';
 import { Tabs, Tab, Box, makeStyles, Grid } from '@material-ui/core';
 
 const TabPanel = (props) => {
@@ -9,7 +9,7 @@ const TabPanel = (props) => {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
@@ -17,7 +17,7 @@ const TabPanel = (props) => {
       {...other}
     >
       {value === index && (
-        <Box p={3} width="100%">
+        <Box p={3} width='100%'>
           {children}
         </Box>
       )}
@@ -56,28 +56,29 @@ const AuthForm = () => {
   };
 
   return (
-    <Grid container justify="center">
+    <Grid container justify='center'>
       <Grid item xs={12} md={6}>
         <Box className={classes.root}>
           <Tabs
-            orientation="vertical"
+            orientation='vertical'
             value={value}
             onChange={handleChange}
             className={classes.tabs}
             centered
           >
-            <Tab label="Login" {...a11yProps(0)} />
-            <Tab label="Patient Signup" {...a11yProps(1)} />
-            <Tab label="Doctor Signup" {...a11yProps(2)} />
+            <Tab label='Login' {...a11yProps(0)} />
+            <Tab label='Patient Signup' {...a11yProps(1)} />
+            <Tab label='Doctor Signup' {...a11yProps(2)} />
           </Tabs>
           <TabPanel value={value} index={0}>
             <LoginForm />
+            <Login />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <UserSignup metaType="patient" />
+            <UserSignup metaType='patient' />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <UserSignup metaType="doctor" />
+            <UserSignup metaType='doctor' />
           </TabPanel>
         </Box>
       </Grid>
