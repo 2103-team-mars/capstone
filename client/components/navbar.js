@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { logout } from '../store';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { logout } from "../store";
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
   <div>
@@ -22,6 +22,7 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
         <div>
           <Link to="/auth">Login</Link>
           <Link to="/home">Home</Link>
+          <Link to="/BMICalculator">BMI Calculator</Link>
         </div>
       )}
     </nav>
