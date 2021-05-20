@@ -24,7 +24,7 @@ const MetricBMI = () => {
       <input type="number" onChange={handleHeight}></input>
       <p>Weight in kg</p>
       <input type="number" onChange={handleWeight}></input>
-      <h2>BMI: {bmi}</h2>
+      <h2>BMI: {bmi ? bmi : ""}</h2>
     </div>
   );
 };

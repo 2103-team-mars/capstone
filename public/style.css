@@ -30,9 +30,8 @@ nav a {
   margin-right: -20%;
   transform: translate(-50%, -25%);
 }
-
-.switch {
-  align-items: center;
+#switch {
+  left: 15%;
 }
 .barchart {
   margin-right: -20%;

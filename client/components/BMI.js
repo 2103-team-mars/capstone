@@ -25,10 +25,11 @@ function BMI() {
           <FormControlLabel
             control={
               <Switch
-                className="switch"
+                id="switch"
                 checked={state.checkedA}
                 onChange={handleChange}
                 name="checkedA"
+                color="grey"
               />
             }
             label={state.checkedA ? "Metric" : "Imperial"}

@@ -44,9 +44,21 @@ const Chart = () => {
             },
           ],
           options: {
+            plugins: {
+              title: {
+                align: "center",
+                display: true,
+                text: "Average BMI by Age Group in the United States",
+                padding: {
+                  top: 10,
+                  bottom: 30,
+                },
+              },
+            },
             scales: {
-              y: {
+              yAxes: {
                 beginAtZero: true,
+                label: "BMI",
               },
             },
           },
