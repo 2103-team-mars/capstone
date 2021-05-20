@@ -31,7 +31,7 @@ export const claimAppointment = (appointment) => {
 
 export const cancelAppointment = (appointment, onDoctorPage) => {
   return {
-    type: CLAIM_APPOINTMENT,
+    type: CANCEL_APPOINTMENT,
     appointment,
     onDoctorPage,
   };
@@ -152,7 +152,7 @@ export default function appointmentsReducer(state = initialState, action) {
           else return appointment;
         });
       } else {
-        return state.filter((appointment) => appointment.id !== action.id);
+        return state.filter((appointment) => appointment.id !== action.appointment.id);
       }
     case REMOVE_APPOINTMENT:
       return state.filter((appointment) => appointment.id !== action.id);

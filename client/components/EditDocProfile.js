@@ -1,20 +1,22 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchDoctor } from "../store/singleDoctor";
-import { updateSpecialties } from "../store/specialties";
-import { updateDoctor } from "../store/auth";
-import Select from "react-select";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchDoctor } from '../store/singleDoctor';
+import { updateSpecialties } from '../store/specialties';
+import { updateDoctor } from '../store/auth';
+import Select from 'react-select';
+
+import { Box, Grid, Button, Typography, TextField } from '@material-ui/core';
 
 const options = [
-  { label: "Anxiety", value: "Anxiety" },
-  { label: "ADHD", value: "ADHD" },
-  { label: "Bipolar disorder", value: "Bipolar disorder" },
-  { label: "OCD", value: "OCD" },
-  { label: "PTSD", value: "PTSD" },
-  { label: "Psychosis", value: "Psychosis" },
-  { label: "Schizophrenia", value: "Schizophrenia" },
-  { label: "Despression", value: "Despression" },
-  { label: "Eating disorder", value: "Eating disorder" },
+  { label: 'Anxiety', value: 'Anxiety' },
+  { label: 'ADHD', value: 'ADHD' },
+  { label: 'Bipolar disorder', value: 'Bipolar disorder' },
+  { label: 'OCD', value: 'OCD' },
+  { label: 'PTSD', value: 'PTSD' },
+  { label: 'Psychosis', value: 'Psychosis' },
+  { label: 'Schizophrenia', value: 'Schizophrenia' },
+  { label: 'Despression', value: 'Despression' },
+  { label: 'Eating disorder', value: 'Eating disorder' },
 ];
 
 export class EditDocProfile extends Component {
@@ -62,61 +64,62 @@ export class EditDocProfile extends Component {
   }
 
   render() {
+    const { firstName, lastName, location, specialties } = this.state;
+    const { changeHandler } = this;
+
     return (
-      <div>
-        <div>
-          <h2>Edit Your Provider Profile Details</h2>
-        </div>
-        <form onSubmit={this.handleSubmit}>
-          <div>
-            <h4>Profile Details</h4>
-
-            <label htmlFor="firstName">
-              <small>First Name: </small>
-            </label>
-            <input
-              onChange={this.changeHandler}
-              name="firstName"
-              type="text"
-              placeholder={this.state.firstName}
-            />
-
-            <label htmlFor="lastName">
-              <small>Last Name: </small>
-            </label>
-            <input
-              onChange={this.changeHandler}
-              name="lastName"
-              type="text"
-              placeholder={this.state.lastName}
-            />
-
-            <label htmlFor="location">
-              <small>Location: </small>
-            </label>
-            <input
-              onChange={this.changeHandler}
-              name="location"
-              type="text"
-              width="100px"
-              placeholder={this.state.location}
-            />
-          </div>
-
-          <h4>Specialization Details:</h4>
-          <div>
-            <p>Select all specializations</p>
+      <form onSubmit={this.handleSubmit} style={{ height: '100%' }}>
+        <Grid
+          container
+          direction="column"
+          justify="space-around"
+          alignItems="center"
+          style={{ height: '100%' }}
+        >
+          <TextField
+            id="firstName"
+            name="firstName"
+            label="First Name"
+            variant="outlined"
+            fullWidth
+            value={firstName}
+            onChange={changeHandler}
+            required
+          />
+          <TextField
+            id="lastName"
+            name="lastName"
+            label="Last Name"
+            variant="outlined"
+            fullWidth
+            value={lastName}
+            onChange={changeHandler}
+            required
+          />
+          <TextField
+            id="location"
+            name="location"
+            label="Address"
+            variant="outlined"
+            fullWidth
+            value={location}
+            onChange={changeHandler}
+            required
+          />
+          <Box width="90%">
+            <Typography>Specializations</Typography>
             <Select
               isMulti={true}
               onChange={this.selectHandler}
               options={options}
+              style={{ width: '90%' }}
             />
-            <div>
-              <button type="submit">Submit Updates</button>
-            </div>
-          </div>
-        </form>
-      </div>
+          </Box>
+          <Button type="submit" variant="outlined">
+            Save Changes
+          </Button>
+        </Grid>
+      </form>
     );
   }
 }
@@ -131,8 +134,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     updateDoctor: (id, docDetails) => dispatch(updateDoctor(id, docDetails)),
-    updateSpecialties: (id, specialties) =>
-      dispatch(updateSpecialties(id, specialties)),
+    updateSpecialties: (id, specialties) => dispatch(updateSpecialties(id, specialties)),
     fetchDoctor: (docId) => dispatch(fetchDoctor(docId)),
   };
 };

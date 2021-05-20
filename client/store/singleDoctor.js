@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 //action type
-const TOKEN = "token";
-const GET_DOCTOR = "GET_DOCTOR";
+const TOKEN = 'token';
+const GET_DOCTOR = 'GET_DOCTOR';
 
 //action creator
 export const getDoctor = (doctor) => {
@@ -19,7 +19,7 @@ export const fetchDoctor = (id) => {
       const { data } = await axios.get(`/api/doctors/${id}`);
       dispatch(getDoctor(data));
     } catch (err) {
-      console.log("There was a error in fetching your data");
+      console.log('There was a error in fetching your data');
     }
   };
 };

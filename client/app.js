@@ -1,6 +1,8 @@
 import React from 'react';
-import Navbar from './components/navbar'
-import Routes from './routes'
+import Navbar from './components/navbar';
+import Footer from './components/footer';
+import Routes from './routes';
+
 import { Container } from '@material-ui/core';
 
 const App = () => {
@@ -10,6 +12,7 @@ const App = () => {
       <Container maxWidth="xl">
         <Routes />
       </Container>
+      <Footer />
     </div>
   );
 };
