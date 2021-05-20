@@ -1,13 +1,14 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import AuthForm from './components/auth/AuthForm';
-import Home from './components/Home';
-import { me } from './store';
-import Meeting from './components/Meeting';
-import Dashboard from './components/Dashboard';
-import PatientDocProfile from './components/PatientDocProfile';
-import PatientProfile from './components/PatientProfile';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import AuthForm from "./components/auth/AuthForm";
+import Home from "./components/Home";
+import { me } from "./store";
+import Meeting from "./components/Meeting";
+import Dashboard from "./components/Dashboard";
+import PatientDocProfile from "./components/PatientDocProfile";
+import PatientProfile from "./components/PatientProfile";
+import BMI from "./components/BMI";
 import PatientProfileDoctor from './components/PatientProfileDoctor';
 
 /**
@@ -43,6 +44,7 @@ class Routes extends Component {
           <Switch>
             <Route path="/home" exact component={Home} />
             <Route path="/auth" component={AuthForm} />
+            <Route path="/BMICalculator" component={BMI} />
             <Redirect to="/home" />
           </Switch>
         )}

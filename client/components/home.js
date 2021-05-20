@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAppointments } from '../store/appointments';
 import { getDateString } from '../utils/dateUtils';
+import Doctor from '../SVG/doctor';
 
 /**
  * COMPONENT
@@ -55,6 +56,7 @@ export class Home extends React.Component {
               <Link to={'/dashboard?index=1'}>Checkout your upcoming appointments</Link>
             </div>
           )}
+          <Doctor />
         </div>
       );
     }

@@ -7,6 +7,9 @@ import Medications from './Medications';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DocDocProfile from './DocDocProfile';
+import SickPatient from '../SVG/SickPatient';
+import Medication from '../SVG/Medication';
+import Calender from '../SVG/Calender';
 
 import { AppBar, Tabs, Tab, Box, makeStyles } from '@material-ui/core';
 
@@ -33,7 +36,7 @@ function TabPanel(props) {
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -73,7 +76,7 @@ export default function Dashboard() {
               onChange={handleChange}
               classes={{ indicator: classes.indicator }}
               centered
-              variant="fullWidth"
+              variant='fullWidth'
             >
               <Tab label="Find Doctor" className={value === 0 ? classes.activeTab : classes.tab} />
               <Tab label="Profile" className={value === 1 ? classes.activeTab : classes.tab} />
@@ -88,12 +91,15 @@ export default function Dashboard() {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <PatientProfile />
+            <SickPatient />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <Medications />
+            <Medication />
           </TabPanel>
           <TabPanel value={value} index={3}>
             <MyAppointments />
+            <Calender />
           </TabPanel>
         </Box>
       ) : (
@@ -104,7 +110,7 @@ export default function Dashboard() {
               onChange={handleChange}
               classes={{ indicator: classes.indicator }}
               centered
-              variant="fullWidth"
+              variant='fullWidth'
             >
               <Tab label="Profile" className={value === 0 ? classes.activeTab : classes.tab} />
               <Tab

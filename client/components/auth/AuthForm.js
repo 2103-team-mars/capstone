@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginForm from './LoginForm';
 import UserSignup from './UserSignup';
-
+import Login from '../../SVG/LogIn';
 import { Tabs, Tab, Box, makeStyles, Grid } from '@material-ui/core';
 
 const TabPanel = (props) => {
@@ -74,6 +74,7 @@ const AuthForm = () => {
             </Tabs>
             <TabPanel value={value} index={0}>
               <LoginForm />
+              <Login />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <UserSignup metaType="patient" />
