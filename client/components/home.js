@@ -3,28 +3,28 @@ import { connect } from 'react-redux';
 import { me } from '../store/auth';
 import { Link } from 'react-router-dom';
 import { fetchAppointments } from '../store/appointments';
+import Doctor from '../SVG/doctor';
 
 /**
  * COMPONENT
  */
 export class Home extends React.Component {
   componentDidMount() {
-    // if (this.props.isLoggedIn) {
-    //   this.props.fetchAppointments(
-    //     this.props.auth.metaType === 'doctor',
-    //     this.props.auth.metaId
-    //   );
-    // }
+    if (this.props.isLoggedIn) {
+      this.props.fetchAppointments(
+        this.props.auth.metaType === 'doctor',
+        this.props.auth.metaId
+      );
+    }
   }
   render() {
-    // console.log(this.props);
     const { auth, isLoggedIn } = this.props;
 
     if (!isLoggedIn) {
       return (
         <div>
           <h3>Welcome</h3>
-          <Link to="/auth">Get Started!</Link>
+          <Link to='/auth'>Get Started!</Link>
         </div>
       );
     } else {
@@ -35,7 +35,7 @@ export class Home extends React.Component {
               <h3>
                 Hi, {auth.firstName} {auth.lastName}, how can we help you today?
               </h3>
-              {/* {this.props.appointments.length ? (
+              {this.props.appointments.length ? (
                 <h3>
                   your upcoming appointment{' '}
                   {new Date(this.props.appointments[0].date).toLocaleString(
@@ -53,9 +53,11 @@ export class Home extends React.Component {
                 </h3>
               ) : (
                 <h3>You have no upcomming appointments</h3>
-              )} */}
+              )}
 
-              <Link to={'/dashboard?index=2'}>Not feeling well? Update you symptoms</Link>
+              <Link to={'/dashboard?index=2'}>
+                Not feeling well? Update you symptoms
+              </Link>
               <Link to={'/dashboard?index=0'}> Looking for a doctor?</Link>
               <Link to={'/dashboard?index=3'}> Check your medication</Link>
             </div>
@@ -64,7 +66,8 @@ export class Home extends React.Component {
               <h3>
                 Hi, {auth.firstName} {auth.lastName}, how can we help you today?
               </h3>
-              {/* {this.props.appointments.length ? (
+
+              {this.props.appointments.length ? (
                 <h3>
                   your upcoming appointment{' '}
                   {new Date(this.props.appointments[0].date).toLocaleString(
@@ -81,12 +84,17 @@ export class Home extends React.Component {
                   )}
                 </h3>
               ) : (
-                <h3>You have no upcomming appointments</h3>
-              )} */}
+                <div>
+                  <h3>You have no upcomming appointments</h3>
+                </div>
+              )}
 
-              <Link to={'/dashboard?index=2'}>Checkout your upcoming appointments</Link>
+              <Link to={'/dashboard?index=2'}>
+                Checkout your upcoming appointments
+              </Link>
             </div>
           )}
+          <Doctor />
         </div>
       );
     }
@@ -106,9 +114,9 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    loadInitialData: () => dispatch(me()),
-    // fetchAppointments: (isDoctor, id) =>
-    //   dispatch(fetchAppointments(isDoctor, id)),
+    // loadInitialData: () => dispatch(me()),
+    fetchAppointments: (isDoctor, id) =>
+      dispatch(fetchAppointments(isDoctor, id)),
   };
 };
 

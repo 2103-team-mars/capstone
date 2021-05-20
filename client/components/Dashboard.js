@@ -8,13 +8,16 @@ import Medications from './Medications';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DocDocProfile from './DocDocProfile';
+import SickPatient from '../SVG/SickPatient';
+import Medication from '../SVG/Medication';
+import Calender from '../SVG/Calender';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -52,20 +55,20 @@ export default function Dashboard() {
       {auth.metaType === 'patient' ? (
         <div>
           <button onClick={toggleOldMap}>Toggle Map</button>
-          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
+          <AppBar position='static' style={{ backgroundColor: '#bbb' }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
+              indicatorColor='primary'
+              textColor='primary'
               centered
-              variant="fullWidth"
+              variant='fullWidth'
             >
-              <Tab label="Find Doctor" />
-              <Tab label="My Doctors" />
-              <Tab label="Profile" />
-              <Tab label="Medications" />
-              <Tab label="Appointments" />
+              <Tab label='Find Doctor' />
+              <Tab label='My Doctors' />
+              <Tab label='Profile' />
+              <Tab label='Medications' />
+              <Tab label='Appointments' />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -76,28 +79,31 @@ export default function Dashboard() {
           </TabPanel>
           <TabPanel value={value} index={2}>
             <PatientProfile />
+            <SickPatient />
           </TabPanel>
           <TabPanel value={value} index={3}>
             <Medications />
+            <Medication />
           </TabPanel>
           <TabPanel value={value} index={4}>
             <MyAppointments />
+            <Calender />
           </TabPanel>
         </div>
       ) : (
         <div>
-          <AppBar position="static" style={{ backgroundColor: '#bbb' }}>
+          <AppBar position='static' style={{ backgroundColor: '#bbb' }}>
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor="primary"
-              textColor="primary"
+              indicatorColor='primary'
+              textColor='primary'
               centered
-              variant="fullWidth"
+              variant='fullWidth'
             >
-              <Tab label="Profile" />
-              <Tab label="My Patients" />
-              <Tab label="My Appointments" />
+              <Tab label='Profile' />
+              <Tab label='My Patients' />
+              <Tab label='My Appointments' />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
