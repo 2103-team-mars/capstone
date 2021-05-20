@@ -4,6 +4,7 @@ import { fetchSymptoms } from '../store/symptoms';
 import { fetchPatient } from '../store/patient';
 import { updatePatientThunk } from '../store/auth';
 import { postSymptomThunk, deleteSymptomThunk } from '../store/symptoms';
+import SickPatient from '../SVG/SickPatient';
 
 import {
   Box,
@@ -289,7 +290,11 @@ export class PatientProfile extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-        <Box style={styles.gridExtra} />
+        <Box style={styles.gridExtra}>
+          <Box style={{ width: '50%', margin: '0 auto' }}>
+            <SickPatient />
+          </Box>
+        </Box>
       </Box>
     );
   }

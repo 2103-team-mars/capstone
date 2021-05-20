@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMedications } from '../store/medications';
 import { Link } from 'react-router-dom';
+import Medication from '../SVG/Medication';
 
 import {
   Box,
@@ -76,7 +77,11 @@ const Medications = () => {
           })}
         </Box>
       </Grid>
-      <Grid item md={6}></Grid>
+      <Grid item md={6}>
+        <Box style={{ width: '50%', margin: '0 auto' }}>
+          <Medication />
+        </Box>
+      </Grid>
     </Grid>
   );
 };

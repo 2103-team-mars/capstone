@@ -7,7 +7,6 @@ import { me } from "./store";
 import Meeting from "./components/Meeting";
 import Dashboard from "./components/Dashboard";
 import PatientDocProfile from "./components/PatientDocProfile";
-import PatientProfile from "./components/PatientProfile";
 import BMI from "./components/BMI";
 import PatientProfileDoctor from './components/PatientProfileDoctor';
 
