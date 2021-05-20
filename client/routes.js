@@ -1,13 +1,14 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import AuthForm from './components/auth/AuthForm';
-import Home from './components/Home';
-import { me } from './store';
-import Meeting from './components/Meeting';
-import Dashboard from './components/Dashboard';
-import PatientDocProfile from './components/PatientDocProfile';
-import PatientProfile from './components/PatientProfile';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import AuthForm from "./components/auth/AuthForm";
+import Home from "./components/Home";
+import { me } from "./store";
+import Meeting from "./components/Meeting";
+import Dashboard from "./components/Dashboard";
+import PatientDocProfile from "./components/PatientDocProfile";
+import PatientProfile from "./components/PatientProfile";
+import ImmediateHelp from "./components/ImmediateHelp";
 
 /**
  * COMPONENT
@@ -24,9 +25,14 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route exact path="/patients/:patientId" component={PatientProfile} />
+            <Route
+              exact
+              path="/patients/:patientId"
+              component={PatientProfile}
+            />
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
+            <Route path="/help" component={ImmediateHelp} />
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/doctor/:docId" component={PatientDocProfile} />
             <Redirect to="/home" />
@@ -35,6 +41,8 @@ class Routes extends Component {
           <Switch>
             <Route path="/home" exact component={Home} />
             <Route path="/auth" component={AuthForm} />
+            <Route path="/help" component={ImmediateHelp} />
+            <Route path="/immediateHelp" component={ImmediateHelp} />
             <Redirect to="/home" />
           </Switch>
         )}

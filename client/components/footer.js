@@ -1,16 +1,20 @@
 import React from "react";
-
-function handleClick() {}
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import ImmediateHelp from "./ImmediateHelp";
 
 const Footer = () => (
   <div>
-    <strong>
-      <p>
-        If you are in a crisis or any other person may be in danger - don't use
-        this application. <span>These resources</span> can provide you with
-        immediate help.
-      </p>
-    </strong>
+    <hr />
+    <footer className="footer">
+      <strong>
+        <p>
+          If you are in a crisis or any other person may be in danger - don't
+          use this application. <Link to="/help">These resources</Link> can
+          provide you with immediate help.
+        </p>
+      </strong>
+    </footer>
   </div>
 );
 

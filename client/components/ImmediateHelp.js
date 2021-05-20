@@ -211,8 +211,21 @@ const ImmediateHelp = () => (
         <h3>South Africa</h3>
         <ul>
           <li>
-            <strong>xxxxxx</strong>
-            <a>aaaaaa</a>aaaaaaaa
+            <strong>Emergency: </strong>10 111 for police or 10 177 for an
+            ambulance
+          </li>
+
+          <li>
+            <strong>24hr Helpline: </strong>0800 12 13 14 or SMS 31393 (and we
+            will call you back)
+          </li>
+
+          <li>
+            <strong>Depression and Anxiety Helpline: </strong>0800 70 80 90
+          </li>
+          <li>
+            <strong>YourLifeCounts.org: </strong>
+            <a>https://yourlifecounts.org/find-help/</a>
           </li>
         </ul>
       </div>
@@ -220,7 +233,18 @@ const ImmediateHelp = () => (
         <h3>New Zealand</h3>
         <ul>
           <li>
-            <strong>xxxxxx</strong>aaaaaaaa
+            <strong>Emergency: </strong>111
+          </li>
+          <li>
+            <strong>Lifeline 24/7 Helpline: </strong>0800 543 354
+          </li>
+          <li>
+            <strong>Suicide Crisis Helpline: </strong>0508 828 865 (0508
+            TAUTOKO)
+          </li>
+          <li>
+            <strong>YourLifeCounts.org: </strong>
+            <a>https://yourlifecounts.org/find-help/</a>
           </li>
         </ul>
       </div>
@@ -228,7 +252,9 @@ const ImmediateHelp = () => (
         <h3>India</h3>
         <ul>
           <li>
-            <strong>xxxxxx</strong>aaaaaaaa
+            <strong>Sneha India: </strong>
+            <a>(http://www.snehaindia.org) </a>is available 24/7 on the phone by
+            calling 91 44 24640050
           </li>
         </ul>
       </div>
@@ -236,7 +262,17 @@ const ImmediateHelp = () => (
         <h3>Germany</h3>
         <ul>
           <li>
-            <strong>xxxxxx</strong>aaaaaaaa
+            <strong>Emergency: </strong>112
+          </li>
+          <li>
+            <strong>Hotline: </strong>800 111 0111
+          </li>
+          <li>
+            <strong>Hotline: </strong>0800 111 0222
+          </li>
+          <li>
+            <strong>YourLifeCounts.org: </strong>
+            <a>https://yourlifecounts.org/find-help/</a>
           </li>
         </ul>
       </div>
@@ -244,10 +280,16 @@ const ImmediateHelp = () => (
         <h3>Finland</h3>
         <ul>
           <li>
-            <strong>xxxxxx</strong>aaaaaaaa
+            <strong>Emergency: </strong>112
+          </li>
+          <li>
+            <strong>Crisis Line: </strong>010 195 202
           </li>
         </ul>
       </div>
+      <br />
+      <br />
+      <br />
     </div>
   </div>
 );
