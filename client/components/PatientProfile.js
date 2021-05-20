@@ -5,7 +5,22 @@ import { fetchPatient } from '../store/patient';
 import { updatePatientThunk } from '../store/auth';
 import { postSymptomThunk, deleteSymptomThunk } from '../store/symptoms';
 
-import { Box, Grid, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  Fab,
+  IconButton,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+} from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
+import RemoveIcon from '@material-ui/icons/Remove';
+import AddIcon from '@material-ui/icons/Add';
 
 const defaultState = {
   firstName: '',
@@ -36,6 +51,7 @@ const styles = {
     borderRadius: '1rem',
     boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
     gridArea: 'symptom',
+    position: 'relative',
   },
   gridExtra: {
     padding: '1rem',
@@ -53,11 +69,13 @@ const styles = {
 export class PatientProfile extends Component {
   constructor() {
     super();
-    this.state = { ...defaultState, showEdit: false };
+    this.state = { ...defaultState, showEdit: false, openDialog: false };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePost = this.handlePost.bind(this);
     this.toggleEdit = this.toggleEdit.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleChange(event) {
@@ -68,17 +86,17 @@ export class PatientProfile extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.props.updatePatientThunk({ ...this.state });
+    this.setState({ showEdit: false });
   }
-  handlePost(event) {
-    event.preventDefault();
+  handlePost() {
     this.props.postSymptomThunk({ name: this.state.symptom });
-    this.setState(defaultState);
+    this.handleClose();
   }
 
   toggleEdit() {
-    this.setState((prevState) => {
-      showEdit: !prevState.edit;
-    });
+    this.setState((prevState) => ({
+      showEdit: !prevState.showEdit,
+    }));
   }
 
   componentDidMount() {
@@ -91,87 +109,187 @@ export class PatientProfile extends Component {
         location: this.props.auth.location,
       });
     }
-    this.props.auth.metaType === 'patient'
-      ? this.props.fetchSymptoms(this.props.auth.metaId)
-      : this.props.fetchPatient(this.props.match.params.patientId);
+    this.props.fetchSymptoms(this.props.auth.metaId);
+  }
+
+  handleClickOpen() {
+    this.setState({ openDialog: true });
+  }
+  handleClose() {
+    this.setState({ openDialog: false, symptom: '' });
   }
 
   render() {
-    const { firstName, lastName, dob, age, location, symptom } = this.state;
+    const { firstName, lastName, dob, age, location, symptom, openDialog, showEdit } = this.state;
     const { handleSubmit, handleChange, handlePost } = this;
+    const userInfo = this.props.auth;
     const symptoms = this.props.symptoms || [];
+
     return (
-      <Box>
-        {this.props.auth.metaType === 'patient' ? (
-          <Box style={styles.gridContainer}>
-            <Box style={styles.gridProfile}>
-              <Grid container direction="column" justify="center" alignItems="center">
-                <img style={styles.image} src={this.props.auth.profilePicture} />
-                <p>
-                  Name: {this.props.auth.firstName} {this.props.auth.lastName}
-                </p>
-                <p>Date of Birth: {this.props.auth.dob}</p>
-                <p>Age: {this.props.auth.age}</p>
-                <p>Email: {this.props.auth.email}</p>
-                <p>Location: {this.props.auth.location}</p>
+      <Box style={styles.gridContainer}>
+        <Box style={styles.gridProfile}>
+          {showEdit ? (
+            <form onSubmit={handleSubmit} style={{ height: '100%' }}>
+              <Grid
+                container
+                direction="column"
+                justify="space-around"
+                alignItems="center"
+                style={{ height: '100%' }}
+              >
+                <TextField
+                  id="firstName"
+                  name="firstName"
+                  label="First Name"
+                  variant="outlined"
+                  fullWidth
+                  value={firstName}
+                  onChange={handleChange}
+                  required
+                />
+                <TextField
+                  id="lastName"
+                  name="lastName"
+                  label="Last Name"
+                  variant="outlined"
+                  fullWidth
+                  value={lastName}
+                  onChange={handleChange}
+                  required
+                />
+                <TextField
+                  id="dob"
+                  name="dob"
+                  label="Date of Birth"
+                  variant="outlined"
+                  type="date"
+                  fullWidth
+                  value={dob}
+                  onChange={handleChange}
+                  required
+                />
+                <TextField
+                  id="age"
+                  name="age"
+                  label="Age"
+                  variant="outlined"
+                  type="number"
+                  fullWidth
+                  value={age}
+                  onChange={handleChange}
+                  required
+                />
+                <TextField
+                  id="location"
+                  name="location"
+                  label="Address"
+                  variant="outlined"
+                  fullWidth
+                  value={location}
+                  onChange={handleChange}
+                  required
+                />
+                <Button type="submit" variant="outlined">
+                  Save Changes
+                </Button>
               </Grid>
-            </Box>
-            <Box style={styles.gridSymptom}>
-              Symptoms:
-              {symptoms.map((symptom) => {
-                return (
-                  <div key={symptom.id}>
-                    <p> {symptom.name}</p>
-                    <button onClick={() => this.props.deleteSymptomThunk(symptom)}>X</button>
-                  </div>
-                );
-              })}
-            </Box>
-            <Box style={styles.gridExtra} />
-            {/* <form onSubmit={handleSubmit}>
-              <label htmlFor="firstName">First Name:</label>
-              <input name="firstName" onChange={handleChange} value={firstName} />
-              <label htmlFor="lastName">Last Name:</label>
-              <input name="lastName" onChange={handleChange} value={lastName} />
-              <label htmlFor="dob">Date of Birth:</label>
-              <input name="dob" onChange={handleChange} value={dob} />
-              <label htmlFor="age">Age:</label>
-              <input name="age" onChange={handleChange} value={age} />
-              <label htmlFor="location">Location:</label>
-              <input name="location" onChange={handleChange} value={location} />
-              <button type="submit">Submit</button>
             </form>
-            <form onSubmit={handlePost}>
-              <label htmlFor="symptom">Symptoms:</label>
-              <input name="symptom" onChange={handleChange} value={symptom} />
-              <button type="submit">Submit Change</button>
-            </form> */}
-          </Box>
-        ) : (
-          <div>
-            {this.props.patient.id && (
-              <div key={this.props.patient.id}>
-                <img src={this.props.patient.user.profilePicture} />
-                <p>
-                  Name: {this.props.patient.user.firstName}
-                  {this.props.patient.user.lastName}
-                </p>
-                <p>Date of Birth: {this.props.patient.user.dob}</p>
-                <p>Age: {this.props.patient.user.age}</p>
-                <p>Email: {this.props.patient.user.email}</p>
-                <p>Location: {this.props.patient.user.location}</p>
-                Patient Symptoms:
-                {this.props.patient.symptoms.map((symptom) => {
-                  return <p> {symptom.name}</p>;
-                })}
-                Patient Medications:
-                {this.props.patient.medications.map((medicine) => {
-                  return <p> {medicine.name}</p>;
-                })}
-              </div>
-            )}
-          </div>
-        )}
+          ) : (
+            <Grid
+              container
+              direction="column"
+              justify="space-around"
+              alignItems="center"
+              style={{ height: '100%' }}
+            >
+              <img style={styles.image} src={userInfo.profilePicture} />
+              <Typography variant="h6" align="center">
+                {userInfo.firstName} {userInfo.lastName}
+              </Typography>
+              <Grid item container justify="center" spacing={2}>
+                <Grid item>
+                  <Typography align="center">
+                    <strong>Date of Birth:</strong> {userInfo.dob}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography align="center">
+                    <strong>Age:</strong> {userInfo.age}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Typography align="center">
+                <strong>Email:</strong> {userInfo.email}
+              </Typography>
+              <Typography align="center">
+                <strong>Address:</strong> {userInfo.location}
+              </Typography>
+              <Fab
+                color="secondary"
+                aria-label="edit"
+                style={{ alignSelf: 'flex-end' }}
+                onClick={this.toggleEdit}
+              >
+                <EditIcon />
+              </Fab>
+            </Grid>
+          )}
+        </Box>
+        <Box style={styles.gridSymptom}>
+          <Typography variant="h6" align="center">
+            Symptoms
+          </Typography>
+          {symptoms.map((symptom) => {
+            return (
+              <Box key={symptom.id}>
+                <Typography>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => this.props.deleteSymptomThunk(symptom)}
+                    color="secondary"
+                  >
+                    <RemoveIcon />
+                  </IconButton>{' '}
+                  {symptom.name}
+                </Typography>
+              </Box>
+            );
+          })}
+          <Fab
+            color="primary"
+            aria-label="add"
+            style={{ position: 'absolute', bottom: 10, right: 10 }}
+            onClick={this.handleClickOpen}
+          >
+            <AddIcon />
+          </Fab>
+        </Box>
+        <Dialog onClose={this.handleClose} open={openDialog}>
+          <DialogTitle id="customized-dialog-title" onClose={this.handleClose}>
+            Add Symptom
+          </DialogTitle>
+          <DialogContent dividers>
+            <TextField
+              id="symptom"
+              name="symptom"
+              label="Symptom"
+              variant="outlined"
+              fullWidth
+              value={symptom}
+              onChange={handleChange}
+              required
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={this.handleClose} color="primary">
+              Close
+            </Button>
+            <Button onClick={this.handlePost} color="primary">
+              Add Symptom
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Box style={styles.gridExtra} />
       </Box>
     );
   }

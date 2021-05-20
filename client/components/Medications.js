@@ -1,54 +1,84 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchMedications } from '../store/medications';
-import { fetchPatient } from '../store/patient';
 import { Link } from 'react-router-dom';
 
-export class Medications extends Component {
-  componentDidMount() {
-    this.props.fetchMedications(this.props.auth.metaId);
-    // this.props.fetchPatient(this.props.auth.metaId);
-  }
-  render() {
-    const medications = this.props.medications;
-    return (
-      <div>
-        {medications.map((medication) => {
-          return (
-            <div key={medication.id}>
-              <p>Name: {medication.name}</p>
-              <p>Strength: {medication.strength}</p>
-              <p>Company: {medication.company}</p>
-              <p>Instructions: {medication.instructions}</p>
-              <p>Reason: {medication.reason}</p>
-              <p>
-                Perscribing Doctor:
-                <Link to={`/doctor/${medication.doctorId}`}>
-                  {medication.doctor.user.firstName}{' '}
-                  {medication.doctor.user.lastName}
-                </Link>
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-}
+import {
+  Box,
+  Grid,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  makeStyles,
+} from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-const mapState = (state) => {
-  return {
-    medications: state.medications,
-    auth: state.auth,
-    patient: state.patient,
-  };
+const useStyles = makeStyles((theme) => ({
+  accordion: {
+    backgroundColor: '#e5e5e5',
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+}));
+
+const Medications = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const medications = useSelector((state) => state.medications);
+
+  useEffect(() => {
+    dispatch(fetchMedications(auth.metaId));
+  }, []);
+
+  return (
+    <Grid container justify="center">
+      <Grid item md={6}>
+        <Box>
+          {medications.map((medication) => {
+            return (
+              <Accordion key={medication.id}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  className={classes.accordion}
+                >
+                  <Typography className={classes.heading}>
+                    <strong>{medication.name}</strong>
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{ display: 'block' }}>
+                  <Typography>
+                    <strong>Dosage:</strong> {medication.strength}
+                  </Typography>
+                  <Typography>
+                    <strong>Company:</strong> {medication.company}
+                  </Typography>
+                  <Typography>
+                    <strong>Instructions:</strong> {medication.instructions}
+                  </Typography>
+                  <Typography>
+                    <strong>Reason:</strong> {medication.reason}
+                  </Typography>
+                  <Typography>
+                    <strong>Prescribing Doctor:</strong>{' '}
+                    <Link to={`/doctor/${medication.doctorId}`}>
+                      {medication.doctor.user.firstName} {medication.doctor.user.lastName}
+                    </Link>
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            );
+          })}
+        </Box>
+      </Grid>
+      <Grid item md={6}></Grid>
+    </Grid>
+  );
 };
 
-const mapDispatch = (dispatch) => {
-  return {
-    fetchMedications: (id) => dispatch(fetchMedications(id)),
-    // fetchPatient: (id) => dispatch(fetchPatient(id)),
-  };
-};
-
-export default connect(mapState, mapDispatch)(Medications);
+export default Medications;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAppointments } from '../../store/appointments';
 import { useParams } from 'react-router-dom';
-import NewAppointmentForm from '../NewAppointmentForm';
+import NewAppointmentForm from './NewAppointmentForm';
 import {
   getDateString,
   momomentLocalizer,
@@ -91,7 +91,7 @@ const DocAppointments = ({ doctorFirstName, doctorLastName }) => {
   return (
     <div>
       {isDoctor && <NewAppointmentForm />}
-      <Box height="700px" p={2} style={{ backgroundColor: 'white' }}>
+      <Box height="500px" p={2} style={{ backgroundColor: 'white' }}>
         <Calendar
           events={appointments}
           localizer={momomentLocalizer}

@@ -8,6 +8,7 @@ import Meeting from './components/Meeting';
 import Dashboard from './components/Dashboard';
 import PatientDocProfile from './components/PatientDocProfile';
 import PatientProfile from './components/PatientProfile';
+import PatientProfileDoctor from './components/PatientProfileDoctor';
 
 /**
  * COMPONENT
@@ -31,7 +32,7 @@ class Routes extends Component {
           'Loading'
         ) : isLoggedIn ? (
           <Switch>
-            <Route exact path="/patients/:patientId" component={PatientProfile} />
+            <Route exact path="/patients/:patientId" component={PatientProfileDoctor} />
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
             <Route path="/dashboard" component={Dashboard} />

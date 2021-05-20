@@ -40,7 +40,7 @@ export const updatePatientThunk = (patient) => {
           authorization: window.localStorage.getItem('token'),
         },
       });
-      dispatch(updatePatient(updated));
+      dispatch(updatePatient({ ...updated, performedAuth: true }));
     } catch (error) {
       throw error;
     }
@@ -64,7 +64,7 @@ export const updateDoctor = (id, docDetails) => {
       console.log('dispatched the data', data);
       ////////////////////////////////////////////
 
-      dispatch(setDoctor(id, data));
+      dispatch(setDoctor(id, { ...data, performedAuth: true }));
     } catch (err) {
       console.log('There was a error in updating your records');
     }
