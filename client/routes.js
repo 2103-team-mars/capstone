@@ -7,14 +7,10 @@ import { me } from "./store";
 import Meeting from "./components/Meeting";
 import Dashboard from "./components/Dashboard";
 import PatientDocProfile from "./components/PatientDocProfile";
-<<<<<<< HEAD
-import PatientProfile from "./components/PatientProfile";
 import ImmediateHelp from "./components/ImmediateHelp";
 import AboutUs from "./components/AboutUs";
-=======
 import BMI from "./components/BMI";
-import PatientProfileDoctor from './components/PatientProfileDoctor';
->>>>>>> origin
+import PatientProfileDoctor from "./components/PatientProfileDoctor";
 
 /**
  * COMPONENT
@@ -25,7 +21,7 @@ class Routes extends Component {
   }
 
   setLoading() {
-    console.log('hello');
+    console.log("hello");
     this.setState({ loading: false });
   }
 
@@ -35,10 +31,14 @@ class Routes extends Component {
     return (
       <div>
         {!performedAuth ? (
-          'Loading'
+          "Loading"
         ) : isLoggedIn ? (
           <Switch>
-            <Route exact path="/patients/:patientId" component={PatientProfileDoctor} />
+            <Route
+              exact
+              path="/patients/:patientId"
+              component={PatientProfileDoctor}
+            />
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
             <Route path="/help" component={ImmediateHelp} />
