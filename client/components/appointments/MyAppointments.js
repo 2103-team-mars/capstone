@@ -76,9 +76,9 @@ const MyAppointments = () => {
       {!!event && (
         <AppointmentDialog open={open} handleClose={handleClose} title={getDateString(event.date)}>
           {auth.metaType === 'doctor' ? (
-            <DoctorAppointment event={event} />
+            <DoctorAppointment event={event} handleClose={handleClose} />
           ) : (
-            <PatientAppointment event={event} />
+            <PatientAppointment event={event} handleClose={handleClose} />
           )}
         </AppointmentDialog>
       )}

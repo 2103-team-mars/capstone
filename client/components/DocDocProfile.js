@@ -13,7 +13,6 @@ export class DocDocProfile extends Component {
     this.onButtonClick = this.onButtonClick.bind(this);
   }
   componentDidMount() {
-    const userId = this.props.auth.id;
     const docId = this.props.auth.metaId;
     this.props.fetchDoctor(docId);
     this.setState({

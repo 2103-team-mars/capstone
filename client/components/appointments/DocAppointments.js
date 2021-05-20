@@ -36,19 +36,33 @@ const DocAppointments = ({ doctorFirstName, doctorLastName }) => {
   const isDoctor = auth.metaType === 'doctor';
 
   useEffect(() => {
-    dispatch(fetchAppointments(true, doctorId));
+    dispatch(fetchAppointments(true, doctorId || auth.metaId));
   }, [auth, doctorId]);
 
   const titleAccessor = (event) => {
-    return event.topic;
+    if (isDoctor) {
+      return event.topic || 'Unclaimed';
+    } else if (event.patient) {
+      return event.patient.id === auth.metaId ? event.topic : 'Taken';
+    } else {
+      return 'Unclaimed';
+    }
   };
 
   const eventPropGetter = (event) => {
-    return { style: { backgroundColor: event.topic === '' ? 'red' : 'blue' } };
+    let backgroundColor;
+    if (isDoctor) {
+      backgroundColor = event.patient ? '#ff715e' : '#a8ff96';
+    } else if (event.patient) {
+      backgroundColor = event.patient.id === auth.metaId ? '#87a7ff' : '#ff715e';
+    } else {
+      backgroundColor = '#a8ff96';
+    }
+    return { style: { backgroundColor, color: 'black' } };
   };
 
   const handleClickEvent = (event) => {
-    if (auth.metaType === 'doctor') {
+    if (isDoctor) {
       setEvent(event);
       setOpen(true);
     } else {
@@ -66,7 +80,7 @@ const DocAppointments = ({ doctorFirstName, doctorLastName }) => {
 
   return (
     <div>
-      {auth.metaType === 'doctor' && <NewAppointmentForm />}
+      {isDoctor && <NewAppointmentForm />}
       <Box height="700px" p={2} style={{ backgroundColor: 'white' }}>
         <Calendar
           events={appointments}
@@ -75,7 +89,7 @@ const DocAppointments = ({ doctorFirstName, doctorLastName }) => {
           titleAccessor={titleAccessor}
           startAccessor={startAccessor}
           endAccessor={endAccessor}
-          // eventPropGetter={eventPropGetter}
+          eventPropGetter={eventPropGetter}
           onSelectEvent={handleClickEvent}
           // components={{
           //   agenda: {
@@ -86,13 +100,14 @@ const DocAppointments = ({ doctorFirstName, doctorLastName }) => {
       </Box>
       {!!event && (
         <AppointmentDialog open={open} handleClose={handleClose} title={getDateString(event.date)}>
-          {auth.metaType === 'doctor' ? (
-            <DoctorAppointment event={event} />
+          {isDoctor ? (
+            <DoctorAppointment event={event} handleClose={handleClose} />
           ) : (
             <PatientAppointment
               event={event}
               doctorFirstName={doctorFirstName}
               doctorLastName={doctorLastName}
+              handleClose={handleClose}
             />
           )}
         </AppointmentDialog>

@@ -5,10 +5,11 @@ import { Link } from 'react-router-dom';
 
 import { Box, Typography, Button, DialogContentText, TextField } from '@material-ui/core';
 
-export const DoctorAppointment = ({ event }) => {
+export const DoctorAppointment = ({ event, handleClose }) => {
   const dispatch = useDispatch();
   const removeAppointment = (id) => {
     dispatch(deleteAppointment(id));
+    handleClose();
   };
 
   return (
@@ -37,17 +38,19 @@ export const DoctorAppointment = ({ event }) => {
   );
 };
 
-export const PatientAppointment = ({ event, patientId, doctorFirstName, doctorLastName }) => {
+export const PatientAppointment = ({ event, doctorFirstName, doctorLastName, handleClose }) => {
   const [topic, setTopic] = useState('');
   const dispatch = useDispatch();
 
   const cancelAppointment = (id) => {
     dispatch(leaveAppointment(id, true));
+    handleClose();
   };
 
   const claimAppointment = (id) => {
     dispatch(registerAppointment(topic, id));
     setTopic('');
+    handleClose();
   };
 
   return (

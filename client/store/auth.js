@@ -1,13 +1,13 @@
-import axios from "axios";
-import history from "../history";
+import axios from 'axios';
+import history from '../history';
 
-const TOKEN = "token";
+const TOKEN = 'token';
 /**
  * ACTION TYPES
  */
-const SET_AUTH = "SET_AUTH";
-const UPDATE_PATIENT = "UPDATE_PATIENT";
-const SET_DOCTOR = "SET_DOCTOR";
+const SET_AUTH = 'SET_AUTH';
+const UPDATE_PATIENT = 'UPDATE_PATIENT';
+const SET_DOCTOR = 'SET_DOCTOR';
 
 /**
  * ACTION CREATORS
@@ -35,15 +35,11 @@ export const setDoctor = (id, docDetails) => {
 export const updatePatientThunk = (patient) => {
   return async (dispatch) => {
     try {
-      const { data: updated } = await axios.put(
-        `/api/patients/${patient.id}`,
-        patient,
-        {
-          headers: {
-            authorization: window.localStorage.getItem("token"),
-          },
-        }
-      );
+      const { data: updated } = await axios.put(`/api/patients/${patient.id}`, patient, {
+        headers: {
+          authorization: window.localStorage.getItem('token'),
+        },
+      });
       dispatch(updatePatient(updated));
     } catch (error) {
       throw error;
@@ -57,7 +53,7 @@ export const updateDoctor = (id, docDetails) => {
       const token = window.localStorage.getItem(TOKEN);
 
       ////////////////////////////////////////////
-      console.log("UpdateDoctor: hit the thunk here!");
+      console.log('UpdateDoctor: hit the thunk here!');
       ////////////////////////////////////////////
 
       const { data } = await axios.put(`/api/users/${id}`, docDetails, {
@@ -65,12 +61,12 @@ export const updateDoctor = (id, docDetails) => {
       });
 
       ////////////////////////////////////////////
-      console.log("dispatched the data", data);
+      console.log('dispatched the data', data);
       ////////////////////////////////////////////
 
       dispatch(setDoctor(id, data));
     } catch (err) {
-      console.log("There was a error in updating your records");
+      console.log('There was a error in updating your records');
     }
   };
 };
@@ -78,13 +74,14 @@ export const updateDoctor = (id, docDetails) => {
 export const me = () => async (dispatch) => {
   const token = window.localStorage.getItem(TOKEN);
   if (token) {
-    const res = await axios.get("/auth/me", {
+    const res = await axios.get('/auth/me', {
       headers: {
         authorization: token,
       },
     });
-    return dispatch(setAuth(res.data));
+    return dispatch(setAuth({ ...res.data, performedAuth: true }));
   }
+  return dispatch(setAuth({ performedAuth: true }));
 };
 
 export const authenticate = (email, password) => async (dispatch) => {
@@ -93,7 +90,7 @@ export const authenticate = (email, password) => async (dispatch) => {
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());
   } catch (authError) {
-    return dispatch(setAuth({ error: authError }));
+    return dispatch(setAuth({ error: authError, performedAuth: true }));
   }
 };
 
@@ -103,23 +100,23 @@ export const signup = (userInfo, metaInfo, metaType) => async (dispatch) => {
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());
   } catch (authError) {
-    return dispatch(setAuth({ error: authError }));
+    return dispatch(setAuth({ error: authError, performedAuth: true }));
   }
 };
 
 export const logout = () => {
   window.localStorage.removeItem(TOKEN);
-  history.push("/login");
+  history.push('/login');
   return {
     type: SET_AUTH,
-    auth: {},
+    auth: { performedAuth: true },
   };
 };
 
 /**
  * REDUCER
  */
-export default function (state = {}, action) {
+export default function (state = { performedAuth: false }, action) {
   switch (action.type) {
     case SET_AUTH:
       return action.auth;

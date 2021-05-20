@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 
 import { Box, Typography, Button } from '@material-ui/core';
 
-export const DoctorAppointment = ({ event }) => {
+export const DoctorAppointment = ({ event, handleClose }) => {
   const dispatch = useDispatch();
+
   const removeAppointment = (id) => {
     dispatch(deleteAppointment(id));
+    handleClose();
   };
 
   return (
@@ -32,11 +34,14 @@ export const DoctorAppointment = ({ event }) => {
   );
 };
 
-export const PatientAppointment = ({ event }) => {
+export const PatientAppointment = ({ event, handleClose }) => {
   const dispatch = useDispatch();
+
   const cancelAppointment = (id) => {
     dispatch(leaveAppointment(id, false));
+    handleClose();
   };
+
   return (
     <Box>
       <Typography>
