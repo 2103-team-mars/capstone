@@ -30,7 +30,7 @@ export class Home extends React.Component {
       );
     } else {
       return (
-        <div>
+        <div className="home">
           {auth.metaType === "patient" ? (
             <div>
               <h3>
