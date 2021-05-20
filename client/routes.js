@@ -7,8 +7,8 @@ import { me } from "./store";
 import Meeting from "./components/Meeting";
 import Dashboard from "./components/Dashboard";
 import PatientDocProfile from "./components/PatientDocProfile";
-import PatientProfile from "./components/PatientProfile";
 import BMI from "./components/BMI";
+import PatientProfileDoctor from './components/PatientProfileDoctor';
 
 /**
  * COMPONENT
@@ -18,18 +18,21 @@ class Routes extends Component {
     this.props.loadInitialData();
   }
 
+  setLoading() {
+    console.log('hello');
+    this.setState({ loading: false });
+  }
+
   render() {
-    const { isLoggedIn } = this.props;
+    const { isLoggedIn, performedAuth } = this.props;
 
     return (
       <div>
-        {isLoggedIn ? (
+        {!performedAuth ? (
+          'Loading'
+        ) : isLoggedIn ? (
           <Switch>
-            <Route
-              exact
-              path="/patients/:patientId"
-              component={PatientProfile}
-            />
+            <Route exact path="/patients/:patientId" component={PatientProfileDoctor} />
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
             <Route path="/dashboard" component={Dashboard} />
@@ -57,13 +60,14 @@ const mapState = (state) => {
     // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
     // Otherwise, state.auth will be an empty object, and state.auth.id will be falsey
     isLoggedIn: !!state.auth.id,
+    performedAuth: state.auth.performedAuth,
   };
 };
 
 const mapDispatch = (dispatch) => {
   return {
-    loadInitialData() {
-      dispatch(me());
+    loadInitialData(setLoading) {
+      dispatch(me(setLoading));
     },
   };
 };

@@ -9,15 +9,15 @@ const TabPanel = (props) => {
 
   return (
     <div
-      role='tabpanel'
+      role="tabpanel"
       hidden={value !== index}
       id={`vertical-tabpanel-${index}`}
       aria-labelledby={`vertical-tab-${index}`}
-      style={{ width: '100%' }}
+      style={{ width: '100%', overflow: 'auto' }}
       {...other}
     >
       {value === index && (
-        <Box p={3} width='100%'>
+        <Box p={3} width="100%">
           {children}
         </Box>
       )}
@@ -35,8 +35,8 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
     display: 'flex',
+    height: 350,
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
@@ -56,33 +56,36 @@ const AuthForm = () => {
   };
 
   return (
-    <Grid container justify='center'>
-      <Grid item xs={12} md={6}>
-        <Box className={classes.root}>
-          <Tabs
-            orientation='vertical'
-            value={value}
-            onChange={handleChange}
-            className={classes.tabs}
-            centered
-          >
-            <Tab label='Login' {...a11yProps(0)} />
-            <Tab label='Patient Signup' {...a11yProps(1)} />
-            <Tab label='Doctor Signup' {...a11yProps(2)} />
-          </Tabs>
-          <TabPanel value={value} index={0}>
-            <LoginForm />
-            <Login />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <UserSignup metaType='patient' />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            <UserSignup metaType='doctor' />
-          </TabPanel>
-        </Box>
+    <Box mt={5}>
+      <Grid container justify="center">
+        <Grid item xs={12} md={6}>
+          <Box className={classes.root}>
+            <Tabs
+              orientation="vertical"
+              value={value}
+              onChange={handleChange}
+              className={classes.tabs}
+              centered
+              indicatorColor="primary"
+            >
+              <Tab label="Login" {...a11yProps(0)} />
+              <Tab label="Patient Signup" {...a11yProps(1)} />
+              <Tab label="Doctor Signup" {...a11yProps(2)} />
+            </Tabs>
+            <TabPanel value={value} index={0}>
+              <LoginForm />
+              <Login />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <UserSignup metaType="patient" />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <UserSignup metaType="doctor" />
+            </TabPanel>
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 };
 

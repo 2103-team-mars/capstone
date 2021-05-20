@@ -14,7 +14,7 @@ const populateArray = (data, array, metaType) => {
       firstName: user.name.first,
       lastName: user.name.last,
       password: user.login.password,
-      profilePicture: user.picture.medium,
+      profilePicture: user.picture.large,
       age: user.dob.age,
       sex: user.gender,
       dob: new Date(user.dob.date),

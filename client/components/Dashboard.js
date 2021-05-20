@@ -1,16 +1,33 @@
 import React, { useState } from 'react';
-import { AppBar, Tabs, Tab, Typography, Box } from '@material-ui/core';
 import MapComponent from './MapComponent';
 import OldMap from './OldMap';
 import PatientProfile from './PatientProfile';
-import MyAppointments from './MyAppointments';
+import MyAppointments from './appointments/MyAppointments';
 import Medications from './Medications';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import DocDocProfile from './DocDocProfile';
-import SickPatient from '../SVG/SickPatient';
-import Medication from '../SVG/Medication';
 import Calender from '../SVG/Calender';
+
+import { AppBar, Tabs, Tab, Box, makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles(() => ({
+  indicator: {
+    backgroundColor: 'transparent',
+  },
+  tab: {
+    backgroundColor: '#d8d8d8',
+    opacity: 1,
+    color: 'black',
+  },
+  activeTab: {
+    backgroundColor: 'white',
+    opacity: 1,
+    color: 'black',
+    borderRight: '1px solid #999',
+    borderLeft: '1px solid #999',
+  },
+}));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -21,6 +38,7 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
+      style={{ backgroundColor: 'white' }}
       {...other}
     >
       {value === index && <Box p={3}>{children}</Box>}
@@ -44,79 +62,67 @@ export default function Dashboard() {
     setValue(newValue);
   };
 
-  const [oldMap, setOldMap] = useState(true);
-
-  const toggleOldMap = () => {
-    setOldMap((prevState) => !prevState);
-  };
+  const classes = useStyles();
 
   return (
-    <div>
+    <Box mt={3}>
       {auth.metaType === 'patient' ? (
-        <div>
-          <button onClick={toggleOldMap}>Toggle Map</button>
-          <AppBar position='static' style={{ backgroundColor: '#bbb' }}>
+        <Box style={{ boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 40%)' }}>
+          <AppBar position="static">
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor='primary'
-              textColor='primary'
+              classes={{ indicator: classes.indicator }}
               centered
               variant='fullWidth'
             >
-              <Tab label='Find Doctor' />
-              <Tab label='My Doctors' />
-              <Tab label='Profile' />
-              <Tab label='Medications' />
-              <Tab label='Appointments' />
+              <Tab label="Find Doctor" className={value === 0 ? classes.activeTab : classes.tab} />
+              <Tab label="Profile" className={value === 1 ? classes.activeTab : classes.tab} />
+              <Tab label="Medications" className={value === 2 ? classes.activeTab : classes.tab} />
+              <Tab label="Appointments" className={value === 3 ? classes.activeTab : classes.tab} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
-            {oldMap ? <OldMap /> : <MapComponent />}
+            {/* If new map is having trouble switch to old map */}
+            {/* <OldMap /> */}
+            <MapComponent />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            My doctors list
+            <PatientProfile />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <PatientProfile />
-            <SickPatient />
+            <Medications />
           </TabPanel>
           <TabPanel value={value} index={3}>
-            <Medications />
-            <Medication />
-          </TabPanel>
-          <TabPanel value={value} index={4}>
             <MyAppointments />
             <Calender />
           </TabPanel>
-        </div>
+        </Box>
       ) : (
-        <div>
-          <AppBar position='static' style={{ backgroundColor: '#bbb' }}>
+        <Box style={{ boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 40%)' }}>
+          <AppBar position="static">
             <Tabs
               value={value}
               onChange={handleChange}
-              indicatorColor='primary'
-              textColor='primary'
+              classes={{ indicator: classes.indicator }}
               centered
               variant='fullWidth'
             >
-              <Tab label='Profile' />
-              <Tab label='My Patients' />
-              <Tab label='My Appointments' />
+              <Tab label="Profile" className={value === 0 ? classes.activeTab : classes.tab} />
+              <Tab
+                label="My Appointments"
+                className={value === 1 ? classes.activeTab : classes.tab}
+              />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
             <DocDocProfile />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            My Patients
-          </TabPanel>
-          <TabPanel value={value} index={2}>
             <MyAppointments />
           </TabPanel>
-        </div>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }

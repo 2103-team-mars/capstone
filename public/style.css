@@ -1,5 +1,11 @@
+html,
+body {
+  height: 100vh;
+}
+
 body {
   font-family: sans-serif;
+  background-color: #cee4c8;
 }
 
 a {
