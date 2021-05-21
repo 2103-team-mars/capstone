@@ -27,18 +27,19 @@ router.get('/patients/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', isLoggedIn, isPatient, async (req, res, next) => {
+router.post('/:id', isLoggedIn, isDoctor, async (req, res, next) => {
   try {
-    const patient = await req.user.getPatient();
     const { name, strength, company, instructions, reason } = req.body;
+
     let medication = await Medication.create({
       name,
       strength,
       company,
       instructions,
       reason,
+      patientId: req.params.id,
+      doctorId: req.user.metaId,
     });
-    await patient.addMedication(medication);
     res.send(medication);
   } catch (error) {
     next(error);
