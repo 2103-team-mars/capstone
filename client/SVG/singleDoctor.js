@@ -1,8 +1,7 @@
 import React from 'react';
-import './singleDoctor.css'
+import './singleDoctor.css';
 function SingleDoctor() {
   return (
-    <div style={{width: '50%'}}>
     <svg
       xmlns='http://www.w3.org/2000/svg'
       id='freepik_stories-medicine'
@@ -1966,7 +1965,6 @@ function SingleDoctor() {
           <feColorMatrix values='0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0'></feColorMatrix>
         </filter>
       </defs>
-      </div>
     </svg>
   );
 }
