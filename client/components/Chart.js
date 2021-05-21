@@ -4,7 +4,7 @@ import "../../public/style.css";
 
 const Chart = () => {
   return (
-    <div className="barchart">
+    <div>
       <Bar
         data={{
           labels: ["20-29", "30-39", "40-49", "50-59"],
