@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { fetchAppointments } from "../store/appointments";
 import { getDateString } from "../utils/dateUtils";
 import Doctor from "../SVG/doctor";
+import SingleDoctor from "../SVG/singleDoctor";
+import Meeting from "../SVG/Meeting";
+import Icon from "../SVG/PatientWelcome";
 
 /**
  * COMPONENT
@@ -26,6 +29,7 @@ export class Home extends React.Component {
           <h3>Welcome</h3>
 
           <Link to="/auth">Get Started!</Link>
+          <Meeting />
         </div>
       );
     } else {
@@ -50,6 +54,7 @@ export class Home extends React.Component {
               </Link>
               <Link to={"/dashboard?index=0"}> Looking for a doctor?</Link>
               <Link to={"/dashboard?index=2"}> Check your medication</Link>
+              <Icon />
             </div>
           ) : (
             <div>
@@ -68,9 +73,9 @@ export class Home extends React.Component {
               <Link to={"/dashboard?index=1"}>
                 Checkout your upcoming appointments
               </Link>
+              <SingleDoctor />
             </div>
           )}
-          <Doctor />
         </div>
       );
     }

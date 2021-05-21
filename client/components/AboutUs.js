@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Box, Grid, Typography, Fab } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import About from "../SVG/AboutUs";
 
 const styles = {
   gridContainer: {
@@ -85,29 +86,30 @@ export default AboutUs;
             hope to build a resource for mental health. Check out our team!
           </p>
           <img
-            className="photo"
+            className='photo'
             height={300}
             width={300}
-            src="https://ca.slack-edge.com/T024FPYBQ-U01HVGXDKL7-9f1006440219-512"
+            src='https://ca.slack-edge.com/T024FPYBQ-U01HVGXDKL7-9f1006440219-512'
           />
 
           <img
-            className="photo"
+            className='photo'
             height={300}
             width={300}
-            src="https://ca.slack-edge.com/T024FPYBQ-U01JGF243E0-89e19e4353a9-512"
+            src='https://ca.slack-edge.com/T024FPYBQ-U01JGF243E0-89e19e4353a9-512'
           />
           <img
-            className="photo"
+            className='photo'
             height={300}
             width={300}
-            src="https://ca.slack-edge.com/T024FPYBQ-U01PXDH1PTK-65bf8620e716-512"
+            src='https://ca.slack-edge.com/T024FPYBQ-U01PXDH1PTK-65bf8620e716-512'
           />
           <img
-            className="photo"
+            className='photo'
             height={300}
             width={300}
-            src="https://ca.slack-edge.com/T024FPYBQ-U01PFMW4F0V-366ee5aa3832-512"
+            src='https://ca.slack-edge.com/T024FPYBQ-U01PFMW4F0V-366ee5aa3832-512'
           />
+         <About />
         </div>
       </div> */

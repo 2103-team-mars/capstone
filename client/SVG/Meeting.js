@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './meeting.css';
 function Meeting() {
   return (
     <div style={{ width: '50%' }}>
