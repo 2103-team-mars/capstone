@@ -36,11 +36,35 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     display: 'flex',
-    height: 350,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
     width: 200,
+  },
+  tab: {
+    minWidth: 0,
+  },
+  container: {
+    borderRadius: '1rem',
+    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 30%)',
+    width: '75%',
+    margin: '3rem auto 0',
+    overflow: 'hidden',
+  },
+  authContainer: {
+    backgroundColor: '#f5f5f5',
+    padding: '1rem',
+    position: 'relative',
+    minHeight: 500,
+  },
+  svgContainer: {
+    backgroundColor: 'white',
+    padding: '1rem',
   },
 }));
 
@@ -56,9 +80,9 @@ const AuthForm = () => {
   };
 
   return (
-    <Box mt={5}>
+    <Box mt={5} className={classes.container}>
       <Grid container justify="center">
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} className={classes.authContainer}>
           <Box className={classes.root}>
             <Tabs
               orientation="vertical"
@@ -68,13 +92,12 @@ const AuthForm = () => {
               centered
               indicatorColor="primary"
             >
-              <Tab label="Login" {...a11yProps(0)} />
-              <Tab label="Patient Signup" {...a11yProps(1)} />
-              <Tab label="Doctor Signup" {...a11yProps(2)} />
+              <Tab label="Login" {...a11yProps(0)} className={classes.tab} />
+              <Tab label="Patient Signup" wrapped {...a11yProps(1)} className={classes.tab} />
+              <Tab label="Doctor Signup" wrapped {...a11yProps(2)} className={classes.tab} />
             </Tabs>
             <TabPanel value={value} index={0}>
               <LoginForm />
-              <Login />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <UserSignup metaType="patient" />
@@ -83,6 +106,9 @@ const AuthForm = () => {
               <UserSignup metaType="doctor" />
             </TabPanel>
           </Box>
+        </Grid>
+        <Grid item xs={12} md={6} className={classes.svgContainer}>
+          <Login />
         </Grid>
       </Grid>
     </Box>

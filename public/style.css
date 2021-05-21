@@ -17,15 +17,26 @@ nav a {
   margin: 1em;
 }
 
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1 0 auto;
+  margin-bottom: 1rem;
+}
+
 .footer {
-  margin-top: 1rem;
   padding: 1rem;
   background-color: rgb(193, 192, 189);
-  position: fixed;
   bottom: 0;
-  left: 0;
   width: 100%;
+  flex-shrink: 0;
+  text-align: center;
 }
+
 .photo {
   justify-content: space-around;
   margin-right: -30%;
@@ -35,6 +46,7 @@ nav a {
   transform: translate(20%, 10%);
   margin-bottom: 4em;
 }
+
 .BMI {
   align-items: center;
   text-align: center;
@@ -45,9 +57,11 @@ nav a {
   margin-right: -20%;
   transform: translate(-50%, -25%);
 }
+
 #switch {
   left: 15%;
 }
+
 .barchart {
   margin-right: -20%;
   top: 70%;

@@ -36,19 +36,19 @@ const styles = {
   gridContainer: {
     display: 'grid',
     gridTemplateColumns: '1fr 1fr',
-    gridTemplateRows: '1fr 1fr',
-    minHeight: 500,
+    gridTemplateRows: '1fr 2fr',
+    minHeight: 750,
     gridTemplateAreas: '"profile symptom" "profile extra"',
     gridGap: '1rem',
   },
   gridProfile: {
-    padding: '1rem',
+    padding: '1.5rem',
     borderRadius: '1rem',
     boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
     gridArea: 'profile',
   },
   gridSymptom: {
-    padding: '1rem',
+    padding: '1.5rem',
     borderRadius: '1rem',
     boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
     gridArea: 'symptom',
@@ -56,8 +56,6 @@ const styles = {
   },
   gridExtra: {
     padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
     gridArea: 'extra',
   },
   image: {
@@ -200,29 +198,29 @@ export class PatientProfile extends Component {
               container
               direction="column"
               justify="space-around"
-              alignItems="center"
+              // alignItems="center"
               style={{ height: '100%' }}
             >
               <img style={styles.image} src={userInfo.profilePicture} />
-              <Typography variant="h6" align="center">
+              <Typography variant="h6">
                 {userInfo.firstName} {userInfo.lastName}
               </Typography>
               <Grid item container justify="center" spacing={2}>
                 <Grid item>
-                  <Typography align="center">
+                  <Typography>
                     <strong>Date of Birth:</strong> {userInfo.dob}
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography align="center">
+                  <Typography>
                     <strong>Age:</strong> {userInfo.age}
                   </Typography>
                 </Grid>
               </Grid>
-              <Typography align="center">
+              <Typography>
                 <strong>Email:</strong> {userInfo.email}
               </Typography>
-              <Typography align="center">
+              <Typography>
                 <strong>Address:</strong> {userInfo.location}
               </Typography>
               <Fab
@@ -291,7 +289,7 @@ export class PatientProfile extends Component {
           </DialogActions>
         </Dialog>
         <Box style={styles.gridExtra}>
-          <Box style={{ width: '50%', margin: '0 auto' }}>
+          <Box style={{ width: '75%', margin: '0 auto' }}>
             <SickPatient />
           </Box>
         </Box>
