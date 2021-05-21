@@ -1,10 +1,64 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Box, Grid, Typography, Fab } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
+
+const styles = {
+  gridContainer: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gridTemplateRows: "1fr 1fr",
+    minHeight: 600,
+    gridTemplateAreas: '"profile calendar" "profile calendar"',
+    gridGap: "1rem",
+  },
+  gridProfile: {
+    padding: "1rem",
+    borderRadius: "1rem",
+    boxShadow: "0 0 0.5rem 0 rgb(0 0 0 / 25%)",
+    gridArea: "profile",
+  },
+  gridCalendar: {
+    padding: "1rem",
+    borderRadius: "1rem",
+    boxShadow: "0 0 0.5rem 0 rgb(0 0 0 / 25%)",
+    gridArea: "calendar",
+  },
+  image: {
+    width: "40%",
+    height: "auto",
+    borderRadius: 9999,
+  },
+};
 
 export class AboutUs extends Component {
   render() {
     return (
-      <div>
+      <Box style={styles.gridContainer}>
+        <Grid
+          container
+          direction="column"
+          justify="space-around"
+          alignItems="center"
+          style={{ height: "100%" }}
+        >
+          <Typography variant="h6" align="center">
+            Our Mission
+          </Typography>
+          <Typography align="center">
+            Making selecting and managing your mental health easier and more
+            accessible. Because finding and prioritizing your mental health
+            professional should be easy and convenient
+          </Typography>
+        </Grid>
+      </Box>
+    );
+  }
+}
+
+export default AboutUs;
+
+/* <div>
         <div>
           <h3>Our Mission</h3>
           <h4>
@@ -56,9 +110,4 @@ export class AboutUs extends Component {
             src="https://ca.slack-edge.com/T024FPYBQ-U01PFMW4F0V-366ee5aa3832-512"
           />
         </div>
-      </div>
-    );
-  }
-}
-
-export default AboutUs;
+      </div> */

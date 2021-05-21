@@ -6,6 +6,12 @@ body {
 body {
   font-family: sans-serif;
   background-color: #cee4c8;
+  min-height: 100vh; /* will cover the 100% of viewport */
+  overflow: hidden;
+  display: block;
+  position: relative;
+  padding-bottom: 100px; /* height of your footer */
+  padding: 100px; /* height of your footer */
 }
 
 a {
@@ -58,6 +64,7 @@ nav a {
 } */
 
 footer {
+  /* sj-footer- this will need to be stashed  */
   bottom: 0;
   width: 100%;
   position: relative;
