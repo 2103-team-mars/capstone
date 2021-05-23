@@ -19,48 +19,9 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from '@material-ui/core';
-import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-const styles = {
-  gridContainer: {
-    marginTop: '3rem',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gridTemplateRows: '1fr 1fr',
-    minHeight: 500,
-    gridTemplateAreas: '"profile symptom" "profile extra"',
-    gridGap: '1rem',
-  },
-  gridProfile: {
-    padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'profile',
-    backgroundColor: '#f5f5f5',
-  },
-  gridSymptom: {
-    padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'symptom',
-    position: 'relative',
-    backgroundColor: '#f5f5f5',
-  },
-  gridExtra: {
-    padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'extra',
-    backgroundColor: '#f5f5f5',
-    position: 'relative',
-  },
-  image: {
-    width: '40%',
-    height: 'auto',
-    borderRadius: 9999,
-  },
-};
+import '../../public/styles/profiles.css';
 
 const PatientProfileDoctor = () => {
   const [name, setName] = useState('');
@@ -108,41 +69,41 @@ const PatientProfileDoctor = () => {
   const { user: userInfo, symptoms, medications } = patient;
 
   return (
-    <Box style={styles.gridContainer}>
-      <Box style={styles.gridProfile}>
+    <Box className="patient-container" mt={3}>
+      <Box className="grid-profile grid-item plat-bg">
         <Grid
           container
-          direction='column'
-          justify='space-around'
-          alignItems='center'
+          direction="column"
           style={{ height: '100%' }}
+          className="child-spacing"
+          wrap="nowrap"
         >
-          <img style={styles.image} src={userInfo.profilePicture} />
-          <Typography variant='h6' align='center'>
+          <img className="profile-image" src={userInfo.profilePicture} />
+          <Typography variant="h6" align="center">
             {userInfo.firstName} {userInfo.lastName}
           </Typography>
-          <Grid item container justify='center' spacing={2}>
+          <Grid item container spacing={2}>
             <Grid item>
-              <Typography align='center'>
+              <Typography>
                 <strong>Date of Birth:</strong> {userInfo.dob}
               </Typography>
             </Grid>
             <Grid item>
-              <Typography align='center'>
+              <Typography>
                 <strong>Age:</strong> {userInfo.age}
               </Typography>
             </Grid>
           </Grid>
-          <Typography align='center'>
+          <Typography>
             <strong>Email:</strong> {userInfo.email}
           </Typography>
-          <Typography align='center'>
+          <Typography>
             <strong>Address:</strong> {userInfo.location}
           </Typography>
         </Grid>
       </Box>
-      <Box style={styles.gridSymptom}>
-        <Typography variant='h6' align='center'>
+      <Box className="grid-symptom grid-item plat-bg">
+        <Typography variant="h6" align="center">
           Symptoms
         </Typography>
         {symptoms.map((symptom) => {
@@ -153,16 +114,16 @@ const PatientProfileDoctor = () => {
           );
         })}
       </Box>
-      <Box style={styles.gridExtra}>
+      <Box className="grid-extra grid-item plat-bg">
         <Box>
-          <Typography variant='h6'>Medications</Typography>
+          <Typography variant="h6">Medications</Typography>
           {medications.map((medication) => {
             return (
               <Accordion key={medication.id}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
-                  aria-controls='panel1a-content'
-                  id='panel1a-header'
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                   style={{
                     backgroundColor: '#e5e5e5',
                   }}
@@ -189,8 +150,8 @@ const PatientProfileDoctor = () => {
             );
           })}
           <Fab
-            color='primary'
-            aria-label='add'
+            color="primary"
+            aria-label="add"
             style={{ position: 'absolute', bottom: 10, right: 10 }}
             onClick={handleClickOpen}
           >
@@ -199,77 +160,82 @@ const PatientProfileDoctor = () => {
         </Box>
       </Box>
       <Dialog onClose={handleClose} open={dialog}>
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Add Medication
         </DialogTitle>
         <DialogContent dividers>
           <TextField
-            id='name'
-            name='name'
-            label='Name'
-            variant='outlined'
+            id="name"
+            name="name"
+            label="Name"
+            variant="outlined"
             fullWidth
             value={name}
             onChange={(event) => {
               setName(event.target.value);
             }}
             required
+            style={{ marginTop: '1rem' }}
           />
           <TextField
-            id='strength'
-            name='strength'
-            label='Strength'
-            variant='outlined'
-            type='number'
+            id="strength"
+            name="strength"
+            label="Strength"
+            variant="outlined"
+            type="number"
             fullWidth
             value={strength}
             onChange={(event) => {
               setStrength(event.target.value);
             }}
             required
+            style={{ marginTop: '1rem' }}
           />
           <TextField
-            id='company'
-            name='company'
-            label='Company'
-            variant='outlined'
+            id="company"
+            name="company"
+            label="Company"
+            variant="outlined"
             fullWidth
             value={company}
             onChange={(event) => {
               setCompany(event.target.value);
             }}
             required
+            style={{ marginTop: '1rem' }}
           />
           <TextField
-            id='instructions'
-            name='instructions'
-            label='Instructions'
-            variant='outlined'
+            id="instructions"
+            name="instructions"
+            label="Instructions"
+            variant="outlined"
             fullWidth
             value={instructions}
             onChange={(event) => {
               setInstructions(event.target.value);
             }}
             required
+            style={{ marginTop: '1rem' }}
           />
           <TextField
-            id='reason'
-            name='reason'
-            label='Reason'
-            variant='outlined'
+            id="reason"
+            name="reason"
+            label="Reason"
+            variant="outlined"
             fullWidth
             value={reason}
             onChange={(event) => {
               setReason(event.target.value);
             }}
             required
+            style={{ marginTop: '1rem' }}
           />
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color='primary'>
+          <Button autoFocus onClick={handleClose} color="primary">
             Close
           </Button>
-          <Button onClick={handlePost} color='primary'>
+          <Button onClick={handlePost} color="primary">
             Add Medication
           </Button>
         </DialogActions>

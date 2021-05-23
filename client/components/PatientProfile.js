@@ -22,6 +22,7 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
+import '../../public/styles/profiles.css';
 
 const defaultState = {
   firstName: '',
@@ -30,39 +31,6 @@ const defaultState = {
   age: 0,
   location: '',
   symptom: '',
-};
-
-const styles = {
-  gridContainer: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gridTemplateRows: '1fr 2fr',
-    minHeight: 750,
-    gridTemplateAreas: '"profile symptom" "profile extra"',
-    gridGap: '1rem',
-  },
-  gridProfile: {
-    padding: '1.5rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'profile',
-  },
-  gridSymptom: {
-    padding: '1.5rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'symptom',
-    position: 'relative',
-  },
-  gridExtra: {
-    padding: '1rem',
-    gridArea: 'extra',
-  },
-  image: {
-    width: '40%',
-    height: 'auto',
-    borderRadius: 9999,
-  },
 };
 
 export class PatientProfile extends Component {
@@ -120,21 +88,22 @@ export class PatientProfile extends Component {
 
   render() {
     const { firstName, lastName, dob, age, location, symptom, openDialog, showEdit } = this.state;
-    const { handleSubmit, handleChange, handlePost } = this;
+    const { handleSubmit, handleChange } = this;
     const userInfo = this.props.auth;
     const symptoms = this.props.symptoms || [];
 
     return (
-      <Box style={styles.gridContainer}>
-        <Box style={styles.gridProfile}>
+      <Box className="patient-container">
+        <Box className="grid-profile grid-item">
           {showEdit ? (
             <form onSubmit={handleSubmit} style={{ height: '100%' }}>
               <Grid
                 container
                 direction="column"
-                justify="space-around"
                 alignItems="center"
                 style={{ height: '100%' }}
+                className="child-spacing"
+                wrap="nowrap"
               >
                 <TextField
                   id="firstName"
@@ -197,15 +166,15 @@ export class PatientProfile extends Component {
             <Grid
               container
               direction="column"
-              justify="space-around"
-              // alignItems="center"
-              style={{ height: '100%' }}
+              style={{ height: '100%', position: 'relative' }}
+              className="child-spacing"
+              wrap="nowrap"
             >
-              <img style={styles.image} src={userInfo.profilePicture} />
-              <Typography variant="h6">
+              <img className="profile-image" src={userInfo.profilePicture} />
+              <Typography variant="h6" style={{ alignSelf: 'center' }}>
                 {userInfo.firstName} {userInfo.lastName}
               </Typography>
-              <Grid item container justify="center" spacing={2}>
+              <Grid item container spacing={2}>
                 <Grid item>
                   <Typography>
                     <strong>Date of Birth:</strong> {userInfo.dob}
@@ -226,7 +195,7 @@ export class PatientProfile extends Component {
               <Fab
                 color="secondary"
                 aria-label="edit"
-                style={{ alignSelf: 'flex-end' }}
+                style={{ position: 'absolute', bottom: 10, right: 10 }}
                 onClick={this.toggleEdit}
               >
                 <EditIcon />
@@ -234,7 +203,7 @@ export class PatientProfile extends Component {
             </Grid>
           )}
         </Box>
-        <Box style={styles.gridSymptom}>
+        <Box className="grid-symptom grid-item">
           <Typography variant="h6" align="center">
             Symptoms
           </Typography>
@@ -288,7 +257,7 @@ export class PatientProfile extends Component {
             </Button>
           </DialogActions>
         </Dialog>
-        <Box style={styles.gridExtra}>
+        <Box className="grid-extra">
           <Box style={{ width: '75%', margin: '0 auto' }}>
             <SickPatient />
           </Box>

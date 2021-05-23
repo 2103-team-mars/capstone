@@ -6,6 +6,7 @@ import { updateDoctor } from '../store/auth';
 import Select from 'react-select';
 
 import { Box, Grid, Button, Typography, TextField } from '@material-ui/core';
+import '../../public/styles/profiles.css';
 
 const options = [
   { label: 'Anxiety', value: 'Anxiety' },
@@ -72,9 +73,10 @@ export class EditDocProfile extends Component {
         <Grid
           container
           direction="column"
-          justify="space-around"
           alignItems="center"
           style={{ height: '100%' }}
+          className="child-spacing"
+          wrap="nowrap"
         >
           <TextField
             id="firstName"

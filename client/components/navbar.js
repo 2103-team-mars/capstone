@@ -38,6 +38,9 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
                 <Button component={RouterLink} to="/aboutus" color="inherit">
                   About Us
                 </Button>
+                <Button component={RouterLink} to="/BMICalculator" color="inherit">
+                  BMI Calculator
+                </Button>
                 <Button component={RouterLink} to="/meeting" color="inherit">
                   Meeting
                 </Button>

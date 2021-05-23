@@ -36,15 +36,16 @@ nav a {
   flex-shrink: 0;
   text-align: center;
 }
+
 .BMI {
-  align-items: center;
+  /* align-items: center; */
   text-align: center;
-  margin: 0;
-  position: absolute;
+  margin: 3rem auto 0;
+  /* position: absolute;
   top: 50%;
-  left: 50%;
-  margin-right: -20%;
-  transform: translate(-50%, -50%);
+  left: 50%; */
+  /* margin-right: -20%; */
+  /* transform: translate(-50%, -50%); */
   width: 75%;
 }
 

@@ -4,37 +4,7 @@ import { connect } from 'react-redux';
 import DocAppointments from './appointments/DocAppointments';
 
 import { Box, Grid, Typography } from '@material-ui/core';
-
-const styles = {
-  gridContainer: {
-    marginTop: '3rem',
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gridTemplateRows: '1fr 1fr',
-    minHeight: 600,
-    gridTemplateAreas: '"profile calendar" "profile calendar"',
-    gridGap: '1rem',
-  },
-  gridProfile: {
-    padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'profile',
-    backgroundColor: '#f5f5f5',
-  },
-  gridCalendar: {
-    padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'calendar',
-    backgroundColor: '#f5f5f5',
-  },
-  image: {
-    width: '40%',
-    height: 'auto',
-    borderRadius: 9999,
-  },
-};
+import '../../public/styles/profiles.css';
 
 export class PatientDocProfile extends Component {
   constructor(props) {
@@ -58,41 +28,41 @@ export class PatientDocProfile extends Component {
       const { profession, specialties } = this.props.singleDoc;
 
       return (
-        <Box style={styles.gridContainer}>
-          <Box style={styles.gridProfile}>
+        <Box className="doctor-container" mt={3}>
+          <Box className="grid-profile grid-item plat-bg">
             <Grid
               container
               direction="column"
-              justify="space-around"
-              alignItems="center"
               style={{ height: '100%' }}
+              className="child-spacing"
+              wrap="nowrap"
             >
-              <img style={styles.image} src={profilePicture} />
+              <img className="profile-image" src={profilePicture} />
               <Typography variant="h6" align="center">
                 {firstName} {lastName}
               </Typography>
-              <Typography align="center">
+              <Typography>
                 <strong>Profession</strong>: {profession.name}
               </Typography>
-              <Grid item container justify="center" spacing={2}>
+              <Grid item container spacing={2}>
                 <Grid item>
-                  <Typography align="center">
+                  <Typography>
                     <strong>Date of Birth:</strong> {dob}
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography align="center">
+                  <Typography>
                     <strong>Age:</strong> {age}
                   </Typography>
                 </Grid>
               </Grid>
-              <Typography align="center">
+              <Typography>
                 <strong>Email:</strong> {email}
               </Typography>
-              <Typography align="center">
+              <Typography>
                 <strong>Address:</strong> {location}
               </Typography>
-              <Typography align="center">
+              <Typography>
                 <strong>Specializations:</strong>
               </Typography>
               {specialties.map((specialty) => (
@@ -100,7 +70,7 @@ export class PatientDocProfile extends Component {
               ))}
             </Grid>
           </Box>
-          <Box style={styles.gridCalendar}>
+          <Box className="grid-calendar grid-item plat-bg">
             <Typography align="center" variant="h6">
               Appointment Availabilities
             </Typography>
