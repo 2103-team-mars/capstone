@@ -15,7 +15,7 @@ import { PatientRoute, DoctorRoute } from './components/routeProtection/Protecte
 
 /**
  * COMPONENT
- */x
+ */
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData();
