@@ -19,18 +19,25 @@ import CallEndIcon from '@material-ui/icons/CallEnd';
 import SendIcon from '@material-ui/icons/Send';
 
 const styles = {
-  video: {
-    maxHeight: '90%',
-    maxWidth: '90%',
-    minWidth: '80%',
+  container: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: '1rem',
+    padding: '1rem',
+  },
+  mainVideo: {
+    width: '100%',
+    height: 'auto',
+    maxHeight: '100%',
+    backgroundSize: 'cover',
     margin: '0 auto',
     display: 'block',
   },
-  boundingBox: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 20,
-    padding: '1rem',
-    display: 'inline-block',
+  pipVideo: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    width: 200,
+    height: 200,
   },
 };
 
@@ -125,6 +132,12 @@ class Meeting extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.callAccepted !== this.state.callAccepted) {
+      this.myStream.current.srcObject = this.state.stream;
+    }
+  }
+
   answer() {
     this.setState({ callAccepted: true });
     const peer = new Peer({
@@ -198,7 +211,6 @@ class Meeting extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    console.log('submit');
     const { firstName, lastName } = this.props.auth;
     const message = { msg: this.state.msg, author: `${firstName} ${lastName}` };
     socket.emit('send message', message, this.state.room);
@@ -209,8 +221,9 @@ class Meeting extends Component {
     const { callAccepted, receivingCall, callerName, room, roomToCall, chat, msg } = this.state;
     const { classes } = this.props;
     const isDoctor = this.props.auth.metaType === 'doctor';
+
     return (
-      <Box mt={3}>
+      <Box mt={3} className={classes.container}>
         <Typography variant="h4">Meeting</Typography>
         {isDoctor && (
           <>
@@ -222,7 +235,7 @@ class Meeting extends Component {
             </CopyToClipboard>
           </>
         )}
-        <Box mt={1} className={!isDoctor || callAccepted ? classes.boundingBox : ''}>
+        <Box mt={1}>
           {callAccepted && (
             <Button
               variant="contained"
@@ -272,20 +285,40 @@ class Meeting extends Component {
         </Box>
         <Box pt={2}>
           <Grid container spacing={2} justify="center">
-            <Grid item md={6} container direction="column" alignItems="center">
+            <Grid item md={8}>
               {callAccepted && (
-                <Grid item>
-                  <video className={classes.video} ref={this.theirStream} autoPlay playsInline />
-                </Grid>
+                <Box style={{ position: 'relative', height: '100%' }}>
+                  <video
+                    className={classes.mainVideo}
+                    ref={this.theirStream}
+                    autoPlay
+                    playsInline
+                  />
+                  <video
+                    className={classes.pipVideo}
+                    ref={this.myStream}
+                    autoPlay
+                    playsInline
+                    muted
+                  />
+                </Box>
               )}
-              <Grid item>
-                <video className={classes.video} ref={this.myStream} autoPlay playsInline muted />
-              </Grid>
+              {!callAccepted && (
+                <Box>
+                  <video
+                    className={classes.mainVideo}
+                    ref={this.myStream}
+                    autoPlay
+                    playsInline
+                    muted
+                  />
+                </Box>
+              )}
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={4}>
               <Grid
                 item
-                style={{ height: '100%', width: '100%' }}
+                style={{ height: '100%', width: '100%', position: 'relative' }}
                 container
                 direction="column-reverse"
               >
@@ -307,16 +340,19 @@ class Meeting extends Component {
                     }}
                   ></TextField>
                 </form>
-                <Grid
-                  item
-                  container
-                  direction="column-reverse"
-                  wrap="nowrap"
+                <Box
                   style={{
                     border: '1px solid black',
-                    height: 500,
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    left: 0,
+                    bottom: 75,
                     padding: 10,
                     overflowY: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column-reverse',
+                    flexWrap: 'no-wrap',
                   }}
                 >
                   {chat.map(({ msg, author }, index) => (
@@ -326,7 +362,7 @@ class Meeting extends Component {
                       </Typography>
                     </Box>
                   ))}
-                </Grid>
+                </Box>
               </Grid>
             </Grid>
           </Grid>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 const ImperialBMI = () => {
   const [height, setHeight] = useState(0);
   const [weight, setWeight] = useState(0);
@@ -24,7 +24,7 @@ const ImperialBMI = () => {
       <input type="number" onChange={handleHeight}></input>
       <p>Weight in lbs</p>
       <input type="number" onChange={handleWeight}></input>
-      <h2>BMI: {bmi}</h2>
+      <h2>BMI: {isNaN(bmi) ? 0 : bmi}</h2>
     </div>
   );
 };

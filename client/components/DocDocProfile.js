@@ -6,34 +6,7 @@ import EditDocProfile from './EditDocProfile';
 
 import { Box, Grid, Typography, Fab } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-
-const styles = {
-  gridContainer: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gridTemplateRows: '1fr 1fr',
-    minHeight: 600,
-    gridTemplateAreas: '"profile calendar" "profile calendar"',
-    gridGap: '1rem',
-  },
-  gridProfile: {
-    padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'profile',
-  },
-  gridCalendar: {
-    padding: '1rem',
-    borderRadius: '1rem',
-    boxShadow: '0 0 0.5rem 0 rgb(0 0 0 / 25%)',
-    gridArea: 'calendar',
-  },
-  image: {
-    width: '40%',
-    height: 'auto',
-    borderRadius: 9999,
-  },
-};
+import '../../public/styles/profiles.css';
 
 export class DocDocProfile extends Component {
   constructor(props) {
@@ -72,44 +45,44 @@ export class DocDocProfile extends Component {
     const specialties = this.props.singleDoc.specialties || [];
 
     return (
-      <Box style={styles.gridContainer}>
-        <Box style={styles.gridProfile}>
+      <Box className="doctor-container">
+        <Box className="grid-profile grid-item">
           {this.state.showComponent ? (
             <EditDocProfile closeForm={this.onButtonClick} />
           ) : (
             <Grid
               container
               direction="column"
-              justify="space-around"
-              alignItems="center"
-              style={{ height: '100%' }}
+              style={{ height: '100%', position: 'relative' }}
+              className="child-spacing"
+              wrap="nowrap"
             >
-              <img style={styles.image} src={profilePicture} />
+              <img className="profile-image" src={profilePicture} />
               <Typography variant="h6" align="center">
                 {firstName} {lastName}
               </Typography>
-              <Typography align="center">
+              <Typography>
                 <strong>Profession</strong>: {profession.name}
               </Typography>
-              <Grid item container justify="center" spacing={2}>
+              <Grid item container spacing={2}>
                 <Grid item>
-                  <Typography align="center">
+                  <Typography>
                     <strong>Date of Birth:</strong> {dob}
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography align="center">
+                  <Typography>
                     <strong>Age:</strong> {age}
                   </Typography>
                 </Grid>
               </Grid>
-              <Typography align="center">
+              <Typography>
                 <strong>Email:</strong> {email}
               </Typography>
-              <Typography align="center">
+              <Typography>
                 <strong>Address:</strong> {location}
               </Typography>
-              <Typography align="center">
+              <Typography>
                 <strong>Specializations:</strong>
               </Typography>
               {specialties.map((specialty) => (
@@ -118,7 +91,7 @@ export class DocDocProfile extends Component {
               <Fab
                 color="secondary"
                 aria-label="edit"
-                style={{ alignSelf: 'flex-end' }}
+                style={{ position: 'absolute', bottom: 10, right: 10 }}
                 onClick={this.onButtonClick}
               >
                 <EditIcon />
@@ -126,7 +99,7 @@ export class DocDocProfile extends Component {
             </Grid>
           )}
         </Box>
-        <Box style={styles.gridCalendar}>
+        <Box className="grid-calendar grid-item">
           <Typography align="center" variant="h6">
             My Appointment Schedule
           </Typography>

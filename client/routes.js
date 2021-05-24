@@ -11,10 +11,11 @@ import ImmediateHelp from './components/ImmediateHelp';
 import AboutUs from './components/AboutUs';
 import BMI from './components/BMI';
 import PatientProfileDoctor from './components/PatientProfileDoctor';
+import { PatientRoute, DoctorRoute } from './components/routeProtection/ProtectedRoutes';
 
 /**
  * COMPONENT
- */
+ */x
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData();
@@ -34,13 +35,14 @@ class Routes extends Component {
           'Loading'
         ) : isLoggedIn ? (
           <Switch>
-            <Route exact path="/patients/:patientId" component={PatientProfileDoctor} />
+            <DoctorRoute exact path="/patients/:patientId" component={PatientProfileDoctor} />
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
             <Route path="/help" component={ImmediateHelp} />
             <Route path="/aboutus" component={AboutUs} />
             <Route path="/dashboard" component={Dashboard} />
-            <Route path="/doctor/:docId" component={PatientDocProfile} />
+            <PatientRoute path="/doctor/:docId" component={PatientDocProfile} />
+            <Route path="/BMICalculator" component={BMI} />
             <Redirect to="/home" />
           </Switch>
         ) : (

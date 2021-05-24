@@ -7,13 +7,15 @@ import { Container } from '@material-ui/core';
 
 const App = () => {
   return (
-    <div>
-      <Navbar />
-      <Container maxWidth="xl">
-        <Routes />
-      </Container>
+    <>
+      <div className="content">
+        <Navbar />
+        <Container maxWidth="xl">
+          <Routes />
+        </Container>
+      </div>
       <Footer />
-    </div>
+    </>
   );
 };
 
