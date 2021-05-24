@@ -25,6 +25,10 @@ const useStyles = makeStyles(() => ({
     textTransform: "none",
     justifyContent: "flex-start",
   },
+  logo: {
+    width: 135,
+    height: 43.54,
+  },
 }));
 
 const Navbar = ({ handleClick, isLoggedIn }) => {
@@ -39,9 +43,17 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
             component={RouterLink}
             to="/home"
           >
-            <Grid container alignItems="center">
+            {/* <Grid container alignItems="center">
               <Typography variant="h6">HelloHealth</Typography>
-            </Grid>
+            </Grid> */}
+
+            <img
+              className={classes.logo}
+              src={
+                "https://upload.wikimedia.org/wikipedia/commons/9/98/Imageedit_13_5270063664.png"
+              }
+              alt="Hello Health"
+            />
           </Button>
           <Grid item xs container direction="row-reverse">
             {isLoggedIn && (

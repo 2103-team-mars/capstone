@@ -1,17 +1,55 @@
 import React from "react";
+import { Box, Grid, Typography } from "@material-ui/core";
+
+const styles = {
+  gridContainer: {
+    display: "grid",
+    // gridTemplateColumns: "1fr",
+    // minHeight: 300,
+    // gridTemplateAreas: '"Our Mission" "Our Providers" "Our Team"',
+    padding: "1rem",
+    justify: "space-evenly",
+    alignItems: "center",
+    gridGap: "1rem",
+  },
+  gridAbout: {
+    padding: "1rem",
+    borderRadius: "1rem",
+    boxShadow: "0 0 0.5rem 0 rgb(0 0 0 / 25%)",
+    gridArea: "Our Mission",
+    backgroundColor: "#f5f5f5",
+    spacing: 3,
+    gridGap: "1rem",
+  },
+  title: {
+    alignItems: "center",
+    padding: "12px",
+  },
+};
 
 const ImmediateHelp = () => (
-  <div>
-    <div>
-      <h2>Get Help Immediately</h2>
-      <small>
-        If you are in a crisis or any other person may be in danger the
-        following resources can provide you with immediate help.
-      </small>
-    </div>
+  <Box style={{ maxHeight: "100vh", overflow: "auto" }}>
+    <Grid
+      container
+      container
+      spacing={3}
+      direction="column"
+      style={styles.gridContainer}
+    >
+      <Typography variant="h4" align="center" style={styles.title}>
+        <strong>Get Help Immediately</strong>
+      </Typography>
 
-    <div>
-      <div>
+      <Typography align="center" style={styles.title}>
+        <small>
+          <strong>
+            If you are in a crisis or any other person may be in danger the
+            following resources can provide you with immediate help.
+          </strong>
+        </small>
+      </Typography>
+
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>United States</h3>
         <ul>
           <li>
@@ -82,9 +120,9 @@ const ImmediateHelp = () => (
             <a>https://www.translifeline.org</a> - 877-565-8860
           </li>
         </ul>
-      </div>
+      </Grid>
 
-      <div>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>UK and Republic of Ireland</h3>
         <ul>
           <li>
@@ -108,9 +146,9 @@ const ImmediateHelp = () => (
             <a>https://yourlifecounts.org/find-help/s</a>
           </li>
         </ul>
-      </div>
+      </Grid>
 
-      <div>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>Argentina</h3>
         <ul>
           <li>
@@ -127,9 +165,9 @@ const ImmediateHelp = () => (
             teléfono. Nos comunicaremos con usted.
           </li>
         </ul>
-      </div>
+      </Grid>
 
-      <div>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>Spain</h3>
         <ul>
           <li>
@@ -140,9 +178,9 @@ const ImmediateHelp = () => (
             http://telefonodelaesperanza.org/llamanos
           </li>
         </ul>
-      </div>
+      </Grid>
 
-      <div>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>Australia</h3>
         <ul>
           <li>
@@ -165,9 +203,9 @@ const ImmediateHelp = () => (
             </a>
           </li>
         </ul>
-      </div>
+      </Grid>
 
-      <div>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>China</h3>
         <ul>
           <li>
@@ -184,9 +222,9 @@ const ImmediateHelp = () => (
             <a>//www.lifeline-shanghai.com/</a>
           </li>
         </ul>
-      </div>
+      </Grid>
 
-      <div>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>Canada</h3>
         <ul>
           <li>
@@ -205,9 +243,9 @@ const ImmediateHelp = () => (
             <a>https://suicideprevention.ca/need-help/</a>
           </li>
         </ul>
-      </div>
+      </Grid>
 
-      <div>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>South Africa</h3>
         <ul>
           <li>
@@ -228,8 +266,8 @@ const ImmediateHelp = () => (
             <a>https://yourlifecounts.org/find-help/</a>
           </li>
         </ul>
-      </div>
-      <div>
+      </Grid>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>New Zealand</h3>
         <ul>
           <li>
@@ -247,8 +285,8 @@ const ImmediateHelp = () => (
             <a>https://yourlifecounts.org/find-help/</a>
           </li>
         </ul>
-      </div>
-      <div>
+      </Grid>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>India</h3>
         <ul>
           <li>
@@ -257,8 +295,8 @@ const ImmediateHelp = () => (
             calling 91 44 24640050
           </li>
         </ul>
-      </div>
-      <div>
+      </Grid>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>Germany</h3>
         <ul>
           <li>
@@ -275,8 +313,8 @@ const ImmediateHelp = () => (
             <a>https://yourlifecounts.org/find-help/</a>
           </li>
         </ul>
-      </div>
-      <div>
+      </Grid>
+      <Grid item xs={12} style={styles.gridAbout}>
         <h3>Finland</h3>
         <ul>
           <li>
@@ -286,14 +324,19 @@ const ImmediateHelp = () => (
             <strong>Crisis Line: </strong>010 195 202
           </li>
         </ul>
-      </div>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-    </div>
-  </div>
+      </Grid>
+    </Grid>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+  </Box>
 );
 
 export default ImmediateHelp;

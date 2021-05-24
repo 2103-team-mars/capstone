@@ -5,8 +5,8 @@ import ImmediateHelp from "./ImmediateHelp";
 
 const Footer = () => (
   <div>
-    <hr />
-    <footer className="footer">
+    <footer className="footerStyle">
+      <hr />
       <strong>
         <p>
           If you are in a crisis or any other person may be in danger - don't
