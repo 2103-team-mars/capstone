@@ -1,23 +1,30 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
-import { logout } from '../store';
-import AboutUs from './AboutUs';
+import React from "react";
+import { connect } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
+import { logout } from "../store";
+import AboutUs from "./AboutUs";
 
-import { makeStyles, AppBar, Toolbar, Typography, Button, Grid } from '@material-ui/core';
+import {
+  makeStyles,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Grid,
+} from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   navbar: {
-    backgroundColor: '#9CCA91',
-    color: 'black',
+    backgroundColor: "#9CCA91",
+    color: "black",
   },
   title: {
-    textTransform: 'none',
-    justifyContent: 'flex-start',
+    textTransform: "none",
+    justifyContent: "flex-start",
   },
   logo: {
     width: 135,
-    height: 'auto',
+    height: "auto",
   },
 }));
 
@@ -27,11 +34,16 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
     <AppBar position="static" className={classes.navbar}>
       <Toolbar>
         <Grid container spacing={2} alignItems="center">
-          <Button color="inherit" className={classes.title} component={RouterLink} to="/home">
+          <Button
+            color="inherit"
+            className={classes.title}
+            component={RouterLink}
+            to="/home"
+          >
             <img
               className={classes.logo}
               src={
-                'https://upload.wikimedia.org/wikipedia/commons/9/98/Imageedit_13_5270063664.png'
+                "https://upload.wikimedia.org/wikipedia/commons/c/c6/Imageedit_29_5874461155.svg"
               }
               alt="Hello Health"
             />
@@ -45,7 +57,11 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
                 <Button component={RouterLink} to="/aboutus" color="inherit">
                   About Us
                 </Button>
-                <Button component={RouterLink} to="/BMICalculator" color="inherit">
+                <Button
+                  component={RouterLink}
+                  to="/BMICalculator"
+                  color="inherit"
+                >
                   BMI Calculator
                 </Button>
                 <Button component={RouterLink} to="/meeting" color="inherit">
@@ -65,7 +81,11 @@ const Navbar = ({ handleClick, isLoggedIn }) => {
                 <Button component={RouterLink} to="/aboutus" color="inherit">
                   About Us
                 </Button>
-                <Button component={RouterLink} to="/BMICalculator" color="inherit">
+                <Button
+                  component={RouterLink}
+                  to="/BMICalculator"
+                  color="inherit"
+                >
                   BMI Calculator
                 </Button>
               </>

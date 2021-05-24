@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { signup } from '../../store/auth';
 import PatientSignup from './PatientSignup';
@@ -21,7 +21,7 @@ const UserSignup = ({ metaType }) => {
   const [location, setLocation] = useState('');
 
   const [patientInfo, setPatientInfo] = useState({});
-  const [doctorInfo, setDoctorInfo] = useState({});
+  const professionRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -45,6 +45,9 @@ const UserSignup = ({ metaType }) => {
     if (metaType === 'patient') {
       dispatch(signup(userInfo, patientInfo, metaType));
     } else {
+      const doctorInfo = {
+        profession: professionRef.current.value,
+      };
       dispatch(signup(userInfo, doctorInfo, metaType));
     }
   };
@@ -180,7 +183,7 @@ const UserSignup = ({ metaType }) => {
           />
         </Box>
         {metaType === 'patient' && <PatientSignup />}
-        {metaType === 'doctor' && <DoctorSignup />}
+        {metaType === 'doctor' && <DoctorSignup professionRef={professionRef} />}
         <Box width="100%" pt={2}>
           <Button type="submit" variant="contained" fullWidth color="primary">
             Signup
