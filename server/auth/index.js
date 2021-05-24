@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User, Patient, Doctor } = require('../db');
+const { User, Patient, Doctor, Profession } = require('../db');
 
 router.post('/login', async (req, res, next) => {
   try {
@@ -28,9 +28,11 @@ router.post('/signup/patient', async (req, res, next) => {
 router.post('/signup/doctor', async (req, res, next) => {
   try {
     const { userInfo, metaInfo } = req.body;
+    const profession = await Profession.findOne({ where: { name: metaInfo.profession } });
     const user = await User.create({ ...userInfo, metaType: 'doctor' });
     const doctor = await Doctor.create(metaInfo);
     await user.setDoctor(doctor);
+    await doctor.setProfession(profession);
     res.send({ token: await user.generateToken() });
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {

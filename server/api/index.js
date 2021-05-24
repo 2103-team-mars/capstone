@@ -3,7 +3,7 @@ const { isLoggedIn } = require("../middleware");
 
 module.exports = router;
 
-router.use("/users", require("./users"));
+// router.use("/users", require("./users"));
 router.use("/doctors", require("./doctors"));
 router.use("/symptoms", require("./symptoms"));
 router.use("/medications", require("./medications"));
