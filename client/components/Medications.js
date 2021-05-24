@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchMedications } from '../store/medications';
-import { Link } from 'react-router-dom';
-import Medication from '../SVG/Medication';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchMedications } from "../store/medications";
+import { Link } from "react-router-dom";
+import Medication from "../SVG/Medication";
 
 import {
   Box,
@@ -12,12 +12,12 @@ import {
   AccordionSummary,
   AccordionDetails,
   makeStyles,
-} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+} from "@material-ui/core";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const useStyles = makeStyles((theme) => ({
   accordion: {
-    backgroundColor: '#e5e5e5',
+    backgroundColor: "#e5e5e5",
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -52,7 +52,7 @@ const Medications = () => {
                     <strong>{medication.name}</strong>
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails style={{ display: 'block' }}>
+                <AccordionDetails style={{ display: "block" }}>
                   <Typography>
                     <strong>Dosage:</strong> {medication.strength}
                   </Typography>
@@ -66,9 +66,10 @@ const Medications = () => {
                     <strong>Reason:</strong> {medication.reason}
                   </Typography>
                   <Typography>
-                    <strong>Prescribing Doctor:</strong>{' '}
+                    <strong>Prescribing Doctor:</strong>{" "}
                     <Link to={`/doctor/${medication.doctorId}`}>
-                      {medication.doctor.user.firstName} {medication.doctor.user.lastName}
+                      {medication.doctor.user.firstName}{" "}
+                      {medication.doctor.user.lastName}
                     </Link>
                   </Typography>
                 </AccordionDetails>
@@ -78,7 +79,7 @@ const Medications = () => {
         </Box>
       </Grid>
       <Grid item md={6}>
-        <Box style={{ width: '50%', margin: '0 auto' }}>
+        <Box style={{ width: "50%", margin: "0 auto" }}>
           <Medication />
         </Box>
       </Grid>

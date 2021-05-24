@@ -12,7 +12,6 @@ const App = () => {
       <Container maxWidth="xl">
         <Routes />
       </Container>
-      <Footer />
     </div>
   );
 };
