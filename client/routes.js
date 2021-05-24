@@ -1,16 +1,17 @@
-import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import { withRouter, Route, Switch, Redirect } from "react-router-dom";
-import AuthForm from "./components/auth/AuthForm";
-import Home from "./components/Home";
-import { me } from "./store";
-import Meeting from "./components/Meeting";
-import Dashboard from "./components/Dashboard";
-import PatientDocProfile from "./components/PatientDocProfile";
-import ImmediateHelp from "./components/ImmediateHelp";
-import AboutUs from "./components/AboutUs";
-import BMI from "./components/BMI";
-import PatientProfileDoctor from "./components/PatientProfileDoctor";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
+import AuthForm from './components/auth/AuthForm';
+import Home from './components/Home';
+import { me } from './store';
+import Meeting from './components/Meeting';
+import Dashboard from './components/Dashboard';
+import PatientDocProfile from './components/PatientDocProfile';
+import ImmediateHelp from './components/ImmediateHelp';
+import AboutUs from './components/AboutUs';
+import BMI from './components/BMI';
+import PatientProfileDoctor from './components/PatientProfileDoctor';
+import { PatientRoute, DoctorRoute } from './components/routeProtection/ProtectedRoutes';
 
 /**
  * COMPONENT
@@ -21,7 +22,7 @@ class Routes extends Component {
   }
 
   setLoading() {
-    console.log("hello");
+    console.log('hello');
     this.setState({ loading: false });
   }
 
@@ -31,20 +32,17 @@ class Routes extends Component {
     return (
       <div>
         {!performedAuth ? (
-          "Loading"
+          'Loading'
         ) : isLoggedIn ? (
           <Switch>
-            <Route
-              exact
-              path="/patients/:patientId"
-              component={PatientProfileDoctor}
-            />
+            <DoctorRoute exact path="/patients/:patientId" component={PatientProfileDoctor} />
             <Route path="/home" component={Home} />
             <Route path="/meeting" component={Meeting} />
             <Route path="/help" component={ImmediateHelp} />
             <Route path="/aboutus" component={AboutUs} />
             <Route path="/dashboard" component={Dashboard} />
-            <Route path="/doctor/:docId" component={PatientDocProfile} />
+            <PatientRoute path="/doctor/:docId" component={PatientDocProfile} />
+            <Route path="/BMICalculator" component={BMI} />
             <Redirect to="/home" />
           </Switch>
         ) : (

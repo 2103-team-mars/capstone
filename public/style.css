@@ -6,12 +6,6 @@ body {
 body {
   font-family: sans-serif;
   background-color: #cee4c8;
-  min-height: 100vh; /* will cover the 100% of viewport */
-  overflow: hidden;
-  display: block;
-  position: relative;
-  padding-bottom: 100px; /* height of your footer */
-  padding: 100px; /* height of your footer */
 }
 
 a {
@@ -23,26 +17,38 @@ nav a {
   margin: 1em;
 }
 
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.content {
+  flex: 1 0 auto;
+  margin-bottom: 1rem;
+}
+
 .footer {
-  margin-top: 1rem;
   padding: 1rem;
   background-color: rgb(193, 192, 189);
-  position: fixed;
   bottom: 0;
-  left: 0;
   width: 100%;
-}
-.BMI {
-  align-items: center;
+  flex-shrink: 0;
   text-align: center;
-  margin: 0;
-  position: absolute;
+}
+
+.BMI {
+  /* align-items: center; */
+  text-align: center;
+  margin: 3rem auto 0;
+  /* position: absolute;
   top: 50%;
-  left: 50%;
-  margin-right: -20%;
-  transform: translate(-50%, -50%);
+  left: 50%; */
+  /* margin-right: -20%; */
+  /* transform: translate(-50%, -50%); */
   width: 75%;
 }
+
 #switch {
   left: 15%;
 }
@@ -52,22 +58,4 @@ nav a {
   box-shadow: 0 0 0.5rem 0 rgb(0 0 0 / 25%);
   border-radius: 1rem;
   padding: 1rem;
-}
-
-/* .footer {
-  margin-top: 1rem;
-  padding: 1rem;
-  background-color: rgb(193, 192, 189);
-  position: relative;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-} */
-
-footer {
-  /* sj-footer- this will need to be stashed  */
-  bottom: 0;
-  width: 100%;
-  position: relative;
-  position: absolute;
 }
