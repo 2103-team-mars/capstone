@@ -8,7 +8,13 @@ Our application is a one-stop-shop for finding and connecting with a mental heal
 
 ## View Sanpshots
 
-TBD... (potentially use https://github.com/icholy/ttygif)
+<img src="images/screenshots/welcome-Screen.png" width="100">
+<img src="images/screenshots/logged_in.png" width="100">
+<img src="images/screenshots/map_of_docs.png" width="120">
+<img src="images/screenshots/Sally_Profile.png" width="100">
+<img src="images/screenshots/meds.png" width="100">
+<img src="images/screenshots/appointments.png" width="100">
+<img src="images/screenshots/doc_patient_video.png" width="100">
 
 ## Roadmap
 
@@ -25,10 +31,10 @@ Our initial focus for our application is providing mental health access and serv
 
 Developers of this application include:
 
-- [Mohammad Mussab](https://github.com/Mmussab)
 - [Chiara Wahsono](https://github.com/chiarawahsono)
-- [Sarahjean Marhône](https://github.com/sjmarhone)
 - [Christopher Gil-Martins](https://github.com/chris-gil-martins)
+- [Mohammad Mussab](https://github.com/Mmussab)
+- [Sarahjean Marhône](https://github.com/sjmarhone)
 
 ## Support
 
