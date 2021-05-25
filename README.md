@@ -8,7 +8,13 @@ Our application is a one-stop-shop for finding and connecting with a mental heal
 
 ## View Sanpshots
 
-TBD... (potentially use https://github.com/icholy/ttygif)
+<img src="images/screenshots/welcome-Screen.png" width="100">
+<img src="images/screenshots/logged_in.png" width="100">
+<img src="images/screenshots/map_of_docs.png" width="100">
+<img src="images/screenshots/Sally_Profile.png" width="100">
+<img src="images/screenshots/meds.png" width="100">
+<img src="images/screenshots/appointments.png" width="100">
+<img src="images/screenshots/doc_patient_video.png" width="100">
 
 ## Roadmap
 
