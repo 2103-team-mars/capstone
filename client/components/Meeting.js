@@ -94,7 +94,7 @@ class Meeting extends Component {
     const room = v4();
     this.setState({ room });
     socket.emit('join', room);
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
       this.setState({ stream });
       this.myStream.current.srcObject = stream;
     });
