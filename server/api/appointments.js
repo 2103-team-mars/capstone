@@ -1,10 +1,10 @@
-const router = require('express').Router();
-const { isDoctor, isPatient } = require('../middleware');
-const { Appointment, Doctor, Patient, User } = require('../db');
+const router = require("express").Router();
+const { isDoctor, isPatient } = require("../middleware");
+const { Appointment, Doctor, Patient, User } = require("../db");
 
 //GET /api/appointments/
 //FOR TESTING PURPOSES
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll();
     res.json(appointments);
@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
 });
 
 //GET /api/appointments/doctors/:id
-router.get('/doctors/:id', async (req, res, next) => {
+router.get("/doctors/:id", async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { doctorId: req.params.id },
@@ -27,7 +27,7 @@ router.get('/doctors/:id', async (req, res, next) => {
 });
 
 //GET /api/appointments/patients/:id
-router.get('/patients/:id', isPatient, async (req, res, next) => {
+router.get("/patients/:id", isPatient, async (req, res, next) => {
   try {
     const appointments = await Appointment.findAll({
       where: { patientId: req.params.id },
@@ -40,14 +40,14 @@ router.get('/patients/:id', isPatient, async (req, res, next) => {
 });
 
 //POST /api/appointments
-router.post('/', isDoctor, async (req, res, next) => {
+router.post("/", isDoctor, async (req, res, next) => {
   try {
     const { dateTime } = req.body;
     const doctor = req.user;
     const appointment = await Appointment.create({
       date: new Date(dateTime),
       doctorId: doctor.metaId,
-      topic: '',
+      topic: "",
     });
     appointment.dataValues.patient = null;
     res.json(appointment);
@@ -57,7 +57,7 @@ router.post('/', isDoctor, async (req, res, next) => {
 });
 
 //PUT /api/appointments/:id
-router.put('/:id', isPatient, async (req, res, next) => {
+router.put("/:id", isPatient, async (req, res, next) => {
   try {
     const { topic, join } = req.body;
     const patient = req.user;
@@ -70,7 +70,7 @@ router.put('/:id', isPatient, async (req, res, next) => {
         patientId: patient.metaId,
       });
     } else {
-      await appointment.update({ patientId: null, topic: '' });
+      await appointment.update({ patientId: null, topic: "" });
     }
     await appointment.reload();
     res.json(appointment);
@@ -79,7 +79,7 @@ router.put('/:id', isPatient, async (req, res, next) => {
   }
 });
 
-router.delete('/:id', isDoctor, async (req, res, next) => {
+router.delete("/:id", isDoctor, async (req, res, next) => {
   try {
     await Appointment.destroy({ where: { id: req.params.id } });
     res.sendStatus(204);
@@ -89,3 +89,5 @@ router.delete('/:id', isDoctor, async (req, res, next) => {
 });
 
 module.exports = router;
+
+//adding a random line
